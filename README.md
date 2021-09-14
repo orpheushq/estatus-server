@@ -25,6 +25,7 @@ Laravel-based server
 1. `composer install`
 2. Change timezone in __/config/app.php__
 3. Change `APP_KEY` in __.env__ to a 32 character string
+    + Use `php artisan key:generate` to generate and populate the key field. Without this, 500 error will be shown
 4. Configure database credentials in __.env__
     + If the DB password has symbols like '#', wrap the password in speech marks ex: `DB_PASSWORD="dfg555###"` otherwise '#' breaks the text
 5. Database setup and seeding
@@ -72,3 +73,4 @@ Laravel-based server
 * CSRF protection can be completely disabled for *all routes* (https://laravel.com/docs/8.x/csrf#csrf-excluding-uris)
     + Add '*' to the `$except` array of __Http/Middleware/VerifyCsrfToken.php__
     + Beware of the security implications!
+    + Sending requests without CSRF token when token-checking is enabled generates 419 errors
