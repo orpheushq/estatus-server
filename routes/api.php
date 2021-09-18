@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PatientController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
@@ -30,4 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/secure/test', function (Request $request) {
         return response(["user" => $request->user()], 200);
     });
+
+    Route::get('/patients/{page}', [PatientController::class, 'index']);
+    Route::apiResource('patients', PatientController::class);
 });
