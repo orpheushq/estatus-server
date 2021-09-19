@@ -58,13 +58,15 @@ class PatientController extends Controller
         //
         $patient = Patient::find($id);
         $newValues = json_decode($request->entity, TRUE);
-        
+
+        $newValues['dob'] = new \DateTime($newValues['dob']);
+
         foreach ($newValues as $k => $v) {
             $patient[$k] = $v;
         }
 
         $patient->save();
-        return response($patient, 200);
+        return response(Patient::find($id), 200);
     }
 
     /**
