@@ -31,6 +31,12 @@ class PatientController extends Controller
     public function store(Request $request)
     {
         //
+        $values = json_decode($request->entity, TRUE);
+        $values['dob'] = new \DateTime($values['dob']);
+
+        $newEntity = Patient::create($values);
+
+        return response($newEntity, 200);
     }
 
     /**
