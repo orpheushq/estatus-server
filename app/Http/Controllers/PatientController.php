@@ -103,15 +103,15 @@ class PatientController extends Controller
         $resp[] = count($results);
 
         //13 - 18 age group
-        $results = Patient::whereBetween('dob', [new \DateTime(($cYear-18)."-01-01"), new \DateTime(($cYear-13)."-01-01")])->get();
+        $results = Patient::whereBetween('dob', [new \DateTime(($cYear-18)."-01-01"), new \DateTime(($cYear-12)."-01-01")])->get();
         $resp[] = count($results);
 
         //19 - 59 age group
-        $results = Patient::whereBetween('dob', [new \DateTime(($cYear-59)."-01-01"), new \DateTime(($cYear-19)."-01-01")])->get();
+        $results = Patient::whereBetween('dob', [new \DateTime(($cYear-59)."-01-01"), new \DateTime(($cYear-18)."-01-01")])->get();
         $resp[] = count($results);
 
         //>60 age group
-        $results = Patient::where('dob', "<=", new \DateTime(($cYear-60)."-01-01"))->get();
+        $results = Patient::where('dob', "<=", new \DateTime(($cYear-59)."-01-01"))->get();
         $resp[] = count($results);
 
         return response($resp, 200);
