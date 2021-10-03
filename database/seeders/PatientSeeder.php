@@ -33,7 +33,7 @@ class PatientSeeder extends Seeder
             'diabetesType'=>'Type 2'
         ]);
 
-        DB::table('patients')->insert([
+        Patient::create([
             'patientNo' => 3,
             'name' => 'Jake Fauci',
             'gender' => 'Male',
