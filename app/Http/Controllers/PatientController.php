@@ -5,6 +5,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 use App\Models\Patient;
 
@@ -33,6 +34,9 @@ class PatientController extends Controller
         //
         $values = json_decode($request->entity, TRUE);
         $values['dob'] = new \DateTime($values['dob']);
+        if (isset($values['diagnosisDate'])) $values['diagnosisDate'] = new \DateTime($values['diagnosisDate']);
+
+        $values['password'] = Hash::make($values['password']);
 
         $newEntity = Patient::create($values);
 
@@ -66,6 +70,7 @@ class PatientController extends Controller
         $newValues = json_decode($request->entity, TRUE);
 
         $newValues['dob'] = new \DateTime($newValues['dob']);
+        if (isset($newValues['diagnosisDate'])) $newValues['diagnosisDate'] = new \DateTime($newValues['diagnosisDate']);
 
         foreach ($newValues as $k => $v) {
             $patient[$k] = $v;
