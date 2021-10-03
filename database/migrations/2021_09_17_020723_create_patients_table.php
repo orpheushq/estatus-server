@@ -20,6 +20,14 @@ class CreatePatientsTable extends Migration
             $table->string('gender');
             $table->date('dob')->nullable();
             $table->string('diabetesType');
+
+            $table->string('password')->nullable()->default(null);
+            $table->date('diagnosisDate')->nullable()->default(null);
+            $table->string('patientGroup')->nullable()->default(null);
+            $table->string('mobileNo')->default("");
+            $table->string('emergencyContactName')->default("");
+            $table->string('emergencyContactMobile')->default("");
+            
             $table->timestamps();
         });
     }
