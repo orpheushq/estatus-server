@@ -11,6 +11,7 @@ Laravel-based server
 * [Setting Environment](#setting-environment)
 * [Deployment](#deployment)
 * [CSRF Protection](#csrf-protection)
+* [Migration](#migration)
 
 ## Project Creation
 * Use Composer to install Laravel
@@ -74,3 +75,12 @@ Laravel-based server
     + Add '*' to the `$except` array of __Http/Middleware/VerifyCsrfToken.php__
     + Beware of the security implications!
     + Sending requests without CSRF token when token-checking is enabled generates 419 errors
+
+## Migration
+* To view the status of existing migrations;
+    > `php artisan migrate:status`
+* Rollback the last migration
+    > `php artisan migrate:rollback`
+* Carry out all migrations that have not been run before
+    > `php artisan migrate`
+
