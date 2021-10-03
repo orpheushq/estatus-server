@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+use App\Models\Patient;
 
 class PatientSeeder extends Seeder
 {
@@ -14,7 +17,7 @@ class PatientSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('patients')->insert([
+        Patient::create([
             'patientNo' => 1,
             'name' => 'Anne Smith',
             'gender' => 'Female',
@@ -22,7 +25,7 @@ class PatientSeeder extends Seeder
             'diabetesType'=>'Type 1'
         ]);
 
-        DB::table('patients')->insert([
+        Patient::create([
             'patientNo' => 2,
             'name' => 'John Doe',
             'gender' => 'Male',
@@ -38,7 +41,7 @@ class PatientSeeder extends Seeder
             'diabetesType'=>'Gestational'
         ]);
 
-        DB::table('patients')->insert([
+        Patient::create([
             'patientNo' => 44,
             'name' => 'Frank Simmons',
             'gender' => 'Male',
@@ -46,7 +49,7 @@ class PatientSeeder extends Seeder
             'diabetesType'=>'Type 2'
         ]);
 
-        DB::table('patients')->insert([
+        Patient::create([
             'patientNo' => 98,
             'name' => 'Niel Harris',
             'gender' => 'Male',
@@ -54,7 +57,7 @@ class PatientSeeder extends Seeder
             'diabetesType'=>'Gestational'
         ]);
 
-        DB::table('patients')->insert([
+        Patient::create([
             'patientNo' => 983,
             'name' => 'Jennifer Miel',
             'gender' => 'Female',
@@ -62,7 +65,7 @@ class PatientSeeder extends Seeder
             'diabetesType'=>'Pre-diabetes'
         ]);
 
-        DB::table('patients')->insert([
+        Patient::create([
             'patientNo' => 1983,
             'name' => 'Tani Myers',
             'gender' => 'Female',
