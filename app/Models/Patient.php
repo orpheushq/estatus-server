@@ -9,5 +9,14 @@ class Patient extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password'
+    ];
+
     protected $guarded = []; //make all attributes mass assignable
 }
