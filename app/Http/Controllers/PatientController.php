@@ -12,6 +12,113 @@ use App\Models\Patient;
 class PatientController extends Controller
 {
     /**
+     * Used to find duplicate patients
+     * 
+     * If any 3 of the 4 attributes (name, gender, dob, mobileNo)
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function findDuplicate(Request $request)
+    {
+        //
+        $attributes = ["name", "gender", "dob", "mobileNo"]; //attributes that would be searched
+        $result = collect([]);
+        $filters = json_decode($request->filters, TRUE);
+        $filters['dob'] = new \DateTime($filters['dob']);
+        $filters['dob'] = $filters['dob']->format("Y-m-d");
+
+        $i = 0;
+        for ($a=0; $a < count($attributes);$a++) {
+            for ($b=0; $b < count($attributes); $b++) {
+                for ($c=0; $c < count($attributes); $c++) {
+                    if ($attributes[$a] !== $attributes[$b] && $attributes[$b] !== $attributes[$c] && $attributes[$a] !== $attributes[$c]) {
+                        $patients = [];
+                        switch ($attributes[$a]) {
+                            case "gender":
+                            case "dob":
+                            default: {
+                                $patients = Patient::where($attributes[$a] , '=', $filters[$attributes[$a]])->get();
+                                break;
+                            }
+                            case "mobileNo":
+                            case "name": {
+                                $patients = Patient::where($attributes[$a] , 'like', '%'.$filters[$attributes[$a]].'%')->get();
+                                break;
+                            }
+                        }
+                        //if ($i==17) echo "<br>"."<br>".json_encode($patients)."<br>";
+
+                        switch ($attributes[$b]) {
+                            case "gender":
+                            case "dob":
+                            default: {
+                                if (count($patients) > 0) {
+                                    $patients = $patients->where($attributes[$b] , '=', $filters[$attributes[$b]]);
+                                } else {
+                                    $patients = Patient::where($attributes[$b] , '=', $filters[$attributes[$b]])->get();
+                                }
+                                break;
+                            }
+                            case "mobileNo":
+                            case "name": {
+                                if (count($patients) > 0) {
+                                    $patients = $patients->where($attributes[$b] , 'like', '%'.$filters[$attributes[$b]].'%');
+                                    //$patients = $patients->where($attributes[$b] , '=', $filters[$attributes[$b]]);
+                                } else {
+                                    $patients = Patient::where($attributes[$b] , 'like', '%'.$filters[$attributes[$b]].'%')->get();
+
+                                    
+                                }
+                                break;
+                            }
+                        }
+                        //if ($i==17) echo json_encode($patients)."<br>";
+
+                        switch ($attributes[$c]) {
+                            case "gender":
+                            case "dob":
+                            default: {
+                                if (count($patients) > 0) {
+                                    $patients = $patients->where($attributes[$c] , '=', $filters[$attributes[$c]]);
+                                }
+                                break;
+                            }
+                            case "mobileNo":
+                            case "name": {
+                                if (count($patients) > 0) {
+                                    $patients = $patients->where($attributes[$c] , 'like', '%'.$filters[$attributes[$c]].'%');
+                                }
+                                //$patients = $patients->where($attributes[$b] , '=', $filters[$attributes[$b]]);
+                                break;
+                            }
+                        }
+                        //if ($i === 17) echo json_encode($patients)."<br>";
+                        //if (json_encode($patients) == "{}") $patients = [];
+                        //echo $i." ".$attributes[$a]."=".$filters[$attributes[$a]].",".$attributes[$b]."=".$filters[$attributes[$b]].",".$attributes[$c]."=".$filters[$attributes[$c]]." -> ".(is_null($patients) ? 0: count($patients))."<br>";
+                        //if ($i==17) echo json_encode($patients)."<br>"."<br>";
+                        /*if (is_null($result) && count($patients) > 0) {
+                            $result = $patients;
+                        } else if(!is_null($result)) {
+                            foreach ($patients as $p) {
+                                if (!$result->contains($p)) $patients[] = $p;
+                            }
+                        }*/
+                        foreach ($patients as $p) {
+                            if (!$result->contains($p)) $result[] = $p;
+                        }
+                        $i++;
+                    }
+                }
+            }
+        }
+
+        // $patients = Patient::where('name' , 'like', '%'.$filters['name'].'%')->get();
+        // $patients = $patients->where('dob', $filters['dob']);
+
+        return response($result, 200);
+    }
+
+    /**
      * Display a listing of the resource.
      * 
      * If a `filters` parameter is provided (when invoked as a POST request), filters and sorting can be specified
