@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
     Route::get('/patients/{page}', [PatientController::class, 'index']);
+    Route::post('/patients/{page}', [PatientController::class, 'index']);
     Route::get('/patients/view/{id}', [PatientController::class, 'show']);
     Route::get('/patients/report/age_group', [PatientController::class, 'reportingAgeGroup']);
     Route::apiResource('patients', PatientController::class);

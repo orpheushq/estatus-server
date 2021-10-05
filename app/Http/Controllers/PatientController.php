@@ -13,13 +13,27 @@ class PatientController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * 
+     * If a `filters` parameter is provided (when invoked as a POST request), filters and sorting can be specified
      *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request, $page)
     {
         //
-        $patients = Patient::all();
+        $patients = [];
+
+        $filters = json_decode($request->filters, TRUE);
+
+        if (is_null($filters)) {
+            $patients = Patient::all();
+        } else {
+            /**
+             * TODO: create a more flexible and scalable approach to query using filters
+             */
+            $patients = Patient::where('mobileNo' , 'like', '%'.$filters['mobileNo'].'%')->get();
+        }
+
         return response($patients, 200);
     }
 
