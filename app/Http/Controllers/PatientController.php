@@ -12,6 +12,85 @@ use App\Models\Patient;
 class PatientController extends Controller
 {
     /**
+     * Used to find all duplicate patients
+     * 
+     * If any 3 of the 4 attributes (name, gender, dob, mobileNo)
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function findAllDuplicates(Request $request)
+    {
+        //$attributes = ["name", "gender", "dob", "mobileNo"]; //attributes that would be searched
+        $attributes = ["gender", "dob", "mobileNo"]; //attributes that would be searched
+
+        $mobileGrouped = Patient::all()->groupBy(array('dob', 'mobileNo', 'gender'));
+        $result = [];
+
+        // foreach ($mobileGrouped as $a => &$av) {
+        //     foreach ($mobileGrouped[$a] as $b => &$bv) {
+        //         foreach ($mobileGrouped[$a][$b] as $c => &$cv) {
+        //             if (count($mobileGrouped[$a][$b][$c]) > 1) {
+        //                 $result[] = $mobileGrouped[$a][$b][$c];
+        //             }
+        //         }
+        //     }
+        // }
+
+        $i = 0;
+        $tested = []; //stores already walked through attribute pairs
+        for ($i=0; $i < count($attributes);$i++) {
+            for ($x=0; $x < count($attributes); $x++) {
+                $notRepeated = true;
+                foreach ($tested as $t) {
+                    if (strpos($t, $attributes[$i]) !== FALSE && strpos($t, $attributes[$x]) !== FALSE) {
+                        $notRepeated = false;
+                    }
+                }
+                if ($attributes[$i] !== $attributes[$x] && $notRepeated) {
+                    //echo $attributes[$i].",".$attributes[$x]."<br>";
+                    $tested[] = $attributes[$i].",".$attributes[$x];
+                    
+                    if ($attributes[$i] == "mobileNo" || $attributes[$x] == "mobileNo") {
+                        $mobileGrouped = Patient::where('mobileNo', '!=', "")->groupBy(array($attributes[$i], $attributes[$x]));
+                    } else {
+                        $mobileGrouped = Patient::all()->groupBy(array($attributes[$i], $attributes[$x]));
+                    }
+                    foreach ($mobileGrouped as $a => &$av) {
+                        foreach ($mobileGrouped[$a] as $b => &$bv) {
+                            $idList = [];
+                            foreach ($mobileGrouped[$a][$b] as $c => &$cv) {
+                                $idList[] = $cv['id'];
+                            }
+                            // if (count($idList) > 1) {
+                            //     $j = json_encode(
+                            //         Patient::where('name', 'like', '%'.$mobileGrouped[$a][$b][0]['name'].'%')->get()->find($idList)
+                            //     , true);
+                            // }
+                            if (count($mobileGrouped[$a][$b]) > 1 && count( Patient::where('name', 'like', '%'.$mobileGrouped[$a][$b][0]['name'].'%')->get()->find($idList) ) > 1) {
+                                // $nameMatch = $mobileGrouped[$a][$b]->where("name", "like", "%".$mobileGrouped[$a][$b][0]['name']."%")->all();
+                                // $mobileGrouped[$a][$b][0]['nameMatch'] = $nameMatch;
+                                // $mobileGrouped[$a][$b][0]['nameTest'] = "%".$mobileGrouped[$a][$b][0]['name']."%";
+                                $mobileGrouped[$a][$b][0]['attr'] = $attributes[$i] . "," . $attributes[$x];
+                                // $mobileGrouped[$a][$b][0]['idList'] = $idList;
+                                // $mobileGrouped[$a][$b][0]['j'] = $j;
+                                $result[] = $mobileGrouped[$a][$b];
+                            }
+                        }
+                    }
+                    
+                }
+            }
+        }
+
+        // for ($i = 0; $i < count($mobileGrouped); $i++) {
+
+        // }
+
+        //$result = $mobileGrouped;
+
+        return response($result, 200);
+    }
+    /**
      * Used to find duplicate patients
      * 
      * If any 3 of the 4 attributes (name, gender, dob, mobileNo)
