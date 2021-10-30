@@ -26,15 +26,15 @@ class PatientController extends Controller
         $mobileGrouped = Patient::all()->groupBy(array('dob', 'mobileNo', 'gender'));
         $result = [];
 
-        // foreach ($mobileGrouped as $a => &$av) {
-        //     foreach ($mobileGrouped[$a] as $b => &$bv) {
-        //         foreach ($mobileGrouped[$a][$b] as $c => &$cv) {
-        //             if (count($mobileGrouped[$a][$b][$c]) > 1) {
-        //                 $result[] = $mobileGrouped[$a][$b][$c];
-        //             }
-        //         }
-        //     }
-        // }
+        foreach ($mobileGrouped as $a => &$av) {
+            foreach ($mobileGrouped[$a] as $b => &$bv) {
+                foreach ($mobileGrouped[$a][$b] as $c => &$cv) {
+                    if (count($mobileGrouped[$a][$b][$c]) > 1) {
+                        $result[] = $mobileGrouped[$a][$b][$c];
+                    }
+                }
+            }
+        }
 
         $i = 0;
         $tested = []; //stores already walked through attribute pairs
