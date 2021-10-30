@@ -72,5 +72,40 @@ class PatientSeeder extends Seeder
             'dob' => "2007-12-22",
             'diabetesType'=>'Pre-diabetes'
         ]);
+
+        //gender, dob and name match
+        Patient::create([
+            'patientNo' => 3221,
+            'name' => 'Paul',
+            'gender' => 'Male',
+            'dob' => "1990-12-22",
+            'diabetesType'=>'Pre-diabetes',
+            'mobileNo' => '766634555'
+        ]);
+        Patient::create([
+            'patientNo' => 11241,
+            'name' => 'Paul Kirkland',
+            'gender' => 'Male',
+            'dob' => "1990-12-22",
+            'diabetesType'=>'Pre-diabetes',
+            'mobileNo' => '766634546'
+        ]);
+        //gender, dob and mobileNo
+        Patient::create([
+            'patientNo' => 5631,
+            'name' => 'Era Goldsworth',
+            'gender' => 'Female',
+            'dob' => "1992-08-12",
+            'diabetesType'=>'Pre-diabetes',
+            'mobileNo' => '711631523'
+        ]);
+        Patient::create([
+            'patientNo' => 9837,
+            'name' => 'Nira',
+            'gender' => 'Female',
+            'dob' => "1992-08-12",
+            'diabetesType'=>'Pre-diabetes',
+            'mobileNo' => '711631523'
+        ]);
     }
 }
