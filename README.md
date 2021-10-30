@@ -81,6 +81,8 @@ Laravel-based server
     > `php artisan migrate:status`
 * Rollback the last migration
     > `php artisan migrate:rollback`
+    > `php artisan migrate:rollback --step=1` - rolls back only the last migration
+    > `php artisan migrate:rollback --step=1 --pretend` the `--pretend` option shows SQL that would run without actually executing the command
 * Carry out all migrations that have not been run before
     > `php artisan migrate`
 
