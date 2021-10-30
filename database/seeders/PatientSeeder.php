@@ -90,6 +90,14 @@ class PatientSeeder extends Seeder
             'diabetesType'=>'Pre-diabetes',
             'mobileNo' => '766634546'
         ]);
+        Patient::create([
+            'patientNo' => 111141,
+            'name' => 'Paul Nate',
+            'gender' => 'Male',
+            'dob' => "1990-12-22",
+            'diabetesType'=>'Pre-diabetes',
+            'mobileNo' => '766634000'
+        ]);
         //gender, dob and mobileNo
         Patient::create([
             'patientNo' => 5631,
