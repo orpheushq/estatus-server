@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
     Route::post('/patients/find_duplicate', [PatientController::class, 'findDuplicate']);
+    Route::post('/patients/find_all_duplicates', [PatientController::class, 'findAllDuplicates']);
     Route::get('/patients/{page}', [PatientController::class, 'index']);
     Route::post('/patients/{page}', [PatientController::class, 'index']);
     Route::get('/patients/view/{id}', [PatientController::class, 'show']);
