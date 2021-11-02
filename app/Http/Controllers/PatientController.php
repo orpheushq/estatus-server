@@ -232,7 +232,7 @@ class PatientController extends Controller
             foreach ($temp as $t) {
                 $patients[] = $t;
             }
-        } else if ($request->user()->hasPermissionTo("internal patients")) {
+        } else if (!$request->user()->hasPermissionTo("internal patients")) {
             $patients = [];
         }
 
