@@ -20,14 +20,15 @@ class RolesAndPermissionsSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // create permissions
-        Permission::create(['name' => 'edit patients']);
-        Permission::create(['name' => 'delete patients']);
+        Permission::create(['name' => 'internal patients']); //patients of the same organization as current user
+        Permission::create(['name' => 'external patients']); //patients outside the orgnization of the current user
 
         // create a role and assign an array of permissions
         $role = Role::create(['name' => 'hospital-admin'])
-            ->givePermissionTo(['edit patients', 'delete patients']);
+            ->givePermissionTo(['internal patients']);
 
-        $role = Role::create(['name' => 'professional']);
+        $role = Role::create(['name' => 'professional'])
+            ->givePermissionTo(['internal patients']);
 
         $role = Role::create(['name' => 'super-admin'])
             ->givePermissionTo(Permission::all());
