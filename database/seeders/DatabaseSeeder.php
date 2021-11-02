@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
         //hospital-admin
         DB::table('users')->insert([
             'name' => "Anne Bennett",
+            'organizationId'=>1,
             'email' => 'anne@lorem.dev',
             'password' => Hash::make('anne123'),
         ]);
@@ -37,8 +38,15 @@ class DatabaseSeeder extends Seeder
         //professional
         DB::table('users')->insert([
             'name' => "Ben Chrisworth",
+            'organizationId'=>1,
             'email' => 'ben@lorem.dev',
             'password' => Hash::make('ben123'),
+        ]);
+        DB::table('users')->insert([
+            'name' => "Cathy Drew",
+            'organizationId'=>2,
+            'email' => 'cathy@lorem.dev',
+            'password' => Hash::make('cathy123'),
         ]);
     }
 }
