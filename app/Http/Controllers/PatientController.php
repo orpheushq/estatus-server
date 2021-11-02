@@ -6,11 +6,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Gate;
 
 use App\Models\Patient;
 
 class PatientController extends Controller
 {
+    public function __construct() {
+        //$this->authorizeResource(Patient::class, 'patient');
+    }
     /**
      * Used to find all duplicate patients
      * 
@@ -219,6 +223,11 @@ class PatientController extends Controller
              */
             $patients = Patient::where('mobileNo' , 'like', '%'.$filters['mobileNo'].'%')->get();
         }
+        
+        //apply permission constraits
+        if (!$request->user()->hasPermissionTo("external patients") && $request->user()->hasPermissionTo("internal patients")) {
+            $patients = $patients->where("organizationId", "=", $request->user()->organizationId);
+        }
 
         return response($patients, 200);
     }
@@ -268,6 +277,8 @@ class PatientController extends Controller
         //
         $patient = Patient::find($id);
         $newValues = json_decode($request->entity, TRUE);
+
+        $this->authorize('update', $patient);
 
         $newValues['dob'] = new \DateTime($newValues['dob']);
         if (isset($newValues['diagnosisDate'])) $newValues['diagnosisDate'] = new \DateTime($newValues['diagnosisDate']);
