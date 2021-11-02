@@ -31,5 +31,8 @@ class UserAccessSeeder extends Seeder
         /*Professional*/
         User::where('email', '=', 'ben@lorem.dev')->first()
             ->assignRole('professional');
+
+        User::where('email', '=', 'cathy@lorem.dev')->first()
+            ->assignRole('professional');
     }
 }
