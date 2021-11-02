@@ -12,6 +12,7 @@ Laravel-based server
 * [Deployment](#deployment)
 * [CSRF Protection](#csrf-protection)
 * [Migration](#migration)
+* [Role Management](#role-management)
 
 ## Project Creation
 * Use Composer to install Laravel
@@ -86,3 +87,29 @@ Laravel-based server
 * Carry out all migrations that have not been run before
     > `php artisan migrate`
 
+## Role Management
+* This repo uses Spatie's _laravel-permission_ package for role management
+* To install,
+    1. Follow https://spatie.be/docs/laravel-permission/v5/prerequisites
+    2. https://spatie.be/docs/laravel-permission/v5/installation-laravel
+        + The provider had to be manually added
+* Permissions are cached so they main persist even if the entire database is cleared
+    + Run `php artisan optimize:clear` to clear cache
+* To list all permissions/ roles
+    + `php artisan permission:show`
+
+### Using with Sanctum
+* Since this template uses Sanctum, the default guard is sanctum (do `php artisan permission:show` and it will show the guard)
+* When roles/ permissions are created (within a HTTP Controller), they are created for the 'sanctum' guard
+    + However, during role checking, guard used seems to be the default provided in __/config/auth.php__
+    + https://spatie.be/docs/laravel-permission/v3/basic-usage/multiple-guards#the-downside-to-multiple-guards
+    + Due to this, make sure that models requiring permissions have:
+    > `protected $guard_name = 'sanctum';`
+* Despite this, when permissions are created within a seeder, the default guard is `web`
+    + The User model is set to the `guard_name` 'web' 
+
+### Seeding permissions and user access
+* This feature can be used to initially commit roles and permissions
+    > `php artisan db:seed RolesAndPermissionsSeeder`
+* The UserAccessSeeder can be used to assign roles to some of the default accounts
+    > `php artisan db:seed UserAccessSeeder`
