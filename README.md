@@ -13,6 +13,7 @@ Laravel-based server
 * [CSRF Protection](#csrf-protection)
 * [Migration](#migration)
 * [Role Management](#role-management)
+* [AdminLTE](#adminlte)
 
 ## Project Creation
 * Use Composer to install Laravel
@@ -113,3 +114,8 @@ Laravel-based server
     > `php artisan db:seed RolesAndPermissionsSeeder`
 * The UserAccessSeeder can be used to assign roles to some of the default accounts
     > `php artisan db:seed UserAccessSeeder`
+
+## AdminLTE
+* To publish resources 
+    > `php artisan adminlte:install`
+    + If resources already exist, a prompt is shown whether to replace existing configuration/ resources
