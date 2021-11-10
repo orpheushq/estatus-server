@@ -119,3 +119,7 @@ Laravel-based server
 * To publish resources 
     > `php artisan adminlte:install`
     + If resources already exist, a prompt is shown whether to replace existing configuration/ resources
+* To add login/register forms
+    > `composer require laravel/ui`
+    > `php artisan ui bootstrap --auth`
+    > `php artisan adminlte:install --only=auth_views`
