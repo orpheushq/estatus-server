@@ -20,3 +20,13 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//Route::get('/patient/list/{page?}', [App\Http\Controllers\PatientController::class, 'index']);
+//https://stackoverflow.com/a/45558962
+Route::get('/patients/list/{page?}', function (Illuminate\Http\Request $request, $page = 0) {
+    $ctrl = new \App\Http\Controllers\PatientController();
+    return $ctrl->index($request, $page, FALSE);
+});
+Route::get('/patients/{id}', function (Illuminate\Http\Request $request, $id) {
+    return "dsdsd";
+});
