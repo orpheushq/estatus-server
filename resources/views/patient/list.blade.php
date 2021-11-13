@@ -8,16 +8,17 @@
 
 @section('content')
 
-    @foreach ($patients as $p)
-        <div class="d-inline-flex m-2 card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">{{ $p->name }}</h5>
-                <p class="card-text">Info</p>
-                <a href="{{ url('/patients/') }}/{{ $p->id }}" class="btn btn-primary">View</a>
+    <div class="d-flex flex-sm-row flex-column flex-wrap">
+        @foreach ($patients as $p)
+            <div class="d-flex col-sm-2 m-sm-2 card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $p->name }}</h5>
+                    <p class="card-text">Info</p>
+                    <a href="{{ url('/patients/') }}/{{ $p->id }}" class="btn btn-primary">View</a>
+                </div>
             </div>
-        </div>
-    @endforeach
-
+        @endforeach
+    </div>
 @stop
 
 @section('css')
