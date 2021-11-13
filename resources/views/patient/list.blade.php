@@ -19,6 +19,7 @@
             </div>
         @endforeach
     </div>
+    
 @stop
 
 @section('css')
