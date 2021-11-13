@@ -208,7 +208,7 @@ class PatientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $page)
+    public function index(Request $request, $page = 0, $isApi = TRUE)
     {
         //
         $patients = [];
@@ -236,7 +236,11 @@ class PatientController extends Controller
             $patients = [];
         }
 
-        return response($patients, 200);
+        if ($isApi) {
+            return response($patients, 200);
+        } else {
+            return view('patient.list', [ "patients" => $patients]);
+        }
     }
 
     /**
