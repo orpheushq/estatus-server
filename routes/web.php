@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\PatientController;
+use Illuminate\Support\Facades\Event;
+use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,9 +36,13 @@ Route::prefix('patients')->group(function () {
         $ctrl = new PatientController();
         return $ctrl->show($request, -1, FALSE);
     });
-    Route::get('/{id}', function (Illuminate\Http\Request $request, $id) {
+    Route::get('/{id}/info', function (Illuminate\Http\Request $request, $id) {
         $ctrl = new PatientController();
         return $ctrl->show($request, $id, FALSE);
     });
-    Route::post('/{id}', [PatientController::class, 'update']);
+    Route::post('/{id}/info', [PatientController::class, 'update']);
+    Route::get('/{id}/logbook', function (Illuminate\Http\Request $request, $id) {
+        $ctrl = new PatientController();
+        return $ctrl->logbook($request, $id, FALSE);
+    });
 });

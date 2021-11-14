@@ -14,12 +14,12 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ $p->name }}</h5>
                     <p class="card-text">Info</p>
-                    <a href="{{ url('/patients/') }}/{{ $p->id }}" class="btn btn-primary">View</a>
+                    <a href="{{ url('/patients/')."/".$p->id."/info" }}" class="btn btn-primary">View</a>
                 </div>
             </div>
         @endforeach
     </div>
-    
+
 @stop
 
 @section('css')
