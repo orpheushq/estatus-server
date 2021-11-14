@@ -5,6 +5,12 @@
 @section('content_header')
 @stop
 
+@section('content_top_nav_left')
+    <li class="nav-item">
+        <a class="nav-link">{{ $patient->name }}</a>
+    </li>
+@stop
+
 @section('content')
 
     <x-navtab :tabs="[
