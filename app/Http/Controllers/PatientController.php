@@ -269,11 +269,19 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id, $isApi = TRUE)
     {
         //
         $patient = Patient::find($id);
-        return response($patient, 200);
+
+        $this->authorize('view', $patient);
+
+        if ($isApi) {
+            return response($patient, 200);
+        } else {
+            if ($id == -1) $patient = new Patient;
+            return view('patient.view', [ "patient" => $patient]);
+        }
     }
 
     /**
@@ -287,7 +295,14 @@ class PatientController extends Controller
     {
         //
         $patient = Patient::find($id);
-        $newValues = json_decode($request->entity, TRUE);
+        $newValues = [];
+        
+        if (isset($request->entity)) {
+            $newValues = json_decode($request->entity, TRUE);
+        } else {
+            $newValues = $request->all();
+            unset($newValues['_token']);
+        }
 
         $this->authorize('update', $patient);
 
@@ -295,11 +310,18 @@ class PatientController extends Controller
         if (isset($newValues['diagnosisDate'])) $newValues['diagnosisDate'] = new \DateTime($newValues['diagnosisDate']);
 
         foreach ($newValues as $k => $v) {
-            $patient[$k] = $v;
+            if (!is_null($v)) {
+                $patient[$k] = $v;
+            }
         }
 
         $patient->save();
-        return response(Patient::find($id), 200);
+        if (isset($request->entity)) {
+            //api request
+            return response(Patient::find($id), 200);
+        } else {
+            return back()->withInput(); //go back to previous page
+        }
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use \App\Http\Controllers\PatientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,12 +22,21 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-//Route::get('/patient/list/{page?}', [App\Http\Controllers\PatientController::class, 'index']);
+//Route::get('/patients/list/{page?}', [App\Http\Controllers\PatientController::class, 'index']);
 //https://stackoverflow.com/a/45558962
-Route::get('/patients/list/{page?}', function (Illuminate\Http\Request $request, $page = 0) {
-    $ctrl = new \App\Http\Controllers\PatientController();
-    return $ctrl->index($request, $page, FALSE);
-});
-Route::get('/patients/{id}', function (Illuminate\Http\Request $request, $id) {
-    return "dsdsd";
+
+Route::prefix('patients')->group(function () {
+    Route::get('/list/{page?}', function (Illuminate\Http\Request $request, $page = 0) {
+        $ctrl = new PatientController();
+        return $ctrl->index($request, $page, FALSE);
+    });
+    Route::get('/new', function (Illuminate\Http\Request $request) {
+        $ctrl = new PatientController();
+        return $ctrl->show($request, -1, FALSE);
+    });
+    Route::get('/{id}', function (Illuminate\Http\Request $request, $id) {
+        $ctrl = new PatientController();
+        return $ctrl->show($request, $id, FALSE);
+    });
+    Route::post('/{id}', [PatientController::class, 'update']);
 });
