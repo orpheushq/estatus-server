@@ -282,9 +282,13 @@ class PatientController extends Controller
     public function show(Request $request, $id, $isApi = TRUE)
     {
         //
-        $patient = Patient::find($id);
+        $patient = [];
 
-        $this->authorize('view', $patient);
+        if ($id != -1) {
+            //existing entry
+            $patient = Patient::find($id);
+            $this->authorize('view', $patient);
+        }
 
         if ($isApi) {
             return response($patient, 200);
