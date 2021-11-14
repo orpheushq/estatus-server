@@ -293,7 +293,10 @@ class PatientController extends Controller
         if ($isApi) {
             return response($patient, 200);
         } else {
-            if ($id == -1) $patient = new Patient;
+            if ($id == -1) {
+                $patient = new Patient;
+                $patient['id'] = -1;
+            }
             return view('patient.view', [ "patient" => $patient]);
         }
     }
