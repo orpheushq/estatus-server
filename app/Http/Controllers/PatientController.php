@@ -15,6 +15,16 @@ class PatientController extends Controller
     public function __construct() {
         //$this->authorizeResource(Patient::class, 'patient');
     }
+
+    public function logbook(Request $request, $id)
+    {
+        $patient = Patient::find($id);
+
+        $this->authorize('view', $patient);
+
+        return view('patient.logbook', ['patient' => $patient]);
+    }
+
     /**
      * Used to find all duplicate patients
      * 
