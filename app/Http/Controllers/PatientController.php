@@ -262,15 +262,28 @@ class PatientController extends Controller
     public function store(Request $request)
     {
         //
-        $values = json_decode($request->entity, TRUE);
+        $values = [];
+        if (isset($request->entity)) {
+            $values = json_decode($request->entity, TRUE);
+        } else {
+            $values = $request->all();
+            unset($values['_token']);
+            foreach ($values as $k => &$v) {
+                if (is_null($v)) unset($values[$k]);
+            }
+        }
         $values['dob'] = new \DateTime($values['dob']);
         if (isset($values['diagnosisDate'])) $values['diagnosisDate'] = new \DateTime($values['diagnosisDate']);
 
-        $values['password'] = Hash::make($values['password']);
+        //$values['password'] = Hash::make($values['password']);
 
         $newEntity = Patient::create($values);
 
-        return response($newEntity, 200);
+        if (isset($request->entity)) {
+            return response($newEntity, 200);
+        } else {
+            return redirect()->route("patient.show", ['id' => $newEntity->id, $isApi = false]);
+        }
     }
 
     /**

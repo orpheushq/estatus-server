@@ -237,7 +237,7 @@ return [
             'topnav_right' => true,
         ],
         */
-        
+
         // Sidebar items:
         [
             'text'    => 'Patients',
@@ -249,7 +249,7 @@ return [
                 ],
                 [
                     'text' => 'Create Patient',
-                    'url'  => '#',
+                    'url'  => '/patients/new',
                 ],
                 [
                     'text' => 'Create Patient via App',

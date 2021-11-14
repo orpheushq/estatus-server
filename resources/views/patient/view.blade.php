@@ -7,19 +7,21 @@
 
 @section('content_top_nav_left')
     <li class="nav-item">
-        <a class="nav-link">{{ $patient->name }}</a>
+        <a class="nav-link">{{ $patient->id === -1 ? "Add new patient": $patient->name }}</a>
     </li>
 @stop
 
 @section('content')
 
-    <x-navtab :tabs="[
-        ['link' => 'info', 'text' => 'Information'],
-        ['link' => 'logbook', 'text' => 'Logbook'],
-        ['link' => 'health', 'text' => 'Health data'],
-        ['link' => 'remarks', 'text' => 'Remarks'],
-        ['link' => 'about', 'text' => 'About patient']
-    ]"/>
+    @if ($patient->id !== -1)
+        <x-navtab :tabs="[
+            ['link' => 'info', 'text' => 'Information'],
+            ['link' => 'logbook', 'text' => 'Logbook'],
+            ['link' => 'health', 'text' => 'Health data'],
+            ['link' => 'remarks', 'text' => 'Remarks'],
+            ['link' => 'about', 'text' => 'About patient']
+        ]"/>
+    @endif
 
     <form method="post">
         @csrf
