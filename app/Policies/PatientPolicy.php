@@ -35,7 +35,7 @@ class PatientPolicy
         if ($user['orgnaizationId'] !== $patient['organizationId'] && $user->hasPermissionTo('external patients')) {
             return true;
         }
-        if ($user['orgnaizationId'] === $patient['organizationId'] && $user->hasPermissionTo('internal patients')) {
+        if ($user['organizationId'] === $patient['organizationId'] && $user->hasPermissionTo('internal patients')) {
             return true;
         }
 
