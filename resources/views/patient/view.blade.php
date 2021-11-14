@@ -7,7 +7,14 @@
 
 @section('content')
 
-    
+    <x-navtab :tabs="[
+        ['link' => 'info', 'text' => 'Information'],
+        ['link' => 'logbook', 'text' => 'Logbook'],
+        ['link' => 'health', 'text' => 'Health data'],
+        ['link' => 'remarks', 'text' => 'Remarks'],
+        ['link' => 'about', 'text' => 'About patient']
+    ]"/>
+
     <form method="post">
         @csrf
         <h2>Personal Information</h2>
