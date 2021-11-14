@@ -3,6 +3,7 @@ Laravel-based server
 
 ## Table of Contents
 
+* [Variable Dumping](#variable-dumping)
 * [Project Creation](#project-creation)
 * [Setup](#setup)
 * [Maintenance Mode](#maintenance-mode)
@@ -14,6 +15,11 @@ Laravel-based server
 * [Migration](#migration)
 * [Role Management](#role-management)
 * [AdminLTE](#adminlte)
+
+## Variable Dumping
+* Instead of using `var_dump(...); exit;`, use
+> `dd($myvar)`
+* Variable is dumped using a tree structure so system doesn't get held up even if the `$request` variable is dumped
 
 ## Project Creation
 * Use Composer to install Laravel
