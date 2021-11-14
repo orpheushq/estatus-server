@@ -226,6 +226,7 @@ return [
 
     'menu' => [
         // Navbar items:
+        /*
         [
             'type'         => 'navbar-search',
             'text'         => 'search',
@@ -235,7 +236,8 @@ return [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
         ],
-
+        */
+        
         // Sidebar items:
         [
             'text'    => 'Patients',
