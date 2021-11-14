@@ -27,7 +27,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //Route::get('/patients/list/{page?}', [App\Http\Controllers\PatientController::class, 'index']);
 //https://stackoverflow.com/a/45558962
 
-Route::prefix('patients')->group(function () {
+Route::prefix('patients')->middleware('auth')->group(function () {
     Route::get('/list/{page?}', function (Illuminate\Http\Request $request, $page = 0) {
         $ctrl = new PatientController();
         return $ctrl->index($request, $page, FALSE);
