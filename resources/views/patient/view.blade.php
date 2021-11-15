@@ -67,7 +67,7 @@
                     <label for="inpOrganizationId" class="form-label required">Organization</label>
                     <select class="form-control" id="selOrganization" name="organizationId">
                         @foreach ($organizations as $i => $e)
-                            <option {{ ( isset($patient->organizationId) ? $patient->organizationId: Auth::user()->organizationId ) === $e['id'] ? "selected": ""}} value={{ $e['id'] }}>{{ $e['name'] }}</option>    
+                            <option {{ ( isset($patient->organizationId) ? $patient->organizationId: Auth::user()->organizationId ) == $e['id'] ? "selected": ""}} value={{ $e['id'] }}>{{ $e['name'] }}</option>    
                         @endforeach
                     </select>
                 </div>
