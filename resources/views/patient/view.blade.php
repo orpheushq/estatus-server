@@ -62,6 +62,12 @@
 
         <h2>Advanced Information</h2>
         <div class="d-flex flex-sm-row flex-column">
+            @can('external patients')
+                <div class="d-flex flex-column me-3 mb-2 col-sm-3 col-12">
+                    <label for="inpOrganizationId" class="form-label required">Organization</label>
+                    <input type="number" class="form-control" id="inpOrganizationId" name="organizationId" required value="{{ isset($patient->organizationId) ? $patient->organizationId: Auth::user()->organizationId }}">
+                </div>
+            @endcan
             <div class="d-flex flex-column me-3 mb-2 col-sm-3 col-12">
                 <label for="inpDiagnosisDate" class="form-label required">Date of diagnosis</label>
                 <input type="date" class="form-control" id="inpDiagnosisDate" name="diagnosisDate" value="{{ $patient->diagnosisDate }}">

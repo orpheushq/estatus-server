@@ -277,6 +277,15 @@ class PatientController extends Controller
 
         //$values['password'] = Hash::make($values['password']);
 
+        //all users can create patients within their own organization
+        if (!$request->user()->can("external patients")) {
+            //can only create within their organization
+            $values['organizationId'] = $request->user()->organizationId;
+        } else {
+            //can create for any organization so should be given the option (on the form)
+            //don't have to do anything as organizationId would already be set in form input
+        }
+
         $newEntity = Patient::create($values);
 
         if (isset($request->entity)) {
