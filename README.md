@@ -11,6 +11,7 @@ Laravel-based server
 * [CLI](#cli)
 * [Setting Environment](#setting-environment)
 * [Deployment](#deployment)
+    * [Troubleshooting](#troubleshooting)
 * [CSRF Protection](#csrf-protection)
 * [Migration](#migration)
 * [Role Management](#role-management)
@@ -77,6 +78,10 @@ Laravel-based server
 3. Execute other setup operations
 * App can be accessed at _http://example.com/laravel-folder/public_
     + i.e. the application can be accessed at the __/public__ sub directory (sub route)
+
+### Troubleshooting
+* If an error 'fatal: unable to create thread: Resource temporarily unavailable' occurs during `git pull`,
+    + https://stackoverflow.com/a/21953325
 
 ## CSRF Protection
 * CSRF protection can be completely disabled for *all routes* (https://laravel.com/docs/8.x/csrf#csrf-excluding-uris)
