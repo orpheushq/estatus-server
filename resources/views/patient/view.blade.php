@@ -65,7 +65,11 @@
             @can('external patients')
                 <div class="d-flex flex-column me-3 mb-2 col-sm-3 col-12">
                     <label for="inpOrganizationId" class="form-label required">Organization</label>
-                    <input type="number" class="form-control" id="inpOrganizationId" name="organizationId" required value="{{ isset($patient->organizationId) ? $patient->organizationId: Auth::user()->organizationId }}">
+                    <select class="form-control" id="selOrganization" name="organizationId">
+                        @foreach ($organizations as $i => $e)
+                            <option {{ ( isset($patient->organizationId) ? $patient->organizationId: Auth::user()->organizationId ) === $e['id'] ? "selected": ""}} value={{ $e['id'] }}>{{ $e['name'] }}</option>    
+                        @endforeach
+                    </select>
                 </div>
             @endcan
             <div class="d-flex flex-column me-3 mb-2 col-sm-3 col-12">

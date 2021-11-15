@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
 
 use App\Models\Patient;
+use App\Models\Organization;
 
 class PatientController extends Controller
 {
@@ -319,7 +320,7 @@ class PatientController extends Controller
                 $patient = new Patient;
                 $patient['id'] = -1;
             }
-            return view('patient.view', [ "patient" => $patient]);
+            return view('patient.view', [ "patient" => $patient, "organizations" =>  Organization::all()]);
         }
     }
 
