@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use \App\Http\Controllers\PatientController;
+use Illuminate\Support\Facades\Event;
+use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +19,34 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//Route::get('/patients/list/{page?}', [App\Http\Controllers\PatientController::class, 'index']);
+//https://stackoverflow.com/a/45558962
+
+Route::prefix('patients')->middleware('auth')->group(function () {
+    Route::get('/list/{page?}', function (Request $request, $page = 0) {
+        $ctrl = new PatientController();
+        return $ctrl->index($request, $page, FALSE);
+    });
+    Route::get('/new', function (Request $request) {
+        $ctrl = new PatientController();
+        return $ctrl->show($request, -1, FALSE);
+    });
+    Route::post('/new', [PatientController::class, 'store']);
+    
+    Route::get('/{id}/info', function (Request $request, $id) {
+        $ctrl = new PatientController();
+        return $ctrl->show($request, $id, FALSE);
+    })->name("patient.show");
+    Route::post('/{id}/info', [PatientController::class, 'update']);
+
+    Route::get('/{id}/logbook', function (Request $request, $id) {
+        $ctrl = new PatientController();
+        return $ctrl->logbook($request, $id, FALSE);
+    });
 });

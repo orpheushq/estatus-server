@@ -6,11 +6,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Gate;
 
 use App\Models\Patient;
+use App\Models\Organization;
 
 class PatientController extends Controller
 {
+    public function __construct() {
+        //$this->authorizeResource(Patient::class, 'patient');
+    }
+
+    public function logbook(Request $request, $id)
+    {
+        $patient = Patient::find($id);
+
+        $this->authorize('view', $patient);
+
+        return view('patient.logbook', ['patient' => $patient]);
+    }
+
     /**
      * Used to find all duplicate patients
      * 
@@ -204,7 +219,7 @@ class PatientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $page)
+    public function index(Request $request, $page = 0, $isApi = TRUE)
     {
         //
         $patients = [];
@@ -212,15 +227,31 @@ class PatientController extends Controller
         $filters = json_decode($request->filters, TRUE);
 
         if (is_null($filters)) {
-            $patients = Patient::all();
+            $patients = Patient::whereNotNull("organizationId")->get(); //get only assigned patients
         } else {
             /**
              * TODO: create a more flexible and scalable approach to query using filters
              */
             $patients = Patient::where('mobileNo' , 'like', '%'.$filters['mobileNo'].'%')->get();
         }
+        
+        //apply permission constraits
+        if (!$request->user()->hasPermissionTo("external patients") && $request->user()->hasPermissionTo("internal patients")) {
+            //NOTE: check why $temp is an object not an array
+            $temp = $patients->where("organizationId", "=", $request->user()->organizationId);
+            $patients = [];
+            foreach ($temp as $t) {
+                $patients[] = $t;
+            }
+        } else if (!$request->user()->hasPermissionTo("internal patients")) {
+            $patients = [];
+        }
 
-        return response($patients, 200);
+        if ($isApi) {
+            return response($patients, 200);
+        } else {
+            return view('patient.list', [ "patients" => $patients]);
+        }
     }
 
     /**
@@ -232,15 +263,37 @@ class PatientController extends Controller
     public function store(Request $request)
     {
         //
-        $values = json_decode($request->entity, TRUE);
+        $values = [];
+        if (isset($request->entity)) {
+            $values = json_decode($request->entity, TRUE);
+        } else {
+            $values = $request->all();
+            unset($values['_token']);
+            foreach ($values as $k => &$v) {
+                if (is_null($v)) unset($values[$k]);
+            }
+        }
         $values['dob'] = new \DateTime($values['dob']);
         if (isset($values['diagnosisDate'])) $values['diagnosisDate'] = new \DateTime($values['diagnosisDate']);
 
-        $values['password'] = Hash::make($values['password']);
+        //$values['password'] = Hash::make($values['password']);
+
+        //all users can create patients within their own organization
+        if (!$request->user()->can("external patients")) {
+            //can only create within their organization
+            $values['organizationId'] = $request->user()->organizationId;
+        } else {
+            //can create for any organization so should be given the option (on the form)
+            //don't have to do anything as organizationId would already be set in form input
+        }
 
         $newEntity = Patient::create($values);
 
-        return response($newEntity, 200);
+        if (isset($request->entity)) {
+            return response($newEntity, 200);
+        } else {
+            return redirect()->route("patient.show", ['id' => $newEntity->id, $isApi = false]);
+        }
     }
 
     /**
@@ -249,11 +302,26 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id, $isApi = TRUE)
     {
         //
-        $patient = Patient::find($id);
-        return response($patient, 200);
+        $patient = [];
+
+        if ($id != -1) {
+            //existing entry
+            $patient = Patient::find($id);
+            $this->authorize('view', $patient);
+        }
+
+        if ($isApi) {
+            return response($patient, 200);
+        } else {
+            if ($id == -1) {
+                $patient = new Patient;
+                $patient['id'] = -1;
+            }
+            return view('patient.view', [ "patient" => $patient, "organizations" =>  Organization::all()]);
+        }
     }
 
     /**
@@ -267,17 +335,33 @@ class PatientController extends Controller
     {
         //
         $patient = Patient::find($id);
-        $newValues = json_decode($request->entity, TRUE);
+        $newValues = [];
+        
+        if (isset($request->entity)) {
+            $newValues = json_decode($request->entity, TRUE);
+        } else {
+            $newValues = $request->all();
+            unset($newValues['_token']);
+        }
+
+        $this->authorize('update', $patient);
 
         $newValues['dob'] = new \DateTime($newValues['dob']);
         if (isset($newValues['diagnosisDate'])) $newValues['diagnosisDate'] = new \DateTime($newValues['diagnosisDate']);
 
         foreach ($newValues as $k => $v) {
-            $patient[$k] = $v;
+            if (!is_null($v)) {
+                $patient[$k] = $v;
+            }
         }
 
         $patient->save();
-        return response(Patient::find($id), 200);
+        if (isset($request->entity)) {
+            //api request
+            return response(Patient::find($id), 200);
+        } else {
+            return back()->withInput(); //go back to previous page
+        }
     }
 
     /**

@@ -16,6 +16,7 @@ class CreatePatientsTable extends Migration
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('patientNo')->unsigned();
+            $table->bigInteger('organizationId')->unsigned()->nullable()->default(null);
             $table->string('name');
             $table->string('gender');
             $table->date('dob')->nullable();

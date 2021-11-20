@@ -19,6 +19,7 @@ class PatientSeeder extends Seeder
     {
         Patient::create([
             'patientNo' => 1,
+            'organizationId'=>1,
             'name' => 'Anne Smith',
             'gender' => 'Female',
             'dob' => "1960-01-01",
@@ -27,6 +28,7 @@ class PatientSeeder extends Seeder
 
         Patient::create([
             'patientNo' => 2,
+            'organizationId'=>1,
             'name' => 'John Doe',
             'gender' => 'Male',
             'dob' => "1997-03-12",
@@ -35,6 +37,7 @@ class PatientSeeder extends Seeder
 
         Patient::create([
             'patientNo' => 3,
+            'organizationId'=>1,
             'name' => 'Jake Fauci',
             'gender' => 'Male',
             'dob' => "1989-02-09",
@@ -43,6 +46,7 @@ class PatientSeeder extends Seeder
 
         Patient::create([
             'patientNo' => 44,
+            'organizationId'=>2,
             'name' => 'Frank Simmons',
             'gender' => 'Male',
             'dob' => "1993-09-20",
@@ -51,6 +55,7 @@ class PatientSeeder extends Seeder
 
         Patient::create([
             'patientNo' => 98,
+            'organizationId'=>2,
             'name' => 'Niel Harris',
             'gender' => 'Male',
             'dob' => "1996-09-20",
@@ -59,6 +64,7 @@ class PatientSeeder extends Seeder
 
         Patient::create([
             'patientNo' => 983,
+            'organizationId'=>2,
             'name' => 'Jennifer Miel',
             'gender' => 'Female',
             'dob' => "2010-12-22",
@@ -67,6 +73,7 @@ class PatientSeeder extends Seeder
 
         Patient::create([
             'patientNo' => 1983,
+            'organizationId'=>2,
             'name' => 'Tani Myers',
             'gender' => 'Female',
             'dob' => "2007-12-22",
@@ -76,6 +83,7 @@ class PatientSeeder extends Seeder
         //gender, dob and name match
         Patient::create([
             'patientNo' => 3221,
+            'organizationId'=>2,
             'name' => 'Paul',
             'gender' => 'Male',
             'dob' => "1990-12-22",
@@ -84,6 +92,7 @@ class PatientSeeder extends Seeder
         ]);
         Patient::create([
             'patientNo' => 11241,
+            'organizationId'=>2,
             'name' => 'Paul Kirkland',
             'gender' => 'Male',
             'dob' => "1990-12-22",
@@ -92,6 +101,7 @@ class PatientSeeder extends Seeder
         ]);
         Patient::create([
             'patientNo' => 111141,
+            'organizationId'=>2,
             'name' => 'Paul Nate',
             'gender' => 'Male',
             'dob' => "1990-12-22",
@@ -101,6 +111,7 @@ class PatientSeeder extends Seeder
         //gender, dob and mobileNo
         Patient::create([
             'patientNo' => 5631,
+            'organizationId'=>2,
             'name' => 'Era Goldsworth',
             'gender' => 'Female',
             'dob' => "1992-08-12",
@@ -109,6 +120,7 @@ class PatientSeeder extends Seeder
         ]);
         Patient::create([
             'patientNo' => 9837,
+            'organizationId'=>2,
             'name' => 'Nira',
             'gender' => 'Female',
             'dob' => "1992-08-12",

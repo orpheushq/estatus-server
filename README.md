@@ -3,6 +3,7 @@ Laravel-based server
 
 ## Table of Contents
 
+* [Variable Dumping](#variable-dumping)
 * [Project Creation](#project-creation)
 * [Setup](#setup)
 * [Maintenance Mode](#maintenance-mode)
@@ -10,8 +11,16 @@ Laravel-based server
 * [CLI](#cli)
 * [Setting Environment](#setting-environment)
 * [Deployment](#deployment)
+    * [Troubleshooting](#troubleshooting)
 * [CSRF Protection](#csrf-protection)
 * [Migration](#migration)
+* [Role Management](#role-management)
+* [AdminLTE](#adminlte)
+
+## Variable Dumping
+* Instead of using `var_dump(...); exit;`, use
+> `dd($myvar)`
+* Variable is dumped using a tree structure so system doesn't get held up even if the `$request` variable is dumped
 
 ## Project Creation
 * Use Composer to install Laravel
@@ -70,6 +79,10 @@ Laravel-based server
 * App can be accessed at _http://example.com/laravel-folder/public_
     + i.e. the application can be accessed at the __/public__ sub directory (sub route)
 
+### Troubleshooting
+* If an error 'fatal: unable to create thread: Resource temporarily unavailable' occurs during `git pull`,
+    + https://stackoverflow.com/a/21953325
+
 ## CSRF Protection
 * CSRF protection can be completely disabled for *all routes* (https://laravel.com/docs/8.x/csrf#csrf-excluding-uris)
     + Add '*' to the `$except` array of __Http/Middleware/VerifyCsrfToken.php__
@@ -86,3 +99,38 @@ Laravel-based server
 * Carry out all migrations that have not been run before
     > `php artisan migrate`
 
+## Role Management
+* This repo uses Spatie's _laravel-permission_ package for role management
+* To install,
+    1. Follow https://spatie.be/docs/laravel-permission/v5/prerequisites
+    2. https://spatie.be/docs/laravel-permission/v5/installation-laravel
+        + The provider had to be manually added
+* Permissions are cached so they main persist even if the entire database is cleared
+    + Run `php artisan optimize:clear` to clear cache
+* To list all permissions/ roles
+    + `php artisan permission:show`
+
+### Using with Sanctum
+* Since this template uses Sanctum, the default guard is sanctum (do `php artisan permission:show` and it will show the guard)
+* When roles/ permissions are created (within a HTTP Controller), they are created for the 'sanctum' guard
+    + However, during role checking, guard used seems to be the default provided in __/config/auth.php__
+    + https://spatie.be/docs/laravel-permission/v3/basic-usage/multiple-guards#the-downside-to-multiple-guards
+    + Due to this, make sure that models requiring permissions have:
+    > `protected $guard_name = 'sanctum';`
+* Despite this, when permissions are created within a seeder, the default guard is `web`
+    + The User model is set to the `guard_name` 'web' 
+
+### Seeding permissions and user access
+* This feature can be used to initially commit roles and permissions
+    > `php artisan db:seed RolesAndPermissionsSeeder`
+* The UserAccessSeeder can be used to assign roles to some of the default accounts
+    > `php artisan db:seed UserAccessSeeder`
+
+## AdminLTE
+* To publish resources 
+    > `php artisan adminlte:install`
+    + If resources already exist, a prompt is shown whether to replace existing configuration/ resources
+* To add login/register forms
+    > `composer require laravel/ui`
+    > `php artisan ui bootstrap --auth`
+    > `php artisan adminlte:install --only=auth_views`
