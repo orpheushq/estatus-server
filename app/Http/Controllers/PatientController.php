@@ -227,7 +227,7 @@ class PatientController extends Controller
         $filters = json_decode($request->filters, TRUE);
 
         if (is_null($filters)) {
-            $patients = Patient::all();
+            $patients = Patient::whereNotNull("organizationId")->get(); //get only assigned patients
         } else {
             /**
              * TODO: create a more flexible and scalable approach to query using filters
