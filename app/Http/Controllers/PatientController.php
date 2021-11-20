@@ -237,12 +237,8 @@ class PatientController extends Controller
         
         //apply permission constraits
         if (!$request->user()->hasPermissionTo("external patients") && $request->user()->hasPermissionTo("internal patients")) {
-            //NOTE: check why $temp is an object not an array
-            $temp = $patients->where("organizationId", "=", $request->user()->organizationId);
-            $patients = [];
-            foreach ($temp as $t) {
-                $patients[] = $t;
-            }
+            $patients = Patient::where("organizationId", "=", $request->user()->organizationId)->get();
+
         } else if (!$request->user()->hasPermissionTo("internal patients")) {
             $patients = [];
         }
