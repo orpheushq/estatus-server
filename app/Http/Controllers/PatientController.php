@@ -17,6 +17,37 @@ class PatientController extends Controller
         //$this->authorizeResource(Patient::class, 'patient');
     }
 
+    /**
+     * Search unassigned patients using phone number
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function searchPatient(Request $request, $isApi = TRUE)
+    {
+        //
+        $patient = null;
+
+        if (!$isApi) {
+            if (isset($request->mobileNo)) {
+                $patient = Patient::whereNull("organizationId")->where("mobileNo", "=", $request->mobileNo)->first(); //get only assigned patients
+            }
+        } else {
+            //api route
+        }
+        
+        //apply permission constraits
+        if (!$request->user()->hasPermissionTo("external patients") && !$request->user()->hasPermissionTo("internal patients")) {
+            return response("no permission", 403);
+        }
+
+        if ($isApi) {
+            return response($patient, 200);
+        } else {
+            return view('patient.via-app', [ "patient" => $patient, "mobileNo" => $request->mobileNo ]);
+        }
+    }
+    
     public function logbook(Request $request, $id)
     {
         $patient = Patient::find($id);

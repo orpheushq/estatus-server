@@ -29,6 +29,11 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //https://stackoverflow.com/a/45558962
 
 Route::prefix('patients')->middleware('auth')->group(function () {
+    Route::get('/create-via-app', function (Request $request) {
+        $ctrl = new PatientController();
+        return $ctrl->searchPatient($request, FALSE);
+    });
+
     Route::get('/list/{page?}', function (Request $request, $page = 0) {
         $ctrl = new PatientController();
         return $ctrl->index($request, $page, FALSE);
