@@ -3,7 +3,7 @@
 @section('title', 'Patients')
 
 @section('content_header')
-    <h2 class="text-center display-4">Search</h2>
+    <h2 class="text-center display-6">Search</h2>
 @stop
 
 @section('content')
@@ -13,7 +13,7 @@
         <div class="col-md-8 offset-md-2">
             <form method="get">
                 <div class="input-group input-group-lg">
-                    <input type="search" name="mobileNo" class="form-control form-control-lg" placeholder="Type your keywords here" value="{{ $mobileNo }}" autocomplete="off">
+                    <input type="search" name="mobileNo" class="form-control form-control-lg" placeholder="Mobile number" value="{{ $mobileNo }}" autocomplete="off">
                     <div class="input-group-append">
                         <button type="submit" class="btn btn-lg btn-default">
                             <i class="fa fa-search"></i>
@@ -42,10 +42,10 @@
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header bg-info">
                             <h3 class="widget-user-username">{{ $patient->name }}</h3>
-                            <h5 class="widget-user-desc">Diabetes: {{ $patient->diabetesType }} </h5>
+                            <h5 class="widget-user-desc">{{ date_create_from_format("Y-m-d", $patient->dob)->format("d M y") }} </h5>
                         </div>
                         <div class="widget-user-image">
-                            <img class="img-circle elevation-2" src="https://adminlte.io/themes/v3/dist/img/user1-128x128.jpg" alt="User Avatar">
+                            <img class="img-circle elevation-2" style="background: #fff;" src="{{ asset('images/user.png') }}" alt="User Avatar">
                         </div>
                         <div class="card-footer">
                             <div class="row">
