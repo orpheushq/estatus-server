@@ -18,6 +18,31 @@ class PatientController extends Controller
     }
 
     /**
+     * Assign patient to current user's organizationId
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function assignPatient(Request $request, $id, $isApi = TRUE)
+    {
+        $patient = Patient::find($id);
+
+        //if non-existent patient OR a patient that is already assigned
+        if (is_null($patient) || !is_null($patient['organizationId'])) {
+            abort(403);exit;
+        }
+
+        $patient['organizationId'] = $request->user()->organizationId;
+        $patient->save();
+
+        if (!$isApi) {
+            return redirect()->route("patient.show", ['id' => $patient->id, $isApi = false]);
+        } else {
+
+        }
+    }
+
+    /**
      * Search unassigned patients using phone number
      *
      * @param  \Illuminate\Http\Request  $request

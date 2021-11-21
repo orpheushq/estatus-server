@@ -34,33 +34,35 @@
 
     @if (!is_null($patient))
     <div class="row mt-4">
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
-            <!-- Widget: user widget style 1 -->
-            <div class="card card-widget widget-user">
-                <!-- Add the bg color to the header using any of the bg-* classes -->
-                <div class="widget-user-header bg-info">
-                    <h3 class="widget-user-username">{{ $patient->name }}</h3>
-                    <h5 class="widget-user-desc">Diabetes: {{ $patient->diabetesType }} </h5>
-                </div>
-                <div class="widget-user-image">
-                    <img class="img-circle elevation-2" src="https://adminlte.io/themes/v3/dist/img/user1-128x128.jpg" alt="User Avatar">
-                </div>
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col-sm-12 border-right">
-                            <div class="description-block">
-                                <h5 class="description-header">Unassigned</h5>
-                                <span class="description-text">
-                                    <a href="#" class="small-box-footer">Add to my organization <i class="fas fa-arrow-circle-right"></i></a>
-                                </span>
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <form method="post" action="{{ url('/patients/create-via-app').'/'.$patient->id }}">
+                    <!-- Widget: user widget style 1 -->
+                    <div class="card card-widget widget-user">
+                        <!-- Add the bg color to the header using any of the bg-* classes -->
+                        <div class="widget-user-header bg-info">
+                            <h3 class="widget-user-username">{{ $patient->name }}</h3>
+                            <h5 class="widget-user-desc">Diabetes: {{ $patient->diabetesType }} </h5>
+                        </div>
+                        <div class="widget-user-image">
+                            <img class="img-circle elevation-2" src="https://adminlte.io/themes/v3/dist/img/user1-128x128.jpg" alt="User Avatar">
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-sm-12 border-right">
+                                    <div class="description-block">
+                                        <h5 class="description-header">Unassigned</h5>
+                                        <span class="description-text">
+                                            <button type="submit" class="btn btn-block btn-default btn-sm mt-2">Add to my organization<i class="fas fa-arrow-circle-right ml-1"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
-        </div>
-        <div class="col-md-4"></div>
+            <div class="col-md-4"></div>
     </div>
     @endif
 

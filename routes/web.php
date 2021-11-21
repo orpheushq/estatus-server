@@ -33,6 +33,10 @@ Route::prefix('patients')->middleware('auth')->group(function () {
         $ctrl = new PatientController();
         return $ctrl->searchPatient($request, FALSE);
     });
+    Route::post('/create-via-app/{id}', function (Request $request, $id) {
+        $ctrl = new PatientController();
+        return $ctrl->assignPatient($request, $id, FALSE);
+    });
 
     Route::get('/list/{page?}', function (Request $request, $page = 0) {
         $ctrl = new PatientController();
