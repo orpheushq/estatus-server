@@ -252,7 +252,7 @@ return [
                     'url'  => '/patients/new',
                 ],
                 [
-                    'text' => 'Create Patient via App',
+                    'text' => 'Add Patient from App',
                     'url'  => '/patients/create-via-app',
                 ]
             ],
