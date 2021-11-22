@@ -6,26 +6,81 @@
     <h1>Patients</h1>
 @stop
 
+@section('plugins.Datatables', true)
+
+{{-- Setup data for datatables --}}
+@php
+$heads = [
+    'ID',
+    'Name',
+    'Diabetes Type',
+    'Action'
+    /*['label' => 'Phone', 'width' => 40],*/
+];
+
+$btnDetails = '<button class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details">
+                <i class="fa fa-lg fa-fw fa-eye"></i>
+            </button>';
+
+$config = [
+    'order' => [[1, 'asc']],
+    'columns' => [
+        [
+            'data' => 'id',
+            'visible' => false
+        ],
+        [
+            'data' => 'name'
+        ], 
+        [
+            'data' => 'diabetesType'
+        ],
+        [
+            'data' => 'actionCol',
+            'orderable' => false
+        ]
+    ],
+    'paging' => true,
+    'lengthMenu' => [ 10 ]
+];
+
+foreach ($patients as $i => &$p) {
+    $temp = [
+        'id' => $p['id'],
+        'name' => $p['name'],
+        'diabetesType' => $p['diabetesType'],
+        'actionCol' => '<nobr>'.$btnDetails.'</nobr>'
+    ];
+    $patients[$i] = $temp;
+}
+$config['data'] = $patients;
+@endphp
+
+
+
 @section('content')
-
-    <div class="d-flex flex-sm-row flex-column flex-wrap">
-        @foreach ($patients as $p)
-            <div class="d-flex col-sm-2 m-sm-2 card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $p->name }}</h5>
-                    <p class="card-text">Info</p>
-                    <a href="{{ url('/patients/')."/".$p->id."/info" }}" class="btn btn-primary">View</a>
-                </div>
-            </div>
+    <x-adminlte-datatable id="tblPatient" :heads="$heads" :config="$config" theme="light" striped hoverable with-buttons>
+        @foreach($config['data'] as $row)
+            <tr>
+                @foreach($row as $cell)
+                    <td>{!! $cell !!}</td>
+                @endforeach
+            </tr>
         @endforeach
-    </div>
-
+    </x-adminlte-datatable>
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
 @stop
 
 @section('js')
-    <script> console.log('Hi!'); </script>
+<script>
+    $(document).ready(function() {
+        var table = $('#tblPatient').DataTable();
+        $('#tblPatient tbody').on( 'click', 'button', function () {
+            var data = table.row( $(this).parents('tr') ).data();
+            window.location.href="{{ url('/patients/') }}/" + data['id'] + "/info";
+        } );
+    });
+</script>
 @stop
