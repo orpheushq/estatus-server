@@ -41,6 +41,9 @@ Laravel-based server
 5. Database setup and seeding
     > `php artisan migrate`
     > `php artisan db:seed`
+    > `php artisan db:seed OrganizationSeeder`
+    > `php artisan db:seed RolesAndPermissionsSeeder`
+    > `php artisan db:seed UserAccessSeeder`
 
 ## Maintenance Mode
 * App can be switched into maintenance mode by runnning
