@@ -6,6 +6,7 @@ Laravel-based server
 * [Variable Dumping](#variable-dumping)
 * [Project Creation](#project-creation)
 * [Setup](#setup)
+* [User Registration](#user-registration)
 * [Maintenance Mode](#maintenance-mode)
 * [Unit Testing](#unit-testing)
 * [CLI](#cli)
@@ -44,6 +45,9 @@ Laravel-based server
     > `php artisan db:seed OrganizationSeeder`
     > `php artisan db:seed RolesAndPermissionsSeeder`
     > `php artisan db:seed UserAccessSeeder`
+
+## User Registration
+* __IMPORTANT: by default user registration route is active. To edit registration flow/ modify Auth/RegisterController.php__
 
 ## Maintenance Mode
 * App can be switched into maintenance mode by runnning
