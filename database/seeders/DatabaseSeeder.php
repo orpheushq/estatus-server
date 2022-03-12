@@ -19,12 +19,14 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'name' => "Orpheus Digital",
             'email' => 'admin@orpheus.digital',
-            'password' => Hash::make('decrease'),
+            'organizationId'=>1,
+            'password' => Hash::make('Increase1!or'),
         ]);
         DB::table('users')->insert([
             'name' => "admin",
             'email' => 'admin@lorem.dev',
-            'password' => Hash::make('admin123'),
+            'organizationId'=>1,
+            'password' => Hash::make('Admin1!'),
         ]);
 
         //hospital-admin
@@ -32,7 +34,7 @@ class DatabaseSeeder extends Seeder
             'name' => "Anne Bennett",
             'organizationId'=>1,
             'email' => 'anne@lorem.dev',
-            'password' => Hash::make('anne123'),
+            'password' => Hash::make('Anne1!'),
         ]);
 
         //professional
@@ -40,13 +42,13 @@ class DatabaseSeeder extends Seeder
             'name' => "Ben Chrisworth",
             'organizationId'=>1,
             'email' => 'ben@lorem.dev',
-            'password' => Hash::make('ben123'),
+            'password' => Hash::make('Ben1!'),
         ]);
         DB::table('users')->insert([
             'name' => "Cathy Drew",
             'organizationId'=>2,
             'email' => 'cathy@lorem.dev',
-            'password' => Hash::make('cathy123'),
+            'password' => Hash::make('Cathy1!'),
         ]);
     }
 }
