@@ -24,15 +24,14 @@ class UserAccessSeeder extends Seeder
         User::where('email', '=', 'admin@lorem.dev')->first()
             ->assignRole('super-admin');
 
-        /*Hospital Admin*/
+        /*Branch Admin*/
         User::where('email', '=', 'anne@lorem.dev')->first()
-            ->assignRole('hospital-admin');
-
-        /*Professional*/
+            ->assignRole('branch-admin');
         User::where('email', '=', 'ben@lorem.dev')->first()
-            ->assignRole('professional');
+            ->assignRole('branch-admin');
 
+        /*Client*/
         User::where('email', '=', 'cathy@lorem.dev')->first()
-            ->assignRole('professional');
+            ->assignRole('client');
     }
 }

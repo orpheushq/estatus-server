@@ -29,21 +29,21 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('Admin1!'),
         ]);
 
-        //hospital-admin
+        //branch-admin
         DB::table('users')->insert([
             'name' => "Anne Bennett",
             'organizationId'=>1,
             'email' => 'anne@lorem.dev',
             'password' => Hash::make('Anne1!'),
         ]);
-
-        //professional
         DB::table('users')->insert([
             'name' => "Ben Chrisworth",
-            'organizationId'=>1,
+            'organizationId'=>2,
             'email' => 'ben@lorem.dev',
             'password' => Hash::make('Ben1!'),
         ]);
+
+        //client
         DB::table('users')->insert([
             'name' => "Cathy Drew",
             'organizationId'=>2,

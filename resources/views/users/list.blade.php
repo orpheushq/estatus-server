@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Patients')
+@section('title', 'Users')
 
 @section('content_header')
-    <h1>Patients</h1>
+    <h1>Users</h1>
 @stop
 
 @section('plugins.Datatables', true)
@@ -12,8 +12,9 @@
 @php
 $heads = [
     'ID',
+    'Organization',
     'Name',
-    'Diabetes Type',
+    'Email',
     'Action'
     /*['label' => 'Phone', 'width' => 40],*/
 ];
@@ -23,17 +24,20 @@ $btnDetails = '<button class="btn btn-xs btn-default text-teal mx-1 shadow" titl
             </button>';
 
 $config = [
-    'order' => [[1, 'asc']],
+    'order' => [[0, 'asc']],
     'columns' => [
         [
             'data' => 'id',
             'visible' => false
         ],
         [
-            'data' => 'name'
+            'data' => 'organizationName'
         ], 
         [
-            'data' => 'diabetesType'
+            'data' => 'name'
+        ],
+        [
+            'data' => 'email'
         ],
         [
             'data' => 'actionCol',
@@ -44,22 +48,23 @@ $config = [
     'lengthMenu' => [ 10 ]
 ];
 
-foreach ($patients as $i => &$p) {
+foreach ($users as $i => &$u) {
     $temp = [
-        'id' => $p['id'],
-        'name' => $p['name'],
-        'diabetesType' => $p['diabetesType'],
+        'id' => $u['id'],
+        'organizationName' => $u->organization()->first()->name,
+        'name' => $u['name'],
+        'email' => $u['email'],
         'actionCol' => '<nobr>'.$btnDetails.'</nobr>'
     ];
-    $patients[$i] = $temp;
+    $users[$i] = $temp;
 }
-$config['data'] = $patients;
+$config['data'] = $users;
 @endphp
 
 
 
 @section('content')
-    <x-adminlte-datatable id="tblPatient" :heads="$heads" :config="$config" theme="light" striped hoverable with-buttons>
+    <x-adminlte-datatable id="tblUser" :heads="$heads" :config="$config" theme="light" striped hoverable with-buttons>
         @foreach($config['data'] as $row)
             <tr>
                 @foreach($row as $cell)
@@ -76,10 +81,11 @@ $config['data'] = $patients;
 @section('js')
 <script>
     $(document).ready(function() {
-        var table = $('#tblPatient').DataTable();
-        $('#tblPatient tbody').on( 'click', 'button', function () {
+        var table = $('#tblUser').DataTable();
+        $('#tblUser tbody').on( 'click', 'button', function () {
             var data = table.row( $(this).parents('tr') ).data();
-            window.location.href="{{ url('/patients/') }}/" + data['id'] + "/info";
+            // window.location.href="{{ url('/users/') }}/" + data['id'];
+            window.location.href="{{ route('users.show', '') }}" + "/" + data['id'];
         } );
     });
 </script>

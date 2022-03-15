@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\PatientController;
+use \App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Event;
 use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 use Illuminate\Http\Request;
@@ -28,6 +28,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 //Route::get('/patients/list/{page?}', [App\Http\Controllers\PatientController::class, 'index']);
 //https://stackoverflow.com/a/45558962
+
+Route::middleware('auth')->group(function () {
+    Route::resource('users', UserController::class);
+});
 
 Route::prefix('patients')->middleware('auth')->group(function () {
     Route::get('/create-via-app', function (Request $request) {
