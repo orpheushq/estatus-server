@@ -17,6 +17,7 @@ Laravel-based server
 * [Migration](#migration)
 * [Role Management](#role-management)
 * [AdminLTE](#adminlte)
+* [Google API Client](#google-api-client)
 
 ## Variable Dumping
 * Instead of using `var_dump(...); exit;`, use
@@ -141,3 +142,6 @@ Laravel-based server
     > `composer require laravel/ui`
     > `php artisan ui bootstrap --auth`
     > `php artisan adminlte:install --only=auth_views`
+
+## Google API Client
+* As stated in https://github.com/googleapis/google-api-php-client#composer , Google API library loading can be adjusted by specifying only the required capabilities in composer.json
