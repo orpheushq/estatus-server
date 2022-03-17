@@ -22,6 +22,7 @@ Route::get('/test', function (Request $request) {
 });
 
 Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/gauth', [AuthController::class, 'gauth']);
 
 /* Protected Routes */
 Route::group(['middleware' => ['auth:sanctum']], function () {
