@@ -6,6 +6,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
+use App\Models\User;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -16,27 +18,27 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         //super-admin
-        DB::table('users')->insert([
+        User::create([
             'name' => "Orpheus Digital",
-            'email' => 'admin@orpheus.digital',
+            'email' => "admin@orpheus.digital",
             'organizationId'=>1,
             'password' => Hash::make('Increase1!or'),
         ]);
-        DB::table('users')->insert([
-            'name' => "admin",
-            'email' => 'admin@lorem.dev',
+        User::create([
+            'name' => "Administrator",
+            'email' => "admin@lorem.dev",
             'organizationId'=>1,
             'password' => Hash::make('Admin1!'),
         ]);
 
         //branch-admin
-        DB::table('users')->insert([
+        User::create([
             'name' => "Anne Bennett",
             'organizationId'=>1,
             'email' => 'anne@lorem.dev',
             'password' => Hash::make('Anne1!'),
         ]);
-        DB::table('users')->insert([
+        User::create([
             'name' => "Ben Chrisworth",
             'organizationId'=>2,
             'email' => 'ben@lorem.dev',
@@ -44,7 +46,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         //client
-        DB::table('users')->insert([
+        User::create([
             'name' => "Cathy Drew",
             'organizationId'=>2,
             'email' => 'cathy@lorem.dev',
