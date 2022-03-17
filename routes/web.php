@@ -34,33 +34,4 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::prefix('patients')->middleware('auth')->group(function () {
-    Route::get('/create-via-app', function (Request $request) {
-        $ctrl = new PatientController();
-        return $ctrl->searchPatient($request, FALSE);
-    });
-    Route::post('/create-via-app/{id}', function (Request $request, $id) {
-        $ctrl = new PatientController();
-        return $ctrl->assignPatient($request, $id, FALSE);
-    });
-
-    Route::get('/list/{page?}', function (Request $request, $page = 0) {
-        $ctrl = new PatientController();
-        return $ctrl->index($request, $page, FALSE);
-    });
-    Route::get('/new', function (Request $request) {
-        $ctrl = new PatientController();
-        return $ctrl->show($request, -1, FALSE);
-    });
-    Route::post('/new', [PatientController::class, 'store']);
-    
-    Route::get('/{id}/info', function (Request $request, $id) {
-        $ctrl = new PatientController();
-        return $ctrl->show($request, $id, FALSE);
-    })->name("patient.show");
-    Route::post('/{id}/info', [PatientController::class, 'update']);
-
-    Route::get('/{id}/logbook', function (Request $request, $id) {
-        $ctrl = new PatientController();
-        return $ctrl->logbook($request, $id, FALSE);
-    });
 });

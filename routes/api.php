@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\PatientController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
@@ -31,12 +30,4 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/secure/test', function (Request $request) {
         return response(["user" => $request->user()], 200);
     });
-
-    Route::post('/patients/find_duplicate', [PatientController::class, 'findDuplicate']);
-    Route::post('/patients/find_all_duplicates', [PatientController::class, 'findAllDuplicates']);
-    Route::get('/patients/{page}', [PatientController::class, 'index']);
-    Route::post('/patients/{page}', [PatientController::class, 'index']);
-    Route::get('/patients/view/{id}', [PatientController::class, 'show']);
-    Route::get('/patients/report/age_group', [PatientController::class, 'reportingAgeGroup']);
-    Route::apiResource('patients', PatientController::class);
 });

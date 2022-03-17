@@ -246,24 +246,6 @@ return [
         ],
 
         // Sidebar items:
-        [
-            'text'    => 'Patients',
-            'icon'    => 'fas fa-fw fa-user-injured',
-            'submenu' => [
-                [
-                    'text' => 'List',
-                    'url'  => '/patients/list',
-                ],
-                [
-                    'text' => 'Create Patient',
-                    'url'  => '/patients/new',
-                ],
-                [
-                    'text' => 'Add Patient from App',
-                    'url'  => '/patients/create-via-app',
-                ]
-            ],
-        ],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',
