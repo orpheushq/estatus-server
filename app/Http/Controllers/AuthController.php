@@ -35,12 +35,13 @@ class AuthController extends Controller
 
                 if (!$user) {
                     // user does not exist
-                    User::create([
+                    $newUser = User::create([
                         'name' => $ticket["name"] ?? $request->email,
-                        'organizationId'=>1, // NOTE: for multi-organizational apps, this cannot be hardcoded!
+                        'organizationId' => config("constants.defaultOrganization"), // NOTE: for multi-organizational apps, this cannot be hardcoded!
                         'email' => $request->email,
                         'password' => Hash::make(Str::random(10)),
                     ]);
+                    $newUser->assignRole(config("constants.defaultRole"));
                 }
 
                 return $this->login($request, TRUE); // continue login flow

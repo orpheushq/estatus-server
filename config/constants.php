@@ -2,16 +2,7 @@
 
 return [
 
-    'genders' => [
-        'Male',
-        'Female'
-    ],
-    'diabetesTypes' => [
-        'Type 1',
-        'Type 2',
-        'LADA Diabetes',
-        'Gestational',
-        'Pre-diabetes'
-    ]
+    'defaultRole' => 'client', // The default role that would be assigned to new users
+    'defaultOrganization' => 1
 
 ];

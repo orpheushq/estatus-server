@@ -117,6 +117,7 @@ Laravel-based server
     + Run `php artisan optimize:clear` to clear cache
 * To list all permissions/ roles
     + `php artisan permission:show`
+* The default behaviour is that newly registered users are assigned to the role and company provided in __config/constants.php__
 
 ### Using with Sanctum
 * Since this template uses Sanctum, the default guard is sanctum (do `php artisan permission:show` and it will show the guard)
