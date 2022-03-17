@@ -15,6 +15,7 @@ $heads = [
     'Organization',
     'Name',
     'Email',
+    'Role',
     'Created At',
     'Updated At',
     'Action'
@@ -42,6 +43,9 @@ $config = [
             'data' => 'email'
         ],
         [
+            'data' => 'role'
+        ],
+        [
             'data' => 'created_at'
         ],
         [
@@ -62,6 +66,7 @@ foreach ($users as $i => &$u) {
         'organizationName' => $u->organization()->first()->name,
         'name' => $u['name'],
         'email' => $u['email'],
+        'role' => $u->roles->first()->name,
         'created_at' => $u['created_at']->format("d M Y h:i A"),
         'updated_at' => $u['created_at']->format("d M Y h:i A"),
         'actionCol' => '<nobr>'.$btnDetails.'</nobr>'
