@@ -240,7 +240,7 @@ return [
 
         [
             'text' => 'Users',
-            'url'  => '/users',
+            'route'  => 'users.index',
             'icon' => 'fas fa-fw fa-user',
             'can' => [ 'external users', 'internal users' ] // shown if either permission is present
         ],
