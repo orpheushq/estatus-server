@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use App\Classes\CustomRoute;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +29,8 @@ Route::post('/auth/gauth', [AuthController::class, 'gauth']);
 /* Protected Routes */
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
+    
+    CustomRoute::apiResource('profile', UserController::class);
 
     Route::get('/secure/test', function (Request $request) {
         return response(["user" => $request->user()], 200);
