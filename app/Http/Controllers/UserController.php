@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -102,6 +105,51 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $values = [];
+        $validations = [];
+        $permissions = [];
+        $isValid = FALSE;
+
+        $values = $request->all();
+        unset($values['_token']);
+
+        // Add validation rules
+        $validations["currentPassword"] = [ "required", "current_password" ];
+        $validations["newPassword"] = [ "required", "different:currentPassword", Password::defaults() ];
+    
+        $validator = Validator::make($values, $validations);
+        $isValid = !$validator->fails();
+
+        if ($isValid) {
+            // validation has not failed; add business logic
+            $thisUser = $request->user();
+            foreach ($values as $k => $v) {
+                if (!is_null($v)) {
+                    if ($k === "password" || $k === "newPassword") {
+                        $thisUser['password'] = Hash::make($values['newPassword']);
+                    } else if ($k === "password_confirmation" || $k === "currentPassword") {
+                        // ignore these fields
+                    } else {
+                        $thisUser[$k] = $v;
+                    }
+                }
+            }
+            $thisUser->save();
+        }
+
+        if ($request->wantsJson()) {
+            if (!$isValid) {
+                return response([ "errors" => $validator->errors() ], 422);
+            } else {
+                return response([ "message" => "success" ], 200);
+            }
+        } else {
+            if (!$isValid) {
+                return redirect()->back()->withErrors($validator);;
+            } else {
+                // TODO: render view
+            }
+        }
     }
 
     /**
