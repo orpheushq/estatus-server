@@ -29,6 +29,7 @@ Route::post('/auth/gauth', [AuthController::class, 'gauth']);
 /* Protected Routes */
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
+    Route::post('/auth/verifyToken', [AuthController::class, 'verifyToken']);
     
     CustomRoute::apiResource('profile', UserController::class);
 

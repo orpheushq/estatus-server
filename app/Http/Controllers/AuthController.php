@@ -78,6 +78,9 @@ class AuthController extends Controller
         ];
         return response($response, 200);
     }
+    public function verifyToken(Request $request) {
+        return $request->user();
+    }
 
     public function logout(Request $request) {
         $request->user()->tokens()->delete();
