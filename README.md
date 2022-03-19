@@ -18,6 +18,8 @@ Laravel-based server
 * [Role Management](#role-management)
 * [AdminLTE](#adminlte)
 * [Google API Client](#google-api-client)
+* [CORS](#cors)
+* [Custom Routes](#custom-routes)
 
 ## Variable Dumping
 * Instead of using `var_dump(...); exit;`, use
@@ -146,3 +148,12 @@ Laravel-based server
 
 ## Google API Client
 * As stated in https://github.com/googleapis/google-api-php-client#composer , Google API library loading can be adjusted by specifying only the required capabilities in composer.json
+
+## CORS
+* https://www.stackhawk.com/blog/laravel-cors/
+
+## Custom Routes
+> `use App\Classes\CustomRoute`
+* API resource route acts like the built-in `Route::apiResource()`
+* The difference is that this route deduces user ID from `$request->user()` and passes it along to the UserController
+* From the POV of the UserController, there is no difference
