@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 class CustomRoute {
 
-    public static function apiResource($label, $class) {
+    public static function profileResource($label, $class) {
 
         Route::put('/'.$label, function (Request $request) use ($class) {
             $ctrl = new $class;

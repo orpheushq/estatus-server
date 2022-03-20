@@ -31,7 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::post('/auth/verifyToken', [AuthController::class, 'verifyToken']);
     
-    CustomRoute::apiResource('profile', UserController::class);
+    CustomRoute::profileResource('profile', UserController::class);
 
     Route::get('/secure/test', function (Request $request) {
         return response(["user" => $request->user()], 200);

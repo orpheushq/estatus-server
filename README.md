@@ -154,6 +154,6 @@ Laravel-based server
 
 ## Custom Routes
 > `use App\Classes\CustomRoute`
-* API resource route acts like the built-in `Route::apiResource()`
+* Profile resource route acts like the built-in `Route::apiResource()`
 * The difference is that this route deduces user ID from `$request->user()` and passes it along to the UserController
 * From the POV of the UserController, there is no difference
