@@ -73,13 +73,24 @@ class AuthController extends Controller
 
         $token = $user->createToken($request->device_name ?? "loremipsumdevice")->plainTextToken;
         $response = [
-            'user' => $user,
+            'user' => $this->verifyToken($request, $user),
             'token' => $token
         ];
         return response($response, 200);
     }
-    public function verifyToken(Request $request) {
-        return $request->user();
+    public function verifyToken(Request $request, $user = NULL) {
+        $thisUser = $request->user() ?? $user;
+        $permissions = [];
+        foreach ($thisUser->getAllPermissions() as $p) {
+            $permissions[] = $p->name;
+        }
+        unset($thisUser['permissions']);
+        $thisUser['permissions'] = $permissions;
+       
+
+        unset($thisUser['roles']);
+
+        return $thisUser;
     }
 
     public function logout(Request $request) {
