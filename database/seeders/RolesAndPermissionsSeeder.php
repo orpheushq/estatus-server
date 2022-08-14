@@ -20,21 +20,48 @@ class RolesAndPermissionsSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // create permissions
-        Permission::create(['name' => 'internal users']); // users of the same organization as the signed in user
-        Permission::create(['name' => 'external users']); // users outside of the signed in user's organization
+        $permissions = [
+            "internal users",
+            "external users",
+            "view users",
 
-        Permission::create(['name' => 'add locations']); // users with this permission can add new locations
+            "view login logs",
+
+            "add locations"
+        ];
+
+        foreach ($permissions as $p) {
+            if (Permission::where("name", "=", $p)->first() == NULL) {
+                Permission::create(['name' => $p]); // users of the same organization as the signed in user
+            }
+        }
 
         // create a role and assign an array of permissions
-        $role = Role::create(['name' => 'branch-admin'])
-            ->givePermissionTo(['internal users']);
+        $roles = [
+            "branch-admin" => [ "internal users" ],
+            "client" => [],
+            "guide" => [ "add locations" ],
+            "tester" => [ "internal users", "external users", "view users", "view login logs" ],
+            "super-admin" => "all"
+        ];
 
-        $role = Role::create(['name' => 'client']);
+        foreach ($roles as $r => $permissions) {
+            $role = Role::where("name", "=", $r)->first();
 
-        $role = Role::create(['name' => 'guide'])
-            ->givePermissionTo(['add locations']);
+            if ($role == NULL) {
+                $role = Role::create(["name" => $r]);
+            }
 
-        $role = Role::create(['name' => 'super-admin'])
-            ->givePermissionTo(Permission::all());
+            switch ($r) {
+                case "super-admin": {
+                    $role->syncPermissions(Permission::all());
+                    break;
+                }
+                default: {
+                    $role->syncPermissions($permissions);
+                    break;
+                }
+            }
+        }
     }
 }
