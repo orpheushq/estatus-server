@@ -52,5 +52,32 @@ class DatabaseSeeder extends Seeder
             'email' => 'cathy@lorem.dev',
             'password' => Hash::make('Cathy1!'),
         ]);
+
+        //tester
+        User::create([
+            'name' => "Rasheen Ruwisha",
+            'organizationId'=>1,
+            'email' => 'rasheen@lorem.dev',
+            'password' => Hash::make('Rasheen1!'),
+        ]);
+        User::create([
+            'name' => "Ruchila Maditha",
+            'organizationId'=>1,
+            'email' => 'ruchila@lorem.dev',
+            'password' => Hash::make('Ruchila2!'),
+        ]);
+        User::create([
+            'name' => "Yukthika Fernando",
+            'organizationId'=>1,
+            'email' => 'yukthika@lorem.dev',
+            'password' => Hash::make('Yukthika3!'),
+        ]);
+
+        // call other seeders
+        $this->call([
+            OrganizationSeeder::class,
+            RolesAndPermissionsSeeder::class,
+            UserAccessSeeder::class
+        ]);
     }
 }
