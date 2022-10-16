@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\UserController;
+use \App\Http\Controllers\LogController;
 use Illuminate\Support\Facades\Event;
 use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 use Illuminate\Http\Request;
@@ -31,6 +32,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
+});
+
+Route::prefix('logs')->middleware('auth')->group(function () {
+    Route::get('login', [LogController::class, 'login'])->middleware('can:view login logs')->name("logs.login");
 });
 
 Route::prefix('patients')->middleware('auth')->group(function () {

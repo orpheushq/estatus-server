@@ -245,6 +245,14 @@ return [
             'can' => [ 'external users', 'internal users' ] // shown if either permission is present
         ],
 
+        ['header' => 'Logs'],
+        [
+            'text' => 'Logins',
+            'route'  => 'logs.login',
+            'icon' => 'fas fa-fw fa-key',
+            'can' => [ 'view login logs' ]
+        ],
+
         // Sidebar items:
         ['header' => 'account_settings'],
         [

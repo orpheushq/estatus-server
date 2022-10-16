@@ -33,5 +33,13 @@ class UserAccessSeeder extends Seeder
         /*Client*/
         User::where('email', '=', 'cathy@lorem.dev')->first()
             ->assignRole('client');
+
+        /*Tester*/
+        User::where('email', '=', 'rasheen@lorem.dev')->first()
+            ->assignRole('tester');
+        User::where('email', '=', 'yukthika@lorem.dev')->first()
+            ->assignRole('tester');
+        User::where('email', '=', 'ruchila@lorem.dev')->first()
+            ->assignRole('tester');
     }
 }
