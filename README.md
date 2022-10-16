@@ -48,6 +48,8 @@ Laravel-based server
     > `php artisan db:seed OrganizationSeeder`
     > `php artisan db:seed RolesAndPermissionsSeeder`
     > `php artisan db:seed UserAccessSeeder`
+6. Make sure that a __.htaccess__ file is present either in this directory or a top-level directory to prevent file browsing and dot file access
+7. Refer [Setting Environment](#setting-environment) for info on setting the environment ot production.
 
 ## User Registration
 * __IMPORTANT: by default user registration route is active. To edit registration flow/ modify Auth/RegisterController.php__
@@ -80,6 +82,8 @@ Laravel-based server
 > `export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Applications/MAMP/bin/php/php7.4.16/bin`
 > `composer create-project --prefer-dist laravel/laravel la-server2 "8.*"`
     + https://stackoverflow.com/a/63111813
+* To set environment to production, set `APP_ENV=production` and `APP_DEBUG=false` in __.env__
+    + https://panjeh.medium.com/laravel-app-env-local-app-env-production-difference-aa9662ac81d0
 
 ## Deployment
 * Laravel app can be deployed to shared hosting
