@@ -22,7 +22,7 @@ class RecordLogins
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, $source = 'app')
     {
         $period = [ (new \DateTime())->format("Y-m-d")." 00:00:00", (new \DateTime())->format("Y-m-d")." 23:59:59" ]; // time period to persist records (default is a day)
 
@@ -32,13 +32,13 @@ class RecordLogins
             $thisLog = LoginLog::where('user_id', '=', $user->id)->whereBetween('updated_at', $period)->first();
             if (!is_null($thisLog)) {
                 // record exists
-                $thisLog['source'] = "app";
+                $thisLog['source'] = $source;
                 $thisLog['updated_at'] = new \DateTime();
                 $thisLog->save();
             } else {
                 LoginLog::create([
                     'user_id' => $user->id,
-                    'source' => 'app'
+                    'source' => $source
                 ]);
             }
         } else {
