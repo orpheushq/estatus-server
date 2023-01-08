@@ -14,8 +14,8 @@ return [
     |
     */
 
-    'title' => 'Admin Panel',
-    'title_prefix' => '',
+    'title' => 'Portal',
+    'title_prefix' => 'Estatus - ',
     'title_postfix' => '',
 
     /*
@@ -45,8 +45,8 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>Panel',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo' => '<b>Estatus</b>Portal',
+    'logo_img' => 'images/login-logo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
