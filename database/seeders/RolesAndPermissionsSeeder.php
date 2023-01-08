@@ -27,7 +27,8 @@ class RolesAndPermissionsSeeder extends Seeder
 
             "view login logs",
 
-            "add locations"
+            "properties",
+            "trends"
         ];
 
         foreach ($permissions as $p) {
@@ -38,9 +39,8 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // create a role and assign an array of permissions
         $roles = [
-            "branch-admin" => [ "internal users" ],
+            "admin" => [ "internal users", "properties", "trends" ],
             "client" => [],
-            "guide" => [ "add locations" ],
             "tester" => [ "internal users", "external users", "view users", "view login logs" ],
             "super-admin" => "all"
         ];

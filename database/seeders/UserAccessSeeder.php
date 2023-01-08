@@ -24,11 +24,9 @@ class UserAccessSeeder extends Seeder
         User::where('email', '=', 'admin@lorem.dev')->first()
             ->assignRole('super-admin');
 
-        /*Branch Admin*/
-        User::where('email', '=', 'anne@lorem.dev')->first()
-            ->assignRole('branch-admin');
-        User::where('email', '=', 'ben@lorem.dev')->first()
-            ->assignRole('branch-admin');
+        /*Admin*/
+        User::where('email', '=', 'emkanchana98@gmail.com')->first()
+            ->assignRole('admin');
 
         /*Client*/
         User::where('email', '=', 'cathy@lorem.dev')->first()
@@ -36,10 +34,6 @@ class UserAccessSeeder extends Seeder
 
         /*Tester*/
         User::where('email', '=', 'rasheen@lorem.dev')->first()
-            ->assignRole('tester');
-        User::where('email', '=', 'yukthika@lorem.dev')->first()
-            ->assignRole('tester');
-        User::where('email', '=', 'ruchila@lorem.dev')->first()
             ->assignRole('tester');
     }
 }

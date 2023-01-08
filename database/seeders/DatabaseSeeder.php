@@ -28,21 +28,15 @@ class DatabaseSeeder extends Seeder
             'name' => "Administrator",
             'email' => "admin@lorem.dev",
             'organizationId'=>1,
-            'password' => Hash::make('Admin1!'),
+            'password' => Hash::make('Admin1!or'),
         ]);
 
-        //branch-admin
+        //admin
         User::create([
-            'name' => "Anne Bennett",
+            'name' => "Kanchana Ekanayake",
             'organizationId'=>1,
-            'email' => 'anne@lorem.dev',
-            'password' => Hash::make('Anne1!'),
-        ]);
-        User::create([
-            'name' => "Ben Chrisworth",
-            'organizationId'=>2,
-            'email' => 'ben@lorem.dev',
-            'password' => Hash::make('Ben1!'),
+            'email' => 'emkanchana98@gmail.com',
+            'password' => Hash::make('Kanchana1!'),
         ]);
 
         //client
@@ -59,18 +53,6 @@ class DatabaseSeeder extends Seeder
             'organizationId'=>1,
             'email' => 'rasheen@lorem.dev',
             'password' => Hash::make('Rasheen1!'),
-        ]);
-        User::create([
-            'name' => "Ruchila Maditha",
-            'organizationId'=>1,
-            'email' => 'ruchila@lorem.dev',
-            'password' => Hash::make('Ruchila2!'),
-        ]);
-        User::create([
-            'name' => "Yukthika Fernando",
-            'organizationId'=>1,
-            'email' => 'yukthika@lorem.dev',
-            'password' => Hash::make('Yukthika3!'),
         ]);
 
         // call other seeders
