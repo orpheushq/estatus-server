@@ -165,5 +165,7 @@ Laravel-based server
 
 ## Upgrade Guide
 ### Update to Laravel 9.0
+* Laravel has to be upgraded to 9.0 if running on PHP 8.x
+  + Otherwise errors like this might occur https://stackoverflow.com/questions/70668306/opis-closure-serializableclosure-error-afer-php-8-1-update
 * Follow the file changes listed in the __upgrade-to-laravel-9__ branch
 * Delete __composer.lock__ before running `composer install`
