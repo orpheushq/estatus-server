@@ -20,6 +20,7 @@ Laravel-based server
 * [Google API Client](#google-api-client)
 * [CORS](#cors)
 * [Custom Routes](#custom-routes)
+* [Upgrade Guide](#upgrade-guide)
 
 ## Variable Dumping
 * Instead of using `var_dump(...); exit;`, use
@@ -161,3 +162,8 @@ Laravel-based server
 * Profile resource route acts like the built-in `Route::apiResource()`
 * The difference is that this route deduces user ID from `$request->user()` and passes it along to the UserController
 * From the POV of the UserController, there is no difference
+
+## Upgrade Guide
+### Update to Laravel 9.0
+* Follow the file changes listed in the __upgrade-to-laravel-9__ branch
+* Delete __composer.lock__ before running `composer install`
