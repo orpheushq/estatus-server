@@ -1,0 +1,19 @@
+on:
+  create:
+    branches:
+      - 'releases/**'
+name: 🚀 Deploy website on push
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v2
+    
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@4.3.3
+      with:
+        server: 198.54.115.80
+        username: ftpdeploy@orpheus.digital
+        password: ${{ secrets.orpheus_ftp_password }}
