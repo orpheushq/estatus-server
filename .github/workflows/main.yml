@@ -16,4 +16,5 @@ jobs:
       with:
         server: 198.54.115.80
         username: ftpdeploy@orpheus.digital
+        server-dir: public_html/estatus
         password: ${{ secrets.orpheus_ftp_password }}
