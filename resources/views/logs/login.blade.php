@@ -59,7 +59,7 @@ $config['data'] = $entities;
 
 
 @section('content')
-    <x-adminlte-datatable id="tblMain" :heads="$heads" :config="$config" theme="light" striped hoverable with-buttons>
+    <x-adminlte-datatable id="tblMain" :heads="$heads" :config="$config" striped hoverable with-buttons>
     </x-adminlte-datatable>
 @stop
 

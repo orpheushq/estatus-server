@@ -35,7 +35,7 @@ $config = [
         ],
         [
             'data' => 'organizationName'
-        ], 
+        ],
         [
             'data' => 'name'
         ],
@@ -79,7 +79,7 @@ $config['data'] = $users;
 
 
 @section('content')
-    <x-adminlte-datatable id="tblUser" :heads="$heads" :config="$config" theme="light" striped hoverable with-buttons>
+    <x-adminlte-datatable id="tblUser" :heads="$heads" :config="$config" striped hoverable with-buttons>
         @foreach($config['data'] as $row)
             <tr>
                 @foreach($row as $cell)
