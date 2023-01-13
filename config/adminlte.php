@@ -267,6 +267,12 @@ return [
             'icon' => 'fas fa-fw fa-user',
             'can' => [ 'external users', 'internal users' ] // shown if either permission is present
         ],
+        [
+            'text' => 'Properties',
+            'route'  => 'properties.index',
+            'icon' => 'fas fa-fw fa-home',
+            'can' => [ 'properties' ]
+        ],
 
         ['header' => 'Logs'],
         [
