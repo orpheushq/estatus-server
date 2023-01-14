@@ -2,7 +2,7 @@
 
 @section('plugins.Select2', true)
 
-@section('title', 'Patients')
+@section('title', 'Properties')
 
 @section('content_header')
 @stop
@@ -16,7 +16,7 @@
 
 @section('content')
 
-    <form method="{{ is_null($entity->id) ? "post": "get" }}" action="{{ is_null($entity->id) ? "": route('properties.edit', $entity->id) }}" class="pt-3">
+    <form method="{{ is_null($entity->id) ? "post": "get" }}" action="{{ is_null($entity->id) ? route('properties.store'): route('properties.edit', $entity->id) }}" class="pt-3">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-8">
                 <div class="card">
@@ -40,7 +40,18 @@
                                 </x-adminlte-select2>
                             </div>
                             <div class="col-12 col-md-6">
+                                <x-adminlte-select2 id="selArea" name="area" label="Area" :config="$config" required>
+                                    <option/>
+                                    @foreach($areas as $t)
+                                        <option {{ $entity['area'] === $t ? "selected": "" }}>{{ $t }}</option>
+                                    @endforeach
+                                </x-adminlte-select2>
+                            </div>
+                            <div class="col-12 col-md-6">
                                 <x-adminlte-input name="title" label="Title" type="text" value="{{ $entity['title'] }}" required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <x-adminlte-input name="size" label="Size" type="number" step="any" value="{{ $entity['size'] }}" required />
                             </div>
                             <div class="col-12">
                                 <x-adminlte-textarea name="description" label="Description" required>
@@ -50,8 +61,11 @@
                             <div class="col-12 col-md-6">
                                 <x-adminlte-input name="url" label="URL" type="text" value="{{ $entity['url'] }}" required />
                             </div>
-                            <div class="col-12 col-md-6">
-                                <x-adminlte-input name="size" label="Size" type="number" value="{{ $entity['size'] }}" required />
+                            <div class="col-6 col-md-3">
+                                <x-adminlte-input name="latitude" label="Latitude" type="number" step="any" value="{{ $entity['location']?->latitude }}" required />
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <x-adminlte-input name="longitude" label="Longitude" type="number" step="any" value="{{ $entity['location']?->longitude }}" required />
                             </div>
                         </div>
                     </div>

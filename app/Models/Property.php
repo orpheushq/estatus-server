@@ -22,4 +22,11 @@ class Property extends Model
 
         return array_map(fn($v): string => $v['type'], $uniqueTypes->toArray());
     }
+
+    public function getAreas ()
+    {
+        $uniqueAreas = $this->all()->unique('area');
+
+        return array_map(fn($v): string => $v['area'], $uniqueAreas->toArray());
+    }
 }

@@ -4,14 +4,42 @@ namespace App\Http\Controllers;
 
 use App\Models\Property;
 use Illuminate\Http\Request;
+use MatanYadaev\EloquentSpatial\Objects\Point;
 
 class PropertyController extends Controller
 {
     private $propertyTypes = [];
+    private $propertyAreas = [];
 
     public function __construct()
     {
         $this->propertyTypes = (new Property())->getTypes();
+        $this->propertyAreas = (new Property())->getAreas();
+    }
+
+    private function updateEntity ($newValues, $entity)
+    {
+        foreach ($newValues as $k => $v) {
+            if (!is_null($v)) {
+                switch ($k) {
+                    case "type": {
+                        $entity[$k] = strtolower($v);
+                        break;
+                    }
+                    case "latitude": {
+                        $entity['location'] = new Point($newValues['latitude'], $newValues['longitude']);
+                        break;
+                    }
+                    case "longitude": {
+                        // handled in a different case
+                        break;
+                    }
+                    default: {
+                        $entity[$k] = $v;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -62,7 +90,8 @@ class PropertyController extends Controller
         $property = new Property();
         return view('properties.view', [
             'entity' => $property,
-            'types' => $this->propertyTypes
+            'types' => $this->propertyTypes,
+            'areas' => $this->propertyAreas
         ]);
     }
 
@@ -75,6 +104,16 @@ class PropertyController extends Controller
     public function store(Request $request)
     {
         //
+        $property = new Property();
+
+        $newValues = $request->all();
+        unset($newValues['_token']);
+
+        $this->updateEntity($newValues, $property);
+
+        $property->save();
+
+        return redirect()->route('properties.show', $property->id);
     }
 
     /**
@@ -90,7 +129,8 @@ class PropertyController extends Controller
 
         return view('properties.view', [
             'entity' => $property,
-            'types' => $this->propertyTypes
+            'types' => $this->propertyTypes,
+            'areas' => $this->propertyAreas
         ]);
     }
 
@@ -108,15 +148,7 @@ class PropertyController extends Controller
         $newValues = $request->all();
         unset($newValues['_token']);
 
-        foreach ($newValues as $k => $v) {
-            if (!is_null($v)) {
-                if ($k === "type") {
-                    $property[$k] = strtolower($v);
-                } else {
-                    $property[$k] = $v;
-                }
-            }
-        }
+        $this->updateEntity($newValues, $property);
 
         $property->save();
 

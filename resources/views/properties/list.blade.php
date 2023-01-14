@@ -3,7 +3,16 @@
 @section('title', 'Properties')
 
 @section('content_header')
-    <h1>Properties</h1>
+    <div class="row justify-content-flex-start">
+        <div class="mr-2">
+            <h1>Properties</h1>
+        </div>
+        <div class="mr-2">
+            <a href="{{ route('properties.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add
+            </a>
+        </div>
+    </div>
 @stop
 
 @section('plugins.Datatables', true)
