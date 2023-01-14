@@ -16,7 +16,7 @@
 
 @section('content')
 
-    <form method="get" action="{{ route('properties.edit', $entity->id) }}" class="pt-3">
+    <form method="{{ is_null($entity->id) ? "post": "get" }}" action="{{ is_null($entity->id) ? "": route('properties.edit', $entity->id) }}" class="pt-3">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-8">
                 <div class="card">
