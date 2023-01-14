@@ -15,4 +15,11 @@ class Property extends Model
     ];
 
     protected $guarded = []; //make all attributes mass assignable
+
+    public function getTypes ()
+    {
+        $uniqueTypes = $this->all()->unique('type');
+
+        return array_map(fn($v): string => $v['type'], $uniqueTypes->toArray());
+    }
 }

@@ -51,6 +51,7 @@ Laravel-based server
     > `php artisan db:seed UserAccessSeeder`
 6. Make sure that a __.htaccess__ file is present either in this directory or a top-level directory to prevent file browsing and dot file access
 7. Refer [Setting Environment](#setting-environment) for info on setting the environment ot production.
+8. `php artisan adminlte:plugins install --plugin=select2`
 
 ## User Registration
 * __IMPORTANT: by default user registration route is active. To edit registration flow/ modify Auth/RegisterController.php__
