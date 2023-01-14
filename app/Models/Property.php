@@ -20,13 +20,13 @@ class Property extends Model
     {
         $uniqueTypes = $this->all()->unique('type');
 
-        return array_map(fn($v): string => $v['type'], $uniqueTypes->toArray());
+        return array_values(array_map(fn($v): string => $v['type'], $uniqueTypes->toArray()));
     }
 
     public function getAreas ()
     {
         $uniqueAreas = $this->all()->unique('area');
-
-        return array_map(fn($v): string => $v['area'], $uniqueAreas->toArray());
+//        dd($uniqueAreas->toArray());
+        return array_values(array_map(fn($v): string => $v['area'], $uniqueAreas->toArray()));
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PropertyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
@@ -25,6 +26,8 @@ Route::get('/test', function (Request $request) {
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/gauth', [AuthController::class, 'gauth']);
+
+Route::get('/util/lists', [PropertyController::class, 'getLists']);
 
 /* Protected Routes */
 Route::group(['middleware' => ['auth:sanctum']], function () {

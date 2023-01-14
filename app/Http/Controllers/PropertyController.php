@@ -43,6 +43,17 @@ class PropertyController extends Controller
     }
 
     /**
+     * Display lists with available options (i.e. property type, property area)
+     */
+    public function getLists(Request $request)
+    {
+        return response([
+            'types' => array_map(fn($v) => [$v => ucfirst(str_replace('-', ' ', $v))], $this->propertyTypes),
+            'areas' => $this->propertyAreas
+        ], 200);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
