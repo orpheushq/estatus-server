@@ -16,11 +16,16 @@ class Property extends Model
 
     protected $guarded = []; //make all attributes mass assignable
 
+    public function propertyable()
+    {
+        return $this->morphTo();
+    }
+
     public function getTypes ()
     {
-        $uniqueTypes = $this->all()->unique('type');
+        $uniqueTypes = $this->all()->unique('propertyable_type');
 
-        return array_values(array_map(fn($v): string => $v['type'], $uniqueTypes->toArray()));
+        return array_values(array_map(fn($v): string => $v['propertyable_type'], $uniqueTypes->toArray()));
     }
 
     public function getAreas ()

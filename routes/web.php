@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Event;
 use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 use Illuminate\Http\Request;
 use \App\Http\Controllers\PropertyController;
+use \App\Http\Controllers\RentalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +34,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
-    Route::resource('properties', PropertyController::class);
+    Route::resource('properties', PropertyController::class)->middleware('can:properties');
+
+    Route::post('rentals/upload', [RentalController::class, 'upload'])->middleware('can:properties')->name("rentals.upload");
+    Route::resource('rentals', RentalController::class)->middleware('can:properties');
 });
 
 Route::prefix('logs')->middleware('auth')->group(function () {
