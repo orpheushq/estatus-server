@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Properties')
+@section('title', 'Rentals')
 
 @section('content_header')
     <div class="row justify-content-flex-start">
@@ -9,7 +9,7 @@
         </div>
         <div class="mr-2">
             <a href="{{ route('rentals.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add
+                <i class="fas fa-upload"></i> Upload
             </a>
         </div>
     </div>
