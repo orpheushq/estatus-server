@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Event;
 use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 use Illuminate\Http\Request;
 use \App\Http\Controllers\PropertyController;
+use \App\Http\Controllers\RentalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('properties', PropertyController::class);
+    Route::resource('rentals', RentalController::class);
 });
 
 Route::prefix('logs')->middleware('auth')->group(function () {
