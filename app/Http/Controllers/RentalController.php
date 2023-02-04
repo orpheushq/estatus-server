@@ -13,11 +13,6 @@ class RentalController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-//    {
-//        //
-//        $rentals = Rental::with('property')->where('id', '>', 0)->get();
-//        dd($rentals[0]->getRelation('property')->id);
-//    }
     {
         //
         $values = [];
