@@ -8,9 +8,6 @@
             <h1>Rentals</h1>
         </div>
         <div class="mr-2">
-            <a href="{{ route('rentals.create') }}" class="btn btn-primary">
-                <i class="fas fa-upload"></i> Upload
-            </a>
         </div>
     </div>
 @stop
@@ -93,6 +90,40 @@ $config['data'] = $entities;
 
 
 @section('content')
+    <form method="post" action="{{ route('rentals.upload') }}">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card card-default">
+                    <div class="card-header">
+                        <h3 class="card-title">Upload data</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-4">
+                                <x-adminlte-input-file igroup-size="sm" name="file" required/>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-check">
+                                    <input type="checkbox" name="test" class="form-check-input" id="chkTestUpload" checked>
+                                    <label class="form-check-label" for="chkTestUpload">Test upload</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer clearfix">
+                        <div class="float-right">
+                            <input type="submit" class="btn btn-primary" value='Upload' />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
     <x-adminlte-datatable id="tblUser" :heads="$heads" :config="$config" striped hoverable with-buttons>
         @foreach($config['data'] as $row)
             <tr>
