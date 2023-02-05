@@ -3,6 +3,7 @@
 namespace App\Classes;
 use App\Models\Property;
 use App\Models\Rental;
+use App\Models\Statistic;
 use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
@@ -37,6 +38,7 @@ class ProcRental
                 $location = null;
                 $propertyId = $sheet->getCell("K${i}")->getValue(); // if the property had been already added, this would contain a value
                 $thisProperty = null;
+                $thisRental = null;
                 if (!is_null($propertyId)) {
                     $thisProperty = Property::where('id', '=', intval($propertyId))->first();
                 }
@@ -70,24 +72,31 @@ class ProcRental
                             $thisRental['rooms'] = $rooms;
                             $thisRental['bathrooms'] = $bathrooms;
                             $thisRental->save();
+
+                            $thisProperty->statistics()->create([
+                                'price' => $price
+                            ]);
                         }
                         Log::channel("upload")->info(($isTest ? "Update": "Updated")." rental with ID ".$thisProperty->id);
                     } else {
                         // new property
                         if (!$isTest) {
-                            $newRental = Rental::create([
+                            $thisRental = Rental::create([
                                 'rooms' => $rooms,
                                 'bathrooms' => $bathrooms
                             ]);
-                            $newProperty = $newRental->property()->create([
+                            $thisProperty = $thisRental->property()->create([
                                 'title' => $title,
                                 'area' => $area,
                                 'description' => $description,
                                 'url' => $url,
                                 'location' => $location
                             ]);
+                            $thisProperty->statistics()->create([
+                                'price' => $price
+                            ]);
                             $sheet->getCell("K${i}")
-                                ->setValue($newProperty->id)
+                                ->setValue($thisProperty->id)
                                 ->getStyle()
                                 ->applyFromArray($greyHighlightStyle);
                         }
