@@ -287,6 +287,12 @@ return [
             'icon' => 'fas fa-fw fa-key',
             'can' => [ 'view login logs' ]
         ],
+        [
+            'text' => 'Explorer',
+            'route'  => 'logs.explorer',
+            'icon' => 'fas fa-fw fa-file-alt',
+            'can' => [ 'view log explorer' ]
+        ],
 
         // Sidebar items:
         ['header' => 'account_settings'],
