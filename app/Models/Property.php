@@ -21,6 +21,11 @@ class Property extends Model
         return $this->morphTo();
     }
 
+    public function statistics()
+    {
+        return $this->hasMany(Statistic::class);
+    }
+
     public function getTypes ()
     {
         $uniqueTypes = $this->all()->unique('propertyable_type');
