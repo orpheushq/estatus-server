@@ -90,10 +90,10 @@ $config['data'] = $entities;
 
 
 @section('content')
-    <form method="post" action="{{ route('rentals.upload') }}">
+    <form method="post" action="{{ route('rentals.upload') }}" enctype="multipart/form-data">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="card card-default">
+                <div class="card card-default collapsed-card">
                     <div class="card-header">
                         <h3 class="card-title">Upload data</h3>
                         <div class="card-tools">
@@ -105,7 +105,7 @@ $config['data'] = $entities;
                     <div class="card-body">
                         <div class="row">
                             <div class="col-4">
-                                <x-adminlte-input-file igroup-size="sm" name="file" required/>
+                                <x-adminlte-input-file igroup-size="sm" name="dataFile" required accept=".xls,.xlsx"/>
                             </div>
                             <div class="col-4">
                                 <div class="form-check">

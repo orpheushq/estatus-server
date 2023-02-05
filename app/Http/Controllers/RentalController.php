@@ -2,11 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\ProcRental;
 use App\Models\Rental;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RentalController extends Controller
 {
+
+    public function upload(Request $request)
+    {
+        $thisFile = $request->file('dataFile');
+        $path = $thisFile->store('rental-upload');
+        Log::channel('upload')->info("Rental uploading processing started for file ${path}");
+//        dd($thisFile->path());
+        ProcRental::processUpload($path);
+    }
+
     /**
      * Display a listing of the resource.
      *
