@@ -42,7 +42,9 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('logs')->middleware('auth')->group(function () {
     Route::get('login', [LogController::class, 'login'])->middleware('can:view login logs')->name("logs.login");
-    Route::get('explorer', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->name("logs.explorer");
+    Route::get('explorer', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])
+        ->middleware('can:view log explorer')
+        ->name("logs.explorer");
 });
 
 Route::prefix('patients')->middleware('auth')->group(function () {
