@@ -16,6 +16,7 @@
         "laravel/ui": "^3.3",
         "matanyadaev/laravel-eloquent-spatial": "^2.8",
         "phpoffice/phpspreadsheet": "^1.27",
+        "rap2hpoutre/laravel-log-viewer": "^2.2",
         "spatie/laravel-permission": "^5.3"
     },
     "require-dev": {
