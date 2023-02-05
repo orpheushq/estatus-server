@@ -14,9 +14,11 @@ class RentalController extends Controller
     {
         $thisFile = $request->file('dataFile');
         $path = $thisFile->store('rental-upload');
-        Log::channel('upload')->info("Rental uploading processing started for file ${path}");
-//        dd($thisFile->path());
-        ProcRental::processUpload($path);
+        Log::channel('upload')->notice("Rental uploading processing started for file ${path}");
+
+        ProcRental::processUpload($path, !is_null($request->post('test')));
+
+        return redirect()->back();
     }
 
     /**
