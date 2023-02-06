@@ -78,8 +78,8 @@ foreach ($entities as $i => &$u) {
         'bathrooms' => $u['bathrooms'],
         'title' => $u->getRelation('property')['title'],
         'description' => $u->getRelation('property')['description'],
-        'created_at' => $u['created_at']->format("d M Y h:i A"),
-        'updated_at' => $u['updated_at']->format("d M Y h:i A"),
+        'created_at' => $u->getRelation('property')['created_at']->format("d M Y h:i A"),
+        'updated_at' => $u->getRelation('property')['updated_at']->format("d M Y h:i A"),
         'actionCol' => '<nobr>'.$btnDetails.'</nobr>'
     ];
     $entities[$i] = $temp;

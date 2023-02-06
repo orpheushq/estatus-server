@@ -26,6 +26,7 @@ class RolesAndPermissionsSeeder extends Seeder
             "view users",
 
             "view login logs",
+            "view log explorer",
 
             "properties",
             "trends"

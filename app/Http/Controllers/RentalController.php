@@ -6,6 +6,7 @@ use App\Classes\ProcRental;
 use App\Models\Rental;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class RentalController extends Controller
 {
@@ -18,7 +19,8 @@ class RentalController extends Controller
 
         ProcRental::processUpload($path, !is_null($request->post('test')));
 
-        return redirect()->back();
+        return Storage::download("public/rental-upload.xlsx");
+//        return redirect()->back();
     }
 
     /**
