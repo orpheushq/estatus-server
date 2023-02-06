@@ -48,7 +48,7 @@ class PropertyController extends Controller
     public function getLists(Request $request)
     {
         return response([
-            'types' => array_map(fn($v) => [$v => ucfirst(str_replace('-', ' ', $v))], $this->propertyTypes),
+            'types' => array_map(fn($v) => [strtolower(str_getcsv($v, "\\\\")[2]) => ucfirst(str_getcsv($v, "\\\\")[2])], $this->propertyTypes),
             'areas' => $this->propertyAreas
         ], 200);
     }
