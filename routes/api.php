@@ -29,11 +29,13 @@ Route::post('/auth/gauth', [AuthController::class, 'gauth']);
 
 Route::get('/util/lists', [PropertyController::class, 'getLists']);
 
+Route::apiResource('properties', PropertyController::class);
+
 /* Protected Routes */
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::post('/auth/verifyToken', [AuthController::class, 'verifyToken']);
-    
+
     CustomRoute::profileResource('profile', UserController::class);
 
     Route::get('/secure/test', function (Request $request) {
