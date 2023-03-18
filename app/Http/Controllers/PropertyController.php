@@ -78,7 +78,9 @@ class PropertyController extends Controller
                     break;
                 }
                 default: {
-                    $properties->where($k, '=', $v);
+                    if (!is_null($v)) {
+                        $properties->where($k, '=', $v);
+                    }
                     break;
                 }
             }
