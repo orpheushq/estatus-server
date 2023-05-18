@@ -48,7 +48,7 @@ class PropertyController extends Controller
     public function getLists(Request $request)
     {
         return response([
-            'types' => array_map(fn($v) => [$v => ucfirst(str_replace('-', ' ', $v))], $this->propertyTypes),
+            'types' => array_map(fn($v) => [strtolower(str_getcsv($v, "\\\\")[2]) => ucfirst(str_getcsv($v, "\\\\")[2])], $this->propertyTypes),
             'areas' => $this->propertyAreas
         ], 200);
     }
@@ -71,6 +71,21 @@ class PropertyController extends Controller
         $values = $request->all();
         unset($values['_token']);
 
+        foreach ($values as $k => $v) {
+            switch ($k) {
+                case "type": {
+                    $properties->where("propertyable_type", "like", "%${v}");
+                    break;
+                }
+                default: {
+                    if (!is_null($v)) {
+                        $properties->where($k, '=', $v);
+                    }
+                    break;
+                }
+            }
+        }
+
         // Add validation rules
         $isValid = TRUE;
 
@@ -78,11 +93,20 @@ class PropertyController extends Controller
             if (!$isValid) {
                 return response([ "errors" => $validator->errors() ], 422);
             } else {
+                $properties->with('propertyable');
+                $properties->with([ 'statistics' => function ($query) {
+                    $query->orderBy('created_at', 'desc');
+                } ]);
+
+//                $processedProperties = $properties->get()->map(function ($p) {
+//                    return $p->statistics()->first();
+//                });
+
                 return response($properties->get(), 200);
             }
         } else {
             if (!$isValid) {
-                return redirect()->back()->withErrors($validator);;
+                return redirect()->back()->withErrors($validator);
             } else {
                 // TODO: render view
                 return view('properties.list', [ "entities" => $properties->get()]);

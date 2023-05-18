@@ -17,25 +17,29 @@ class PropertySeeder extends Seeder
     public function run()
     {
         //
-        Property::create([
-            'id' => 1,
+        $property[0] = Property::create([
             'title' => '4 bedroom house',
-            'type' => 'house',
             'area' => 'Belummahara',
             'description' => '4 bedroom house with 1 garage and large garden',
             'url' => 'https://example.org',
-            'size' => 7.2,
+            'propertyable_id' => 1,
+            'propertyable_type' => 'rental',
             'location' => new Point(7.065697, 80.011635)
         ]);
-        Property::create([
-            'id' => 2,
-            'title' => '3 bedroom apartment',
-            'type' => 'apartment',
-            'area' => 'Miriswatte',
-            'description' => '1 A/C room with attached bathroom. 2 non-A/C rooms',
-            'url' => 'https://example.org/2',
-            'size' => 5,
-            'location' => new Point(7.072982, 80.015305)
+        $property[0]->rentals()->create([
+            "rooms" => 4,
+            "bathrooms" => 2
         ]);
+
+
+//        Property::create([
+//            'title' => '3 bedroom apartment',
+//            'area' => 'Miriswatte',
+//            'description' => '1 A/C room with attached bathroom. 2 non-A/C rooms',
+//            'url' => 'https://example.org/2',
+//            'propertyable_id' => 1,
+//            'propertyable_type' => 'rental',
+//            'location' => new Point(7.072982, 80.015305)
+//        ]);
     }
 }
