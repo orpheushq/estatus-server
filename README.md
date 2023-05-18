@@ -21,6 +21,7 @@ Laravel-based server
 * [CORS](#cors)
 * [Custom Routes](#custom-routes)
 * [Upgrade Guide](#upgrade-guide)
+* [Debugging](#debugging)
 
 ## Variable Dumping
 * Instead of using `var_dump(...); exit;`, use
@@ -170,3 +171,8 @@ Laravel-based server
   + Otherwise errors like this might occur https://stackoverflow.com/questions/70668306/opis-closure-serializableclosure-error-afer-php-8-1-update
 * Follow the file changes listed in the __upgrade-to-laravel-9__ branch
 * Delete __composer.lock__ before running `composer install`
+
+## Debugging
+* To enable breakpoint debugging, follow until https://www.jetbrains.com/help/phpstorm/2022.3/configuring-xdebug.html#integrationWithProduct
+* Breakpoints work when run using `php artisan serve` OR using the run/ debug ccontrols on PhpStorm
+* Breakpoints must be set explicitly, AFTER running the code
