@@ -8,6 +8,7 @@ use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 use Illuminate\Http\Request;
 use \App\Http\Controllers\PropertyController;
 use \App\Http\Controllers\RentalController;
+use \App\Http\Controllers\LandController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('rentals/upload', [RentalController::class, 'upload'])->middleware('can:properties')->name("rentals.upload");
     Route::resource('rentals', RentalController::class)->middleware('can:properties');
+
+    Route::post('lands/upload', [LandController::class, 'upload'])->middleware('can:properties')->name("lands.upload");
+    Route::resource('lands', LandController::class)->middleware('can:properties');
 });
 
 Route::prefix('logs')->middleware('auth')->group(function () {

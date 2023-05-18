@@ -279,6 +279,12 @@ return [
             'icon' => 'fas fa-fw fa-home',
             'can' => [ 'properties' ]
         ],
+        [
+            'text' => 'Bare Land',
+            'route'  => 'lands.index',
+            'icon' => 'fas fa-sign',
+            'can' => [ 'properties' ]
+        ],
 
         ['header' => 'Logs'],
         [
