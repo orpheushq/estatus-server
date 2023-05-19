@@ -2,15 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\ProcLand;
+use App\Classes\ProcRental;
 use App\Models\Land;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class LandController extends Controller
 {
 
     public function upload(Request $request)
     {
+        $thisFile = $request->file('dataFile');
+        $path = $thisFile->store('land-upload');
+        Log::channel('upload')->notice("Land uploading processing started for file ${path}");
 
+        ProcLand::processUpload($path, !is_null($request->post('test')));
+
+        return redirect()->back();
     }
     /**
      * Display a listing of the resource.
