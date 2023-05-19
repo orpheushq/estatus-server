@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Rentals')
+@section('title', 'Bare Lands')
 
 @section('content_header')
     <div class="row justify-content-flex-start">
