@@ -2,27 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\ProcLand;
 use App\Classes\ProcRental;
-use App\Models\Rental;
+use App\Models\Land;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
-class RentalController extends Controller
+class LandController extends Controller
 {
 
     public function upload(Request $request)
     {
         $thisFile = $request->file('dataFile');
-        $path = $thisFile->store('rental-upload');
-        Log::channel('upload')->notice("Rental uploading processing started for file ${path}");
+        $path = $thisFile->store('land-upload');
+        Log::channel('upload')->notice("Land uploading processing started for file ${path}");
 
-        ProcRental::processUpload($path, !is_null($request->post('test')));
+        ProcLand::processUpload($path, !is_null($request->post('test')));
 
-        return Storage::download("public/rental-upload.xlsx");
-//        return redirect()->back();
+        return redirect()->back();
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -36,7 +35,7 @@ class RentalController extends Controller
         $permissions = [];
         $validator = null;
         $isValid = FALSE;
-        $rentals = Rental::with('property')->where('id', '>', 0);
+        $lands = Land::with('property')->where('id', '>', 0);
 
         $values = $request->all();
         unset($values['_token']);
@@ -48,14 +47,14 @@ class RentalController extends Controller
             if (!$isValid) {
                 return response([ "errors" => $validator->errors() ], 422);
             } else {
-                return response($rentals->get(), 200);
+                return response($lands->get(), 200);
             }
         } else {
             if (!$isValid) {
                 return redirect()->back()->withErrors($validator);
             } else {
                 // TODO: render view
-                return view('rentals.list', [ "entities" => $rentals->get()]);
+                return view('lands.list', [ "entities" => $lands->get()]);
             }
         }
     }
