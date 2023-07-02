@@ -37,7 +37,10 @@ class ProcLand
                 $thisProperty = Property::where('url', '=', $url)->first();
 
                 if (!is_null($area)) {
-                    if (!is_null($thisProperty)) {
+                    if (is_null($title)) {
+                        // no title so skip this entry
+                        Log::channel("upload")->info("Skipping the land without a title at line ${i}");
+                    } else if (!is_null($thisProperty)) {
                         // existing property
                         if (!$isTest) {
                             $thisLand = $thisProperty->propertyable()->first();
