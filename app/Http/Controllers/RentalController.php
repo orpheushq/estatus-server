@@ -52,7 +52,7 @@ class RentalController extends Controller
             }
         } else {
             if (!$isValid) {
-                return redirect()->back()->withErrors($validator);;
+                return redirect()->back()->withErrors($validator);
             } else {
                 // TODO: render view
                 return view('rentals.list', [ "entities" => $rentals->get()]);
