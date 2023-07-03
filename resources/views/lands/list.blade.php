@@ -21,6 +21,7 @@ $heads = [
     'Area',
     'Title',
     'Size',
+    'Latest Price',
     'Description',
     'Created At',
     'Updated At',
@@ -48,6 +49,9 @@ $config = [
             'data' => 'size'
         ],
         [
+            'data' => 'price'
+        ],
+        [
             'data' => 'description'
         ],
         [
@@ -66,14 +70,19 @@ $config = [
 ];
 
 foreach ($entities as $i => &$u) {
+    $thisProperty = $u->getRelation('property');
+    $thisStatistic = $thisProperty->statistics()
+        ->orderBy('created_at', 'desc')
+        ->get()[0];
     $temp = [
         'id' => $u['id'],
-        'area' => $u->getRelation('property')['area'],
+        'area' => $thisProperty['area'],
         'size' => $u['size'],
-        'title' => $u->getRelation('property')['title'],
-        'description' => $u->getRelation('property')['description'],
-        'created_at' => $u->getRelation('property')['created_at']->format("d M Y h:i A"),
-        'updated_at' => $u->getRelation('property')['updated_at']->format("d M Y h:i A"),
+        'price' => number_format($thisStatistic['price'], 2),
+        'title' => $thisProperty['title'],
+        'description' => $thisProperty['description'],
+        'created_at' => $thisProperty['created_at']->format("d M Y h:i A"),
+        'updated_at' => $thisProperty['updated_at']->format("d M Y h:i A"),
         'actionCol' => '<nobr>'.$btnDetails.'</nobr>'
     ];
     $entities[$i] = $temp;
