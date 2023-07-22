@@ -108,7 +108,7 @@ $config['data'] = $entities;
                     <div class="card-body">
                         <div class="row">
                             <div class="col-4">
-                                <x-adminlte-input-file igroup-size="sm" name="dataFile" required accept=".xls,.xlsx"/>
+                                <x-adminlte-input-file igroup-size="sm" name="dataFile" required accept=".xls,.xlsx,.csv"/>
                             </div>
                             <div class="col-4">
                                 <div class="form-check">
