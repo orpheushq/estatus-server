@@ -22,6 +22,7 @@ Laravel-based server
 * [Custom Routes](#custom-routes)
 * [Upgrade Guide](#upgrade-guide)
 * [Debugging](#debugging)
+* [File Handling](#file-handling)
 
 ## Variable Dumping
 * Instead of using `var_dump(...); exit;`, use
@@ -176,3 +177,9 @@ Laravel-based server
 * To enable breakpoint debugging, follow until https://www.jetbrains.com/help/phpstorm/2022.3/configuring-xdebug.html#integrationWithProduct
 * Breakpoints work when run using `php artisan serve` OR using the run/ debug ccontrols on PhpStorm
 * Breakpoints must be set explicitly, AFTER running the code
+
+## File Handling
+* If file uploads fail for certain files, file size limit might be the issue
+* Use `ini_get('post_max_size')` and `ini_get('upload_max_filesize')` to get file size limits
+    + Usually this is 2 MB
+* Find the ini file belonging to the current PHP executable and change the values
