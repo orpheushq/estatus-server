@@ -57,12 +57,14 @@ class PropertyController extends Controller
     /**
      * Returns the average price per region using the latest statistic
      */
-    public function getRegion(string $region, Request $request)
+    public function getRegion(Request $request, string $region, $type = 'land')
     {
 //        DB::enableQueryLog();
         /* Solution 4 https://learnsql.com/blog/sql-join-only-first-row/*/
         $sanitizedRegion = strip_tags($region);
-        $properties = Property::where('area', '=', $sanitizedRegion);
+        $sanitizedType = strip_tags($type);
+        $properties = Property::where('area', '=', $sanitizedRegion)
+            ->where("propertyable_type", "like", "%{$sanitizedType}");
         $properties->join('statistics', function ($join) {
             $join
                 ->on('statistics.id', '=', DB::raw("
