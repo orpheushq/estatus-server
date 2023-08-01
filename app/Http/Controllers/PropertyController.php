@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Property;
 use Illuminate\Http\Request;
 use MatanYadaev\EloquentSpatial\Objects\Point;
+use Illuminate\Support\Facades\DB;
 
 class PropertyController extends Controller
 {
@@ -50,6 +51,32 @@ class PropertyController extends Controller
         return response([
             'types' => array_map(fn($v) => [strtolower(str_getcsv($v, "\\\\")[2]) => ucfirst(str_getcsv($v, "\\\\")[2])], $this->propertyTypes),
             'areas' => $this->propertyAreas
+        ], 200);
+    }
+
+    /**
+     * Returns the average price per region using the latest statistic
+     */
+    public function getRegion(string $region, Request $request)
+    {
+//        DB::enableQueryLog();
+        /* Solution 4 https://learnsql.com/blog/sql-join-only-first-row/*/
+        $sanitizedRegion = strip_tags($region);
+        $properties = Property::where('area', '=', $sanitizedRegion);
+        $properties->join('statistics', function ($join) {
+            $join
+                ->on('statistics.id', '=', DB::raw("
+                        (SELECT id from `statistics`
+                        WHERE property_id=properties.id
+                        ORDER BY id DESC LIMIT 1)
+                    "));
+        });
+        $avg = $properties->avg('price');
+
+//        dd(DB::getQueryLog());
+        return response([
+            'area' => $sanitizedRegion,
+            'avgPrice' => $avg
         ], 200);
     }
 
