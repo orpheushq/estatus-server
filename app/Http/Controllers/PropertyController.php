@@ -68,19 +68,63 @@ class PropertyController extends Controller
         });
         return $properties->avg('price');
     }
+    private function getRegionMedian($region, $type)
+    {
+//        DB::enableQueryLog();
+        /* Solution 4 https://learnsql.com/blog/sql-join-only-first-row/*/
+        $properties = Property::where('area', '=', $region)
+            ->where("propertyable_type", "like", "%{$type}");
+        $properties->join('statistics', function ($join) {
+            $join
+                ->on('statistics.id', '=', DB::raw("
+                        (SELECT id from `statistics`
+                        WHERE property_id=properties.id
+                        ORDER BY id DESC LIMIT 1)
+                    "));
+        });
+        $properties->orderBy('price', 'desc');
+//        dd($properties->get());
+        $propertyCollection = $properties->get();
+        $count = count($propertyCollection);
+        if ($count === 0 ) {
+            return null;
+        }
+        if ($count % 2 === 1) {
+            // odd number. Select the middle value
+            return $propertyCollection[(($count + 1) / 2) - 1]->price;
+        } else {
+            // even number
+            return 0.5 * (floatval($propertyCollection[($count / 2) - 1]->price) + floatval($propertyCollection[$count / 2]->price));
+        }
+//        foreach ($propertyCollection as $p) {
+//            echo("{$p->property_id} -> {$p->price}<br>");
+//        }
+//        exit();
+//        return $properties->median();
+//        dd(DB::getQueryLog());
+    }
+    /**
+     * Returns the median price per region using the latest statistic
+     */
+    public function getRegionMed(Request $request, string $region, $type = 'land')
+    {
+        $sanitizedRegion = strip_tags($region);
+        $sanitizedType = strip_tags($type);
+
+        return response([
+            'area' => $sanitizedRegion,
+            'medianPrice' => $this->getRegionMedian($sanitizedRegion, $sanitizedType)
+        ], 200);
+    }
 
     /**
      * Returns the average price per region using the latest statistic
      */
     public function getRegion(Request $request, string $region, $type = 'land')
     {
-//        DB::enableQueryLog();
-        /* Solution 4 https://learnsql.com/blog/sql-join-only-first-row/*/
         $sanitizedRegion = strip_tags($region);
         $sanitizedType = strip_tags($type);
 
-
-//        dd(DB::getQueryLog());
         return response([
             'area' => $sanitizedRegion,
             'avgPrice' => $this->getRegionAverage($sanitizedRegion, $sanitizedType)
@@ -96,7 +140,7 @@ class PropertyController extends Controller
 
         $areas = $properties->get(['area']);
         foreach ($areas as $a) {
-            $thisAverage = $this->getRegionAverage($a->area, $sanitizedType);
+            $thisAverage = $this->getRegionMedian($a->area, $sanitizedType);
             if (!is_null($thisAverage)) {
                 $averages[$a->area] = $thisAverage;
             }
