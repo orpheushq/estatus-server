@@ -28,6 +28,7 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/gauth', [AuthController::class, 'gauth']);
 
 Route::get('/util/lists', [PropertyController::class, 'getLists']);
+Route::get('/region/all/{type?}', [PropertyController::class, 'getAllRegions']);
 Route::get('/region/{region}/{type?}', [PropertyController::class, 'getRegion']);
 
 Route::apiResource('properties', PropertyController::class);

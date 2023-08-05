@@ -54,6 +54,21 @@ class PropertyController extends Controller
         ], 200);
     }
 
+    private function getRegionAverage($region, $type)
+    {
+        $properties = Property::where('area', '=', $region)
+            ->where("propertyable_type", "like", "%{$type}");
+        $properties->join('statistics', function ($join) {
+            $join
+                ->on('statistics.id', '=', DB::raw("
+                        (SELECT id from `statistics`
+                        WHERE property_id=properties.id
+                        ORDER BY id DESC LIMIT 1)
+                    "));
+        });
+        return $properties->avg('price');
+    }
+
     /**
      * Returns the average price per region using the latest statistic
      */
@@ -63,23 +78,30 @@ class PropertyController extends Controller
         /* Solution 4 https://learnsql.com/blog/sql-join-only-first-row/*/
         $sanitizedRegion = strip_tags($region);
         $sanitizedType = strip_tags($type);
-        $properties = Property::where('area', '=', $sanitizedRegion)
-            ->where("propertyable_type", "like", "%{$sanitizedType}");
-        $properties->join('statistics', function ($join) {
-            $join
-                ->on('statistics.id', '=', DB::raw("
-                        (SELECT id from `statistics`
-                        WHERE property_id=properties.id
-                        ORDER BY id DESC LIMIT 1)
-                    "));
-        });
-        $avg = $properties->avg('price');
+
 
 //        dd(DB::getQueryLog());
         return response([
             'area' => $sanitizedRegion,
-            'avgPrice' => $avg
+            'avgPrice' => $this->getRegionAverage($sanitizedRegion, $sanitizedType)
         ], 200);
+    }
+
+    public function getAllRegions(Request $request, $type = 'land')
+    {
+        $sanitizedType = strip_tags($type);
+
+        $averages = [];
+        $properties = Property::distinct(['area']);
+
+        $areas = $properties->get(['area']);
+        foreach ($areas as $a) {
+            $thisAverage = $this->getRegionAverage($a->area, $sanitizedType);
+            if (!is_null($thisAverage)) {
+                $averages[$a->area] = $thisAverage;
+            }
+        }
+        return response($averages, 200);
     }
 
     /**
