@@ -145,6 +145,8 @@ class PropertyController extends Controller
                 $averages[$a->area] = $thisAverage;
             }
         }
+        $averages['Kurunegala'] = 100000;
+        
         return response($averages, 200);
     }
 

@@ -1,14 +1,21 @@
 <?php
 
 namespace App\Classes;
+
 use App\Models\Property;
 use App\Models\Land;
+use App\Models\Region;
+use App\Models\RegionStatistic;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
 
 class ProcLand
 {
     public static function processUpload ($filePath, $isTest = TRUE): void
     {
+        set_time_limit(240);
+        
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(storage_path("app/${filePath}"));
 
         $noOfSheets = $spreadsheet->getSheetCount();
@@ -35,6 +42,14 @@ class ProcLand
                 $thisProperty = null;
                 $thisLand = null;
                 $thisProperty = Property::where('url', '=', $url)->first();
+                if (!empty($area) && $size > 0 && $price >= 0) {
+                    // Calculate the price per size and store it in the array
+                    $pricePerSize = $price / $size;
+                    $areaPrices[$area][] = $pricePerSize;
+                } else {
+                    // Handle validation errors (e.g., log or skip invalid data)
+                    Log::channel("upload")->warning("Skipping invalid data at line ${i}");
+                }
 
                 if (!is_null($area)) {
                     if (is_null($title)) {
@@ -82,8 +97,65 @@ class ProcLand
                 } else {
                     $doContinue = false;
                 }
+            
 
                 $i++;
+            }
+
+            foreach ($areaPrices as $area => $pricePerSize) {
+                if (!is_null($area)) {
+                    // Check if $area is not null before inserting into the regions table
+                    Region::updateOrCreate(
+                        ['region' => $area],
+                        ['created_at' => now(), 'updated_at' => now()]
+                    );
+                }
+            }
+
+            function median($arr) {
+                sort($arr);
+                $count = count($arr);
+                $middle = floor(($count - 1) / 2);
+            
+                if ($count % 2 == 0) {
+                    $low = $arr[$middle];
+                    $high = $arr[$middle + 1];
+                    return ($low + $high) / 2;
+                } else {
+                    return $arr[$middle];
+                }
+            }
+            
+        
+            foreach ($areaPrices as $area => $pricePerSize) {
+                // Calculate the median value for the prices
+                $medianPrice = median($pricePerSize);
+            
+                // Find the corresponding region ID based on the area
+                $region = Region::where('region', $area)->first();
+            
+                if ($region) {
+                    try {
+                        // Insert or update the region statistics
+                        DB::table('region_statistics')->updateOrInsert(
+                            ['region_id' => $region->id],
+                            [
+                                'price' => $medianPrice,
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ]
+                        );
+            
+                        // Log a success message
+                        Log::channel("upload")->info("Successfully processed area: ${area}, median price: ${medianPrice}");
+                    } catch (QueryException $e) {
+                        // Log an error message for database errors
+                        Log::channel("upload")->error("Error processing area: ${area}, error: " . $e->getMessage());
+                    }
+                } else {
+                    // Log an error message if the region is not found
+                    Log::channel("upload")->error("Region not found for area: ${area}");
+                }
             }
         }
 
