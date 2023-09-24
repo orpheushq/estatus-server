@@ -68,12 +68,9 @@ $config = [
     'paging' => true,
     'lengthMenu' => [ 10 ]
 ];
-
 foreach ($entities as $i => &$u) {
-    $thisProperty = $u->getRelation('property');
-    $thisStatistic = $thisProperty->statistics()
-        ->orderBy('created_at', 'desc')
-        ->get()[0];
+    $thisProperty = $u['property'];
+    $thisStatistic = $thisProperty['statistics'][0];
     $temp = [
         'id' => $u['id'],
         'area' => $thisProperty['area'],
