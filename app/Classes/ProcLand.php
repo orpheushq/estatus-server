@@ -10,12 +10,25 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 
+function median($arr) {
+    sort($arr);
+    $count = count($arr);
+    $middle = floor(($count - 1) / 2);
+
+    if ($count % 2 == 0) {
+        $low = $arr[$middle];
+        $high = $arr[$middle + 1];
+        return ($low + $high) / 2;
+    } else {
+        return $arr[$middle];
+    }
+}
 class ProcLand
 {
     public static function processUpload ($filePath, $isTest = TRUE): void
     {
         set_time_limit(240);
-        
+
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(storage_path("app/${filePath}"));
 
         $noOfSheets = $spreadsheet->getSheetCount();
@@ -26,6 +39,8 @@ class ProcLand
 
             $doContinue = true;
             $i = 2; // start at this row
+
+            $areaPrices = [];
 
             while ($doContinue)
             {
@@ -97,7 +112,7 @@ class ProcLand
                 } else {
                     $doContinue = false;
                 }
-            
+
 
                 $i++;
             }
@@ -105,52 +120,36 @@ class ProcLand
             foreach ($areaPrices as $area => $pricePerSize) {
                 if (!is_null($area)) {
                     // Check if $area is not null before inserting into the regions table
-                    Region::updateOrCreate(
-                        ['region' => $area],
-                        ['created_at' => now(), 'updated_at' => now()]
-                    );
+                    if (!$isTest) {
+                        Region::updateOrCreate(
+                            ['region' => $area],
+                            ['created_at' => now(), 'updated_at' => now()]
+                        );
+                    }
                 }
             }
 
-            function median($arr) {
-                sort($arr);
-                $count = count($arr);
-                $middle = floor(($count - 1) / 2);
-            
-                if ($count % 2 == 0) {
-                    $low = $arr[$middle];
-                    $high = $arr[$middle + 1];
-                    return ($low + $high) / 2;
-                } else {
-                    return $arr[$middle];
-                }
-            }
-            
-        
             foreach ($areaPrices as $area => $pricePerSize) {
                 // Calculate the median value for the prices
                 $medianPrice = median($pricePerSize);
-            
+
                 // Find the corresponding region ID based on the area
                 $region = Region::where('region', $area)->first();
-            
+
                 if ($region) {
                     try {
-                        // Insert or update the region statistics
-                        DB::table('region_statistics')->updateOrInsert(
-                            ['region_id' => $region->id],
-                            [
-                                'price' => $medianPrice,
-                                'created_at' => now(),
-                                'updated_at' => now()
-                            ]
-                        );
-            
+                        // Insert statistics
+                        if (!$isTest) {
+                            $region->statistics()->create([
+                                'price' => $medianPrice
+                            ]);
+                        }
+
                         // Log a success message
-                        Log::channel("upload")->info("Successfully processed area: ${area}, median price: ${medianPrice}");
+                        Log::channel("upload")->info("Successfully calculated median for area: ${area}, median price: ${medianPrice}");
                     } catch (QueryException $e) {
                         // Log an error message for database errors
-                        Log::channel("upload")->error("Error processing area: ${area}, error: " . $e->getMessage());
+                        Log::channel("upload")->error("Error median for area: ${area}, error: " . $e->getMessage());
                     }
                 } else {
                     // Log an error message if the region is not found
