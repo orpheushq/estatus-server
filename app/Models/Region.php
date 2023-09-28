@@ -12,4 +12,12 @@ class Region extends Model
     protected $fillable = ['region']; // Add 'region' to the fillable array
 
     // Rest of your model code...
+
+    public function statistics()
+    {
+        return $this->hasMany(RegionStatistic::class, 'region_id');
+        
+    }
 }
+
+   

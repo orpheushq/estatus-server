@@ -12,4 +12,10 @@ class RegionStatistic extends Model
     ];
 
     // Rest of the model code...
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class, 'region_id');
+    }
+
 }
