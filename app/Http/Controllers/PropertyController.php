@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Property;
+use App\Models\RegionStatistic;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use Illuminate\Support\Facades\DB;
+use App\Models\Region;
+use Illuminate\Support\Facades\Log;
 
 class PropertyController extends Controller
 {
@@ -18,26 +23,22 @@ class PropertyController extends Controller
         $this->propertyAreas = (new Property())->getAreas();
     }
 
-    private function updateEntity ($newValues, $entity)
+    private function updateEntity($newValues, $entity)
     {
         foreach ($newValues as $k => $v) {
             if (!is_null($v)) {
                 switch ($k) {
-                    case "type": {
+                    case "type":
                         $entity[$k] = strtolower($v);
                         break;
-                    }
-                    case "latitude": {
+                    case "latitude":
                         $entity['location'] = new Point($newValues['latitude'], $newValues['longitude']);
                         break;
-                    }
-                    case "longitude": {
+                    case "longitude":
                         // handled in a different case
                         break;
-                    }
-                    default: {
+                    default:
                         $entity[$k] = $v;
-                    }
                 }
             }
         }
@@ -49,36 +50,25 @@ class PropertyController extends Controller
     public function getLists(Request $request)
     {
         return response([
-            'types' => array_map(fn($v) => [strtolower(str_getcsv($v, "\\\\")[2]) => ucfirst(str_getcsv($v, "\\\\")[2])], $this->propertyTypes),
+            'types' => array_map(fn ($v) => [strtolower(str_getcsv($v, "\\\\")[2]) => ucfirst(str_getcsv($v, "\\\\")[2])], $this->propertyTypes),
             'areas' => $this->propertyAreas
         ], 200);
     }
 
-    /**
-     * Returns the average price per region using the latest statistic
-     */
-    public function getRegion(string $region, Request $request)
-    {
-//        DB::enableQueryLog();
-        /* Solution 4 https://learnsql.com/blog/sql-join-only-first-row/*/
-        $sanitizedRegion = strip_tags($region);
-        $properties = Property::where('area', '=', $sanitizedRegion);
-        $properties->join('statistics', function ($join) {
-            $join
-                ->on('statistics.id', '=', DB::raw("
-                        (SELECT id from `statistics`
-                        WHERE property_id=properties.id
-                        ORDER BY id DESC LIMIT 1)
-                    "));
-        });
-        $avg = $properties->avg('price');
-
-//        dd(DB::getQueryLog());
-        return response([
-            'area' => $sanitizedRegion,
-            'avgPrice' => $avg
-        ], 200);
-    }
+//    private function getRegionAverage($region, $type)
+//    {
+//        $properties = Property::where('area', '=', $region)
+//            ->where("propertyable_type", "like", "%{$type}");
+//        $properties->join('statistics', function ($join) {
+//            $join
+//                ->on('statistics.id', '=', DB::raw("
+//                        (SELECT id from `statistics`
+//                        WHERE property_id=properties.id
+//                        ORDER BY id DESC LIMIT 1)
+//                    "));
+//        });
+//        return $properties->avg('price');
+//    }
 
     /**
      * Display a listing of the resource.
@@ -87,7 +77,6 @@ class PropertyController extends Controller
      */
     public function index(Request $request)
     {
-        //
         $values = [];
         $validations = [];
         $permissions = [];
@@ -100,16 +89,14 @@ class PropertyController extends Controller
 
         foreach ($values as $k => $v) {
             switch ($k) {
-                case "type": {
+                case "type":
                     $properties->where("propertyable_type", "like", "%${v}");
                     break;
-                }
-                default: {
+                default:
                     if (!is_null($v)) {
                         $properties->where($k, '=', $v);
                     }
                     break;
-                }
             }
         }
 
@@ -118,16 +105,12 @@ class PropertyController extends Controller
 
         if ($request->wantsJson()) {
             if (!$isValid) {
-                return response([ "errors" => $validator->errors() ], 422);
+                return response(["errors" => $validator->errors()], 422);
             } else {
                 $properties->with('propertyable');
-                $properties->with([ 'statistics' => function ($query) {
+                $properties->with(['statistics' => function ($query) {
                     $query->orderBy('created_at', 'desc');
-                } ]);
-
-//                $processedProperties = $properties->get()->map(function ($p) {
-//                    return $p->statistics()->first();
-//                });
+                }]);
 
                 return response($properties->get(), 200);
             }
@@ -136,7 +119,7 @@ class PropertyController extends Controller
                 return redirect()->back()->withErrors($validator);
             } else {
                 // TODO: render view
-                return view('properties.list', [ "entities" => $properties->get()]);
+                return view('properties.list', ["entities" => $properties->get()]);
             }
         }
     }
@@ -148,7 +131,6 @@ class PropertyController extends Controller
      */
     public function create(Request $request)
     {
-        //
         $property = new Property();
         return view('properties.view', [
             'entity' => $property,
@@ -165,7 +147,6 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $property = new Property();
 
         $newValues = $request->all();
@@ -186,7 +167,6 @@ class PropertyController extends Controller
      */
     public function show($id)
     {
-        //
         $property = Property::where('id', '=', $id)->first();
 
         return view('properties.view', [
@@ -204,7 +184,6 @@ class PropertyController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        //
         $property = Property::where('id', '=', $id)->first();
 
         $newValues = $request->all();
