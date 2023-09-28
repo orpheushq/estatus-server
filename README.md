@@ -166,6 +166,10 @@ Laravel-based server
 * The difference is that this route deduces user ID from `$request->user()` and passes it along to the UserController
 * From the POV of the UserController, there is no difference
 
+## Telescope
+* Added Telescope package for monitoring
+* https://laravel.com/docs/9.x/telescope#introduction
+
 ## Upgrade Guide
 ### Update to Laravel 9.0
 * Laravel has to be upgraded to 9.0 if running on PHP 8.x
