@@ -71,56 +71,6 @@ class PropertyController extends Controller
 //    }
 
     /**
-     * Returns the median price per region using the latest statistic
-     */
-    public function getRegion(Request $request, string $region, $type = 'land'): Response
-    {
-        /**
-         * TODO: currently region table has no type column. After adding this, add type handling as well
-         */
-
-        $regionData = Region
-            ::where('region', '=', $region)
-            ->with([
-                'statistics' => function (HasMany $query) {
-                    $query->latest()->first();
-                }
-            ])->first();
-        return response($regionData, 200);
-    }
-
-    public function getAllRegions(Request $request, $type = 'land')
-    {
-        /**
-         * TODO: currently region table has no type column. After adding this, add type handling as well
-         */
-        try {
-            // Method 4 of https://laraveldaily.com/post/eloquent-hasmany-get-parent-latest-row-of-relationship
-            $regions = Region
-                ::addSelect([
-                    'price' =>
-                        RegionStatistic
-                            ::select('price')
-                            ->whereColumn('region_id', 'regions.id')
-                            ->latest()
-                            ->take(1)
-                ])->get();
-
-            $prices = [];
-
-            foreach ($regions as $region) {
-                $prices[$region->region] = $region->price;
-            }
-
-            return response($prices, 200);
-        } catch (\Exception $e) {
-            // Log the exception for debugging
-            Log::error('Error in getAllRegions: ' . $e->getMessage());
-            return response(['error' => 'An error occurred while fetching data.'], 500);
-        }
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
