@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Classes\ProcLand;
 use App\Classes\ProcRental;
 use App\Models\Land;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -35,8 +36,12 @@ class LandController extends Controller
         $permissions = [];
         $validator = null;
         $isValid = FALSE;
-        $lands = Land::with('property')->where('id', '>', 0);
 
+        $lands = Land::with([
+            "property.statistics" => function (HasMany $query) {
+                $query->latest();
+            }
+        ])->where('id', '>', 0);
         $values = $request->all();
         unset($values['_token']);
 

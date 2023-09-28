@@ -11,11 +11,8 @@ class RegionStatistic extends Model
         'price',
     ];
 
-    // Rest of the model code...
-
-    public function region()
+    public function property()
     {
-        return $this->belongsTo(Region::class, 'region_id');
+        return $this->belongsTo(Property::class);
     }
-
 }
