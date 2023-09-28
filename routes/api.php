@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\RegionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
@@ -28,11 +29,9 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/gauth', [AuthController::class, 'gauth']);
 
 Route::get('/util/lists', [PropertyController::class, 'getLists']);
-Route::get('/region/all/{type?}', [PropertyController::class, 'getAllRegions']);
-Route::get('/region/{region}/{type?}', [PropertyController::class, 'getRegion']);
-Route::get('/region/{region}/{type?}/median', [PropertyController::class, 'getRegionMed']);
 
 Route::apiResource('properties', PropertyController::class);
+Route::apiResource('regions', RegionController::class);
 
 /* Protected Routes */
 Route::group(['middleware' => ['auth:sanctum']], function () {
