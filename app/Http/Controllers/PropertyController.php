@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Property;
+use App\Models\RegionStatistic;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use Illuminate\Support\Facades\DB;
 use App\Models\Region;
@@ -52,99 +55,62 @@ class PropertyController extends Controller
         ], 200);
     }
 
-    private function getRegionAverage($region, $type)
-    {
-        $properties = Property::where('area', '=', $region)
-            ->where("propertyable_type", "like", "%{$type}");
-        $properties->join('statistics', function ($join) {
-            $join
-                ->on('statistics.id', '=', DB::raw("
-                        (SELECT id from `statistics`
-                        WHERE property_id=properties.id
-                        ORDER BY id DESC LIMIT 1)
-                    "));
-        });
-        return $properties->avg('price');
-    }
-
-    private function getRegionMedian($region, $type)
-    {
-        
-        {
-            // Find the relevant region in the 'regions' table based on the provided 'region'
-            $regionData = Region::where('region', '=', $region)->first();
-        
-            if (!$regionData) {
-                return null; // Handle the case where the region is not found
-            }
-        
-            // Use the retrieved 'id' from 'regions' to locate the matching 'region_id' in 'region_statistics'
-            $statistics = DB::table('region_statistics')
-                ->where('region_id', '=', $regionData->id)
-                ->orderBy('created_at', 'desc')
-                ->first();
-        
-            if (!$statistics) {
-                return null; // Handle the case where statistics for the region are not found
-            }
-        
-            return $statistics->price;
-        }
-        
-    }
+//    private function getRegionAverage($region, $type)
+//    {
+//        $properties = Property::where('area', '=', $region)
+//            ->where("propertyable_type", "like", "%{$type}");
+//        $properties->join('statistics', function ($join) {
+//            $join
+//                ->on('statistics.id', '=', DB::raw("
+//                        (SELECT id from `statistics`
+//                        WHERE property_id=properties.id
+//                        ORDER BY id DESC LIMIT 1)
+//                    "));
+//        });
+//        return $properties->avg('price');
+//    }
 
     /**
      * Returns the median price per region using the latest statistic
      */
-    public function getRegionMed(Request $request, string $region, $type = 'land')
+    public function getRegion(Request $request, string $region, $type = 'land'): Response
     {
-        $sanitizedRegion = strip_tags($region);
-        $sanitizedType = strip_tags($type);
-    
-        $medianPrice = $this->getRegionMedian($sanitizedRegion, $sanitizedType);
-    
-        return response([
-            'region' => $sanitizedRegion,
-            'medianPrice' => $medianPrice
-        ], 200);
-    }
+        /**
+         * TODO: currently region table has no type column. After adding this, add type handling as well
+         */
 
-    /**
-     * Returns the average price per region using the latest statistic
-     */
-    public function getRegion(Request $request, string $region, $type = 'land')
-    {
-        $sanitizedRegion = strip_tags($region);
-        $sanitizedType = strip_tags($type);
-
-        return response([
-            'area' => $sanitizedRegion,
-            'avgPrice' => $this->getRegionAverage($sanitizedRegion, $sanitizedType)
-        ], 200);
+        $regionData = Region
+            ::where('region', '=', $region)
+            ->with([
+                'statistics' => function (HasMany $query) {
+                    $query->latest()->first();
+                }
+            ])->first();
+        return response($regionData, 200);
     }
 
     public function getAllRegions(Request $request, $type = 'land')
     {
-        $sanitizedType = strip_tags($type);
-
+        /**
+         * TODO: currently region table has no type column. After adding this, add type handling as well
+         */
         try {
-            // Retrieve all regions from the 'regions' table
-            $regions = Region::all();
+            // Method 4 of https://laraveldaily.com/post/eloquent-hasmany-get-parent-latest-row-of-relationship
+            $regions = Region
+                ::addSelect([
+                    'price' =>
+                        RegionStatistic
+                            ::select('price')
+                            ->whereColumn('region_id', 'regions.id')
+                            ->latest()
+                            ->take(1)
+                ])->get();
 
             $prices = [];
 
             foreach ($regions as $region) {
-                // Retrieve the relevant price for each region from the 'region_statistics' table
-                $statistics = $region->statistics()
-                    ->where('region_id', $region->id) // Use the 'id' of the region as 'region_id'
-                    ->first(); // Use 'first' to retrieve a single result
-
-                if ($statistics) {
-                    $prices[$region->region] = $statistics->price;
-                }
+                $prices[$region->region] = $region->price;
             }
-
-            // You can add a default value for 'Kurunegala' here if needed.
 
             return response($prices, 200);
         } catch (\Exception $e) {
