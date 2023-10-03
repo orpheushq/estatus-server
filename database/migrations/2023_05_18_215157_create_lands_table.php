@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('lands', function (Blueprint $table) {
             $table->id();
-            $table->decimal('size', 5, 2);
+            $table->decimal('size', 10, 2);
             $table->timestamps();
         });
     }

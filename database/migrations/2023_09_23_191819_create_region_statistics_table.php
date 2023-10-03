@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('region_statistics', function (Blueprint $table) {
             $table->id();
             $table->integer('region_id'); 
-            $table->integer('price');
+            $table->decimal('price',14,0);
             $table->timestamps();
         });
     }
