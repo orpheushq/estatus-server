@@ -58,8 +58,8 @@ class ProcLand
                 $thisLand = null;
                 $thisProperty = Property::where('url', '=', $url)->first();
                 if (!empty($area) && $size > 0 && $price >= 0) {
-                    // Calculate the price per size and store it in the array
-                    $pricePerSize = $price / $size;
+                  
+                    $pricePerSize = $price;
                     $areaPrices[$area][] = $pricePerSize;
                 } else {
                     // Handle validation errors (e.g., log or skip invalid data)
