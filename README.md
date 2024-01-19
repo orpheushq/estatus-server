@@ -178,6 +178,7 @@ Laravel-based server
 * Delete __composer.lock__ before running `composer install`
 
 ## Debugging
+* Install Xdebug using https://xdebug.org/docs/install#pecl (i.e. using homebrew)
 * To enable breakpoint debugging, follow until https://www.jetbrains.com/help/phpstorm/2022.3/configuring-xdebug.html#integrationWithProduct
 * Breakpoints work when run using `php artisan serve` OR using the run/ debug ccontrols on PhpStorm
 * Breakpoints must be set explicitly, AFTER running the code
