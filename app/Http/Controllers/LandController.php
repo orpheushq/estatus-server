@@ -58,8 +58,12 @@ class LandController extends Controller
             if (!$isValid) {
                 return redirect()->back()->withErrors($validator);
             } else {
-                // TODO: render view
-                return view('lands.list', [ "entities" => $lands->get()]);
+                // INFO: don't load data unless request has showTable URL param
+                if (isset($values['showTable'])) {
+                    return view('lands.list', ["entities" => $lands->get()]);
+                } else {
+                    return view('lands.list', ["entities" => []]);
+                }
             }
         }
     }

@@ -124,6 +124,7 @@ $config['data'] = $entities;
             </div>
         </div>
     </form>
+    <x-adminlte-callout>To show table data, append <a href="?showTable=true">?showTable=true</a> to URL</x-adminlte-callout>
     <x-adminlte-datatable id="tblLand" :heads="$heads" :config="$config" striped hoverable with-buttons>
         @foreach($config['data'] as $row)
             <tr>
