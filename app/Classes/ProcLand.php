@@ -27,7 +27,7 @@ class ProcLand
 {
     public static function processUpload ($filePath, $isTest = TRUE): void
     {
-        set_time_limit(240);
+        set_time_limit(0);
 
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(storage_path("app/${filePath}"));
 
