@@ -11,8 +11,10 @@ class RegionStatistic extends Model
         'price',
     ];
 
-    public function property()
+    protected $touches = [ 'region' ];
+
+    public function region()
     {
-        return $this->belongsTo(Property::class);
+        return $this->belongsTo(Region::class);
     }
 }
