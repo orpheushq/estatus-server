@@ -92,6 +92,8 @@ class PropertyController extends Controller
                 case "type":
                     $properties->where("propertyable_type", "like", "%${v}");
                     break;
+                case "onlyLatestResults":
+                    break;
                 default:
                     if (!is_null($v)) {
                         $properties->where($k, '=', $v);
@@ -99,6 +101,40 @@ class PropertyController extends Controller
                     break;
             }
         }
+
+        if (isset($values['onlyLatestResults'])) {
+//            TODO: current approach works only for the present (latest) week. Modify to work with any date provided to the API
+            /**
+             * Things to check:
+             * [x] When the region has been updated during the current week, only the up-to-date properties should be fetched
+             * [x] When the region has not been updated during the current week, the properties of that region that were last updated (i.e. property has same `updated_at` date as the region) should be fetched
+             */
+
+            $currentDate = (new \DateTime())->format('Y-m-d');
+            // Get the start of the week (Sunday)
+            $startOfWeekDay = date_create_from_format('Y-m-d', date('Y-m-d', strtotime('last Sunday', strtotime($currentDate))));
+            // Get the end of the week (Saturday)
+            $endOfWeekDay = date_create_from_format('Y-m-d', date('Y-m-d', strtotime('next Sunday', $startOfWeekDay->getTimestamp())));
+
+            $properties->where(function ($query) use ($startOfWeekDay, $endOfWeekDay, $values) {
+                $query->whereBetween('updated_at', [$startOfWeekDay, $endOfWeekDay]);
+
+                if (isset($values['area'])) {
+                    $region = Region::where('region', '=', $values['area'])->first();
+                    if (!is_null($region)) {
+                        $lastUpdatedDate = date_create_from_format('Y-m-d H:i:s', $region['updated_at']);
+
+                        if ($startOfWeekDay > $lastUpdatedDate) {
+                            // INFO: Region was last updated before the week period
+                            $query->orWhereBetween('updated_at', ["{$lastUpdatedDate->format('Y-m-d')} 00:00:00", "{$lastUpdatedDate->format('Y-m-d')} 23:59:59"]);
+                        }
+                    }
+                }
+
+            });
+        }
+
+
 
         // Add validation rules
         $isValid = TRUE;
