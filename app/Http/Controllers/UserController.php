@@ -29,9 +29,9 @@ class UserController extends Controller
             /**
              * TODO: apply filters
              */
-            
+
         }
-        
+
         //apply permission constraits
         if (!$request->user()->hasPermissionTo("external users") && $request->user()->hasPermissionTo("internal users")) {
             $entities = User::where("organizationId", "=", $request->user()->organizationId)->get();
@@ -79,9 +79,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         //
+        if ($id === 'me') {
+            return $request->user();
+        }
     }
 
     /**
@@ -116,7 +119,7 @@ class UserController extends Controller
         // Add validation rules
         $validations["currentPassword"] = [ "required", "current_password" ];
         $validations["newPassword"] = [ "required", "different:currentPassword", Password::defaults() ];
-    
+
         $validator = Validator::make($values, $validations);
         $isValid = !$validator->fails();
 
