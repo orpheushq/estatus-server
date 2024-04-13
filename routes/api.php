@@ -30,6 +30,8 @@ Route::post('/auth/gauth', [AuthController::class, 'gauth']);
 
 Route::get('/util/lists', [PropertyController::class, 'getLists']);
 
+Route::get('/properties/addresses', [PropertyController::class, 'getUniqueAddresses']);
+
 Route::apiResource('properties', PropertyController::class);
 Route::apiResource('regions', RegionController::class);
 

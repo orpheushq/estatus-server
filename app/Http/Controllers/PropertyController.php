@@ -23,6 +23,12 @@ class PropertyController extends Controller
         $this->propertyAreas = (new Property())->getAreas();
     }
 
+    public function getUniqueAddresses(Request $request)
+    {
+        $uniqueAddress = (new Property())->getAddresses($request->get('region'));
+        return response($uniqueAddress);
+    }
+
     private function updateEntity($newValues, $entity)
     {
         foreach ($newValues as $k => $v) {
