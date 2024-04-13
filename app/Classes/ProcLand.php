@@ -53,6 +53,10 @@ class ProcLand
                 $location = null;
                 $size = floatval($sheet->getCell("I${i}")->getValue());
                 $price = floatval($sheet->getCell("J${i}")->getValue());
+                $maplink = $sheet->getCell("K${i}")->getValue();
+                $raw_maplink = $sheet->getCell("L${i}")->getValue();
+                $address = $sheet->getCell("D${i}")->getValue();
+                $raw_address = $sheet->getCell("D${i}")->getValue();
 
                 $thisProperty = null;
                 $thisLand = null;
@@ -80,6 +84,10 @@ class ProcLand
                             $thisProperty['description'] = $description;
                             $thisProperty['url'] = $url;
                             $thisProperty['location'] = $location;
+                            $thisProperty['maplink'] = $maplink;
+                            $thisProperty['raw_maplink'] = $raw_maplink;
+                            $thisProperty['address'] = $address;
+                            $thisProperty['raw_address'] = $raw_address;
                             $thisProperty->save();
 
                             $thisLand['size'] = $size;
@@ -101,7 +109,11 @@ class ProcLand
                                 'area' => $area,
                                 'description' => $description,
                                 'url' => $url,
-                                'location' => $location
+                                'location' => $location,
+                                'maplink' => $maplink,
+                                'raw_maplink' => $raw_maplink,
+                                'address' => $address,
+                                'raw_address' => $raw_address,
                             ]);
                             $thisProperty->statistics()->create([
                                 'price' => $price
