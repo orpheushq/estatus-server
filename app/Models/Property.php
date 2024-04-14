@@ -36,7 +36,6 @@ class Property extends Model
     public function getAreas ()
     {
         $uniqueAreas = $this->all()->unique('area');
-//        dd($uniqueAreas->toArray());
         return array_values(array_map(fn($v): string => $v['area'], $uniqueAreas->toArray()));
     }
 }
