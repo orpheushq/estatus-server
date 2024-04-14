@@ -19,8 +19,8 @@ class PropertyController extends Controller
 
     public function __construct()
     {
-        $this->propertyTypes = (new Property())->getTypes();
-        $this->propertyAreas = (new Property())->getAreas();
+        // $this->propertyTypes = (new Property())->getTypes();
+        // $this->propertyAreas = (new Property())->getAreas();
     }
 
     public function getUniqueAddresses(Request $request)
