@@ -25,8 +25,9 @@ class PropertyController extends Controller
 
     public function getUniqueAddresses(Request $request)
     {
-        $uniqueAddress = (new Property())->getAddresses($request->get('region'));
-        return response($uniqueAddress);
+        $region = $request->get('region');
+        $properties = Property::where('area', '=', $region)->select('address')->distinct()->get();
+        return response(array_map(fn($property): string => $property['address'], $properties->toArray()));
     }
 
     private function updateEntity($newValues, $entity)
