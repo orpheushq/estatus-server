@@ -6,6 +6,7 @@ use App\Models\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Hash;
 
@@ -117,8 +118,8 @@ class UserController extends Controller
         unset($values['_token']);
 
         // Add validation rules
-        $validations["currentPassword"] = [ "required", "current_password" ];
-        $validations["newPassword"] = [ "required", "different:currentPassword", Password::defaults() ];
+        $validations["newPassword"] = [ "different:currentPassword", Password::defaults() ];
+        $validations["currentPassword"] = Rule::requiredIf(array_key_exists('newPassword', $values));
 
         $validator = Validator::make($values, $validations);
         $isValid = !$validator->fails();
