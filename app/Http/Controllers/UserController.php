@@ -131,12 +131,21 @@ class UserController extends Controller
             $thisUser = $request->user();
             foreach ($values as $k => $v) {
                 if (!is_null($v)) {
-                    if ($k === "password" || $k === "newPassword") {
-                        $thisUser['password'] = Hash::make($values['newPassword']);
-                    } else if ($k === "password_confirmation" || $k === "currentPassword") {
-                        // ignore these fields
-                    } else {
-                        $thisUser[$k] = $v;
+                    switch ($k) {
+                        case 'password': {
+                            $thisUser['password'] = Hash::make($values['newPassword']);
+                            break;
+                        }
+                        case "newPassword":
+                        case "currentPassword":
+                        case "password_confirmation": {
+                            break;
+                        }
+                        case "alert_regions":
+                        default: {
+                            $thisUser[$k] = $v;
+                            break;
+                        }
                     }
                 }
             }
