@@ -86,7 +86,7 @@ class UserController extends Controller
         if ($id === 'me') {
             $user = $request->user();
             $parsed_alert_regions = json_decode($user->alert_regions);
-            return [...($user->toArray()), 'alert_regions' => is_null($parsed_alert_regions) ? [] : $parsed_alert_regions];
+            return [...($user->toArray()), 'alert_regions' => is_null($parsed_alert_regions) ? null : $parsed_alert_regions];
         }
     }
 
