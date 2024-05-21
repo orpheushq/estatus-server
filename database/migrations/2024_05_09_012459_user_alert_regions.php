@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->json('alert_regions');
+            $table->json('alert_regions')->nullable()->default(NULL);
         });
     }
 
