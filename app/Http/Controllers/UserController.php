@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\SmsClient;
 use App\Models\User;
 
 use Illuminate\Http\Request;
@@ -12,6 +13,12 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    private $smsClient = null;
+    public function __construct()
+    {
+        $this->smsClient = new SmsClient();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -139,6 +146,14 @@ class UserController extends Controller
                         case "newPassword":
                         case "currentPassword":
                         case "password_confirmation": {
+                            break;
+                        }
+                        case "phone_number": {
+                            if ($v !== $thisUser['phone_number']) {
+                                // INFO: user has updated phone number
+                                $this->smsClient->sendSms($v, 'Thanks for subscribing to alerts from estates.lk');
+                            }
+                            $thisUser[$k] = $v;
                             break;
                         }
                         case "alert_regions":
