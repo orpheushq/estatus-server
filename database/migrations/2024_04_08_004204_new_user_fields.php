@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->text('phone_number');
+            $table->text('phone_number')->nullable()->default(NULL);
             $table->boolean('is_buyer')->default(false);
             $table->boolean('is_seller')->default(false);
             $table->enum('subscription', ['free', 'premium'])->default('free');
