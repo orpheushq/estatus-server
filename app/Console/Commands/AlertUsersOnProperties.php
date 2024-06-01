@@ -65,12 +65,17 @@ class AlertUsersOnProperties extends Command
             $date = is_null($minDate) ? new \DateTime() : new \DateTime($minDate);
             Log::channel("cli")->info("{$this->logPrefix} START for date {$date->format('Y-m-d')}");
 
-            $usersWithAlerts = User::whereNotNull('alert_regions')->lazy();
+            $usersWithAlerts = User
+                ::whereNotNull('alert_regions')
+                ->whereNotNull('alert_range')
+                ->whereJsonLength('alert_range', '>', 0)
+                ->lazy();
+
             foreach ($usersWithAlerts as $user) {
                 Log::channel("cli")->info("{$this->logPrefix} BEGIN alert processing for {$user->email}");
 
                 $alertRegions = json_decode($user->alert_regions);
-                $priceRange = [1, 800000]; // TODO: remove hardcoded test
+                $priceRange = json_decode($user->alert_range);
                 $alerts = array();
                 foreach ($alertRegions as $region) {
                     $qualifyingPropertiesCount = Property
