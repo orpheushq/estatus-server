@@ -30,7 +30,7 @@ class AlertUsersOnProperties extends Command
      * @var string
      */
     protected $signature = 'alert:newProperties
-        {minDate : The minimum date by which properties should have been updated by to qualify }
+        {minDate? : The minimum date by which properties should have been updated by to qualify }
         {--D|dry : Dry run where SMS are not actually sent instead logged to console}';
 
     /**
@@ -62,7 +62,8 @@ class AlertUsersOnProperties extends Command
         $dryRun = $this->option('dry');
         $type = 'land';
         try {
-            $date = new \DateTime($minDate);
+            $date = is_null($minDate) ? new \DateTime() : new \DateTime($minDate);
+            Log::channel("cli")->info("{$this->logPrefix} START for date {$date->format('Y-m-d')}");
 
             $usersWithAlerts = User::whereNotNull('alert_regions')->lazy();
             foreach ($usersWithAlerts as $user) {
@@ -75,10 +76,10 @@ class AlertUsersOnProperties extends Command
                     $qualifyingPropertiesCount = Property
                         ::where("propertyable_type", "like", "%${type}")
                         ->where('area', '=', $region)
-                        ->whereHas('statistics', function (Builder $query) use ($priceRange, $minDate) {
+                        ->whereHas('statistics', function (Builder $query) use ($priceRange, $date) {
                             $query
                                 ->whereBetween('price', $priceRange)
-                                ->where('created_at', '>', $minDate);
+                                ->where('created_at', '>', $date->format('Y-m-d'));
                         })
                         ->count();
 
@@ -95,6 +96,7 @@ class AlertUsersOnProperties extends Command
                     }
                 }
             }
+            Log::channel("cli")->info("{$this->logPrefix} END");
             return Command::SUCCESS;
         } catch (\Exception $e) {
             $this->info("ERROR: " . $e->getMessage());
