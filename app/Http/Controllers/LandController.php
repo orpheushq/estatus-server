@@ -2,17 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\CliProcess;
 use App\Classes\ProcLand;
 use App\Classes\ProcRental;
 use App\Models\Land;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class LandController extends Controller
 {
 
+    public function triggerAlertNewProperties(Request $request): RedirectResponse
+    {
+        $dryRun = !is_null($request->post('dryRun'));
+        $minDate = !is_null($request->post('minDate')) ? $request->post('minDate') : '';
+
+        $params = [];
+        if ($dryRun) {
+            $params[] = '-D';
+        }
+        if ($minDate !== '') {
+            $params[] = $minDate;
+        }
+
+        CliProcess::startBgProcess('alert:newProperties', $params);
+
+        return redirect()->back();
+    }
     public function upload(Request $request)
     {
         $thisFile = $request->file('dataFile');

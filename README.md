@@ -10,6 +10,7 @@ Laravel-based server
 * [Maintenance Mode](#maintenance-mode)
 * [Unit Testing](#unit-testing)
 * [CLI](#cli)
+* [Task Scheduler](#task-scheduler)
 * [Setting Environment](#setting-environment)
 * [Deployment](#deployment)
     * [Troubleshooting](#troubleshooting)
@@ -75,6 +76,12 @@ Laravel-based server
 * Console routes can be defined in __/routes/console.php__
 * Console commands can be generated using
     > `php artisan make:command "<command-name"`
+* All console commands available can be listed by
+    > `php artisan list`
+* All console commands (even custom ones) under a namespace can be listed by
+    > `php artisan list alert`
+* Detailed help for console commands (even custom ones) can be printed using
+    > `php artisan -h alert:properties`
 * A routed command can be executed using
     > `php artisan <command-name>`
     > `php artisan ispire`
@@ -88,6 +95,19 @@ Laravel-based server
     + https://stackoverflow.com/a/63111813
 * To set environment to production, set `APP_ENV=production` and `APP_DEBUG=false` in __.env__
     + https://panjeh.medium.com/laravel-app-env-local-app-env-production-difference-aa9662ac81d0
+
+## Task Scheduler
+* Use the task scheduler to add recurring tasks
+* The task scheduler is structured in such a way that only one entry needs to be added to the server cron list to schedule infinite number of tasks
+* Best way to create scheduled task is to create an artisan command which is what will be scheduled
+    + This way, the command can be run on its own via the CLI as well (i.e. will help during debugging...etc)
+* As a standard, make sure to save logs to the __storage/logs__ folder
+* On certain shared hosting servers, the minimum frequency that can be set is 5 minutes. Keep this in mind when setting the intervals for tasks in Laravel
+* Sample cron entry for a shared hosting deployment (artisan is invoked from the php command)
+  > `/opt/alt/php74/usr/bin/php /home/orphoxlq/public_html/koheda/artisan schedule:run >/dev/null 2>&1`
+* During testing, the scheduler can be 'simulated' using
+  > `php artisan schedule:work`
+    + This will run tasks by performing checking (to check if there are tasks that can be run) each minute
 
 ## Deployment
 * Laravel app can be deployed to shared hosting

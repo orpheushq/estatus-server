@@ -6,6 +6,7 @@ use App\Classes\SmsClient;
 use App\Models\User;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
@@ -92,8 +93,7 @@ class UserController extends Controller
         //
         if ($id === 'me') {
             $user = $request->user();
-            $parsed_alert_regions = json_decode($user->alert_regions);
-            return [...($user->toArray()), 'alert_regions' => is_null($parsed_alert_regions) ? null : $parsed_alert_regions];
+            return new Response($user->toArray());
         }
     }
 
@@ -156,6 +156,7 @@ class UserController extends Controller
                             $thisUser[$k] = $v;
                             break;
                         }
+                        case "alert_range":
                         case "alert_regions":
                         default: {
                             $thisUser[$k] = $v;
