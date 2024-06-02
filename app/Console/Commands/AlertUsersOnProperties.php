@@ -74,8 +74,8 @@ class AlertUsersOnProperties extends Command
             foreach ($usersWithAlerts as $user) {
                 Log::channel("cli")->info("{$this->logPrefix} BEGIN alert processing for {$user->email}");
 
-                $alertRegions = json_decode($user->alert_regions);
-                $priceRange = json_decode($user->alert_range);
+                $alertRegions = $user->alert_regions;
+                $priceRange = $user->alert_range;
                 $alerts = array();
                 foreach ($alertRegions as $region) {
                     $qualifyingPropertiesCount = Property
