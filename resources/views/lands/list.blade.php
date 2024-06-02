@@ -124,6 +124,48 @@ $config['data'] = $entities;
             </div>
         </div>
     </form>
+    <form method="post" action="{{ route('lands.triggerAlertNewProperties') }}" enctype="multipart/form-data">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card card-default collapsed-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Alert New Properties</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-md-2">
+                                <x-adminlte-input name="minDate" label="Minimum date" type="date">
+                                    <x-slot name="prependSlot">
+                                        <div class="input-group-text">
+                                            <i class="fas fa-calendar"></i>
+                                        </div>
+                                    </x-slot>
+                                </x-adminlte-input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-2">
+                                <div class="form-check">
+                                    <input type="checkbox" name="dryRun" class="form-check-input" id="chkDryRun" checked>
+                                    <label class="form-check-label" for="chkDryRun">Dry run</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer clearfix">
+                        <div class="float-right">
+                            <input type="submit" class="btn btn-primary" value='Trigger' />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
     <x-adminlte-callout>To show table data, append <a href="?showTable=true">?showTable=true</a> to URL</x-adminlte-callout>
     <x-adminlte-datatable id="tblLand" :heads="$heads" :config="$config" striped hoverable with-buttons>
         @foreach($config['data'] as $row)

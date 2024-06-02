@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::post('rentals/upload', [RentalController::class, 'upload'])->middleware('can:properties')->name("rentals.upload");
     Route::resource('rentals', RentalController::class)->middleware('can:properties');
 
+    Route::post('lands/triggerAlertNewProperties', [LandController::class, 'triggerAlertNewProperties'])->middleware('can:properties')->name("lands.triggerAlertNewProperties");
     Route::post('lands/upload', [LandController::class, 'upload'])->middleware('can:properties')->name("lands.upload");
     Route::resource('lands', LandController::class)->middleware('can:properties');
 });
