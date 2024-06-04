@@ -48,7 +48,7 @@ class ProcLand
 
                 $area = $sheet->getCell("A${i}")->getValue();
                 $url = $sheet->getCell("C${i}")->getValue();
-                $title = $sheet->getCell("E${i}")->getValue();
+                $title = substr($sheet->getCell("E${i}")->getValue(), 0, 250);
                 $description = $sheet->getCell("F${i}")->getValue();
                 $location = null;
                 $size = floatval($sheet->getCell("I${i}")->getValue());
@@ -104,17 +104,34 @@ class ProcLand
                             $thisLand = Land::create([
                                 'size' => $size
                             ]);
-                            $thisProperty = $thisLand->property()->create([
-                                'title' => $title,
-                                'area' => $area,
-                                'description' => $description,
-                                'url' => $url,
-                                'location' => $location,
-                                'maplink' => $maplink,
-                                'raw_maplink' => $raw_maplink,
-                                'address' => $address,
-                                'raw_address' => $raw_address,
-                            ]);
+                            try {
+                                $thisProperty = $thisLand->property()->create([
+                                    'title' => $title,
+                                    'area' => $area,
+                                    'description' => $description,
+                                    'url' => $url,
+                                    'location' => $location,
+                                    'maplink' => $maplink,
+                                    'raw_maplink' => $raw_maplink,
+                                    'address' => $address,
+                                    'raw_address' => $raw_address,
+                                ]);
+                            } catch (\Exception $err){
+                                dd(array(
+                                    'error' => $err,
+                                    'entry' => [
+                                        'title' => $title,
+                                        'area' => $area,
+                                        'description' => $description,
+                                        'url' => $url,
+                                        'location' => $location,
+                                        'maplink' => $maplink,
+                                        'raw_maplink' => $raw_maplink,
+                                        'address' => $address,
+                                        'raw_address' => $raw_address,
+                                    ]
+                                ));
+                            }
                             $thisProperty->statistics()->create([
                                 'price' => $price
                             ]);
