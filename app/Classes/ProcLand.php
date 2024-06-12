@@ -48,7 +48,8 @@ class ProcLand
 
                 $area = $sheet->getCell("A${i}")->getValue();
                 $url = $sheet->getCell("C${i}")->getValue();
-                $title = substr($sheet->getCell("E${i}")->getValue(), 0, 250);
+                // INFO: https://stackoverflow.com/questions/7979567/php-convert-any-string-to-utf-8-without-knowing-the-original-character-set-or
+                $title = mb_convert_encoding(substr($sheet->getCell("E${i}")->getValue(), 0, 250), "UTF-8");
                 $description = $sheet->getCell("F${i}")->getValue();
                 $location = null;
                 $size = floatval($sheet->getCell("I${i}")->getValue());
