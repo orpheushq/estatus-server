@@ -16,75 +16,65 @@
 
 {{-- Setup data for datatables --}}
 @php
-$heads = [
-    'ID',
-    'Area',
-    'Title',
-    'Size',
-    'Latest Price',
-    'Description',
-    'Created At',
-    'Updated At',
-    'Action'
-];
+    $heads = ['ID', 'Area', 'Title', 'Size', 'Latest Price', 'Description', 'Created At', 'Updated At', 'Action'];
 
-$btnDetails = '<button class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details">
+    $btnDetails = '<button class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details">
                 <i class="fa fa-lg fa-fw fa-eye"></i>
             </button>';
 
-$config = [
-    'order' => [[0, 'asc']],
-    'columns' => [
-        [
-            'data' => 'id',
-            'visible' => false
+    $config = [
+        'order' => [[0, 'asc']],
+        'columns' => [
+            [
+                'data' => 'id',
+                'visible' => false,
+            ],
+            [
+                'data' => 'area',
+            ],
+            [
+                'data' => 'title',
+            ],
+            [
+                'data' => 'size',
+            ],
+            [
+                'data' => 'price',
+            ],
+            [
+                'data' => 'description',
+            ],
+            [
+                'data' => 'created_at',
+            ],
+            [
+                'data' => 'updated_at',
+            ],
+            [
+                'data' => 'actionCol',
+                'orderable' => false,
+            ],
         ],
-        [
-            'data' => 'area'
-        ],
-        [
-            'data' => 'title'
-        ],
-        [
-            'data' => 'size'
-        ],
-        [
-            'data' => 'price'
-        ],
-        [
-            'data' => 'description'
-        ],
-        [
-            'data' => 'created_at'
-        ],
-        [
-            'data' => 'updated_at'
-        ],
-        [
-            'data' => 'actionCol',
-            'orderable' => false
-        ]
-    ],
-    'paging' => true,
-    'lengthMenu' => [ 10 ]
-];
-foreach ($entities as $i => &$u) {
-    $thisProperty = $u['property'];
-    $thisStatistic = $thisProperty['statistics'][0];
-    $temp = [
-        'id' => $u['id'],
-        'area' => $thisProperty['area'],
-        'size' => $u['size'],
-        'price' => number_format($thisStatistic['price'], 2),
-        'title' => $thisProperty['title'],
-        'description' => $thisProperty['description'],
-        'created_at' => $thisProperty['created_at']->format("d M Y h:i A"),
-        'updated_at' => $thisProperty['updated_at']->format("d M Y h:i A"),
-        'actionCol' => '<nobr>'.$btnDetails.'</nobr>'
+        'paging' => true,
+        'lengthMenu' => [10],
     ];
-    $entities[$i] = $temp;
-}
-$config['data'] = $entities;
+    foreach ($entities as $i => &$u) {
+        $thisProperty = $u['property'];
+        $thisStatistic = $thisProperty['statistics'][0];
+        $temp = [
+            'id' => $u['id'],
+            'area' => $thisProperty['area'],
+            'size' => $u['size'],
+            'price' => number_format($thisStatistic['price'], 2),
+            'title' => $thisProperty['title'],
+            'description' => $thisProperty['description'],
+            'created_at' => $thisProperty['created_at']->format('d M Y h:i A'),
+            'updated_at' => $thisProperty['updated_at']->format('d M Y h:i A'),
+            'actionCol' => '<nobr>' . $btnDetails . '</nobr>',
+        ];
+        $entities[$i] = $temp;
+    }
+    $config['data'] = $entities;
 @endphp
 
 
@@ -105,11 +95,19 @@ $config['data'] = $entities;
                     <div class="card-body">
                         <div class="row">
                             <div class="col-4">
-                                <x-adminlte-input-file igroup-size="sm" name="dataFile" required accept=".xls,.xlsx,.csv"/>
+                                <x-adminlte-input-file igroup-size="sm" name="dataFile" required accept=".xls,.xlsx,.csv" />
+                            </div>
+                            <div class="col-2">
+                                <x-adminlte-select name="sourceSelect" igroup-size="sm">
+                                    <option>ikman.lk</option>
+                                    <option>LankaPropertyweb</option>
+                                    <option>Hitad.lk</option>
+                                </x-adminlte-select>
                             </div>
                             <div class="col-4">
                                 <div class="form-check">
-                                    <input type="checkbox" name="test" class="form-check-input" id="chkTestUpload" checked>
+                                    <input type="checkbox" name="test" class="form-check-input" id="chkTestUpload"
+                                        checked>
                                     <label class="form-check-label" for="chkTestUpload">Test upload</label>
                                 </div>
                             </div>
@@ -168,9 +166,9 @@ $config['data'] = $entities;
     </form>
     <x-adminlte-callout>To show table data, append <a href="?showTable=true">?showTable=true</a> to URL</x-adminlte-callout>
     <x-adminlte-datatable id="tblLand" :heads="$heads" :config="$config" striped hoverable with-buttons>
-        @foreach($config['data'] as $row)
+        @foreach ($config['data'] as $row)
             <tr>
-                @foreach($row as $cell)
+                @foreach ($row as $cell)
                     <td>{!! $cell !!}</td>
                 @endforeach
             </tr>
@@ -182,13 +180,13 @@ $config['data'] = $entities;
 @stop
 
 @section('js')
-<script>
-    $(document).ready(function() {
-        var table = $('#tblLand').DataTable();
-        $('#tblLand tbody').on( 'click', 'button', function () {
-            var data = table.row( $(this).parents('tr') ).data();
-            window.location.href="{{ route('lands.show', '') }}" + "/" + data['id'];
-        } );
-    });
-</script>
+    <script>
+        $(document).ready(function() {
+            var table = $('#tblLand').DataTable();
+            $('#tblLand tbody').on('click', 'button', function() {
+                var data = table.row($(this).parents('tr')).data();
+                window.location.href = "{{ route('lands.show', '') }}" + "/" + data['id'];
+            });
+        });
+    </script>
 @stop

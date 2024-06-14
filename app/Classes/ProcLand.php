@@ -25,7 +25,7 @@ function median($arr) {
 }
 class ProcLand
 {
-    public static function processUpload ($filePath, $isTest = TRUE): void
+    public static function processUpload ($filePath, $isTest = TRUE, $dataSource): void
     {
         set_time_limit(0);
 
@@ -81,6 +81,7 @@ class ProcLand
                             $thisLand = $thisProperty->propertyable()->first();
 
                             $thisProperty['title'] = $title;
+                            $thisProperty['source'] = $dataSource;
                             $thisProperty['area'] = $area;
                             $thisProperty['description'] = $description;
                             $thisProperty['url'] = $url;
@@ -108,6 +109,7 @@ class ProcLand
                             try {
                                 $thisProperty = $thisLand->property()->create([
                                     'title' => $title,
+                                    'source' => $dataSource,
                                     'area' => $area,
                                     'description' => $description,
                                     'url' => $url,
@@ -122,6 +124,7 @@ class ProcLand
                                     'error' => $err,
                                     'entry' => [
                                         'title' => $title,
+                                        'source' => $dataSource,
                                         'area' => $area,
                                         'description' => $description,
                                         'url' => $url,
