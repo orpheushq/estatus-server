@@ -99,9 +99,9 @@
                             </div>
                             <div class="col-2">
                                 <x-adminlte-select name="sourceSelect" igroup-size="sm">
-                                    <option>ikman.lk</option>
-                                    <option>LankaPropertyweb</option>
-                                    <option>Hitad.lk</option>
+                                    <option value="ikman">ikman.lk</option>
+                                    <option value="lpw">LankaPropertyWeb</option>
+                                    <option value="hitad">Hitad.lk</option>
                                 </x-adminlte-select>
                             </div>
                             <div class="col-4">
