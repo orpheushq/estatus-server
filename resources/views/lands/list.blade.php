@@ -94,6 +94,7 @@
                     </div>
                     <div class="card-body">
                         <div class="container-fluid">
+                            <x-adminlte-callout theme="danger">Currently this feature is under development. Remove this message after development!</x-adminlte-callout>
                             <x-adminlte-callout theme="warning">Make sure there are no uploads currently running!</x-adminlte-callout>
                         </div>
                         <div class="row">

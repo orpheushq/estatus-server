@@ -49,6 +49,12 @@ class ProcLand
             throw new \Exception("No title");
         }
 
+        // INFO: transforms
+        $area = strtolower(trim($area));
+        $title = mb_convert_encoding(substr($title, 0, 250), "UTF-8");
+        $size = floatval($size);
+        $price = floatval($price);
+
         $thisProperty = Property::where('url', '=', $url)->first();
 
         if (is_null($url) || is_null($thisProperty)) { // INFO: consider as new property always if URL is null
