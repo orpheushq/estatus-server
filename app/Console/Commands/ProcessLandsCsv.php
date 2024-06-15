@@ -77,9 +77,9 @@ class ProcessLandsCsv extends Command
                 }
 
                 try {
-                    ProcLand::processSingleLand($landRow, $dryRun);
+                    ProcLand::processSingleLand($landRow, $source, $dryRun);
                 } catch (\Exception $e) {
-                    Log::channel("upload")->error("{$this->logPrefix} Could not process entry with URL ".($landRow['url'] ?? '[no url]'));
+                    Log::channel("upload")->error("{$this->logPrefix} Could not process entry with URL ".($landRow['url'] ?? '[no url]')." Error: {$e->getMessage()}");
                 }
             }
 
