@@ -35,11 +35,16 @@ class LandController extends Controller
     {
         $thisFile = $request->file('dataFile');
         $path = $thisFile->store('land-upload');
-
+        $dryRun = !is_null($request->post('test'));
         $dataSource = $request->input('sourceSelect');
-        Log::channel('upload')->notice("Land uploading processing started for file ${path}");
 
-        ProcLand::processUpload($path, !is_null($request->post('test')), $dataSource);
+        Log::channel('upload')->notice("Lands CSV file uploaded to ${path}");
+
+        $params = [$path, $dataSource];
+        if ($dryRun) {
+            $params[] = '-D';
+        }
+        CliProcess::startBgProcess('process:lands', $params);
 
         return redirect()->back();
     }

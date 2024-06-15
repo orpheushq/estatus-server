@@ -17,6 +17,7 @@ class ProcessLandsCsv extends Command
      */
     protected $signature = 'process:lands
         {filePath : The path of the CSV file to process }
+        {source : Source of the CSV }
         {--D|dry : Dry run where Lands are not actually added to the DB}';
 
     /**
@@ -35,9 +36,10 @@ class ProcessLandsCsv extends Command
     {
         try {
             $filePath = $this->argument('filePath');
+            $source = $this->argument('source');
             $dryRun = $this->option('dry');
 
-            Log::channel("upload")->info("{$this->logPrefix} Land uploading processing started for file ${filePath}" . ($dryRun ? ' (Dry run)' : ''));
+            Log::channel("upload")->info("{$this->logPrefix} Land from source ${source} processing started for file ${filePath}" . ($dryRun ? ' (Dry run)' : ''));
 
             $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(storage_path("app/${filePath}"));
             $spreadsheet->setActiveSheetIndex(0); // INFO: process only first worksheet (which is fine as in CSV there is only 1 sheet)
@@ -77,7 +79,6 @@ class ProcessLandsCsv extends Command
                 try {
                     ProcLand::processSingleLand($landRow, $dryRun);
                 } catch (\Exception $e) {
-                    dd($e);
                     Log::channel("upload")->error("{$this->logPrefix} Could not process entry with URL ".($landRow['url'] ?? '[no url]'));
                 }
             }
