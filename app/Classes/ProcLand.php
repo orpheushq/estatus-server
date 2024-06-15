@@ -25,6 +25,10 @@ function median($arr) {
 }
 class ProcLand
 {
+    public static function processSingleLand ($landRow, bool $dryRun): void
+    {
+        Log::channel("upload")->info(($dryRun ? "Add": "Added")." new land in ${landRow['area']} of size ${landRow['size']}");
+    }
     public static function processUpload ($filePath, $isTest = TRUE, $dataSource): void
     {
         set_time_limit(0);
