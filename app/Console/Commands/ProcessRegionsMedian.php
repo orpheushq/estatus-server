@@ -63,43 +63,43 @@ class ProcessRegionsMedian extends Command
 
                 $median = 0;
 
+                $medianResults = Property
+                    ::select('statistics.price', 'properties.id', 'properties.title')
+                    ->where("propertyable_type", "like", "%${type}")
+                    ->whereBetween('properties.updated_at', [
+                            $date->format('Y-m-d') . ' 00:00:00',
+                            $date->format('Y-m-d') . ' 23:59:59']
+                    )
+                    ->where('area', '=', $regionItem["area"])
+                    ->join('statistics', function ($join) use ($date) {
+                        /**
+                         * INFO: for a given date, there can be only one statistic otherwise the join creates
+                         * multiple entries per property because there are multiple statistics
+                         *
+                         * INFO: also make sure there can be only one statistic per day, even if admin uploaded
+                         * multiple CSV for the same property on the same day
+                         *
+                         */
+                        $join->on('properties.id', '=', 'statistics.property_id');
+                        $join->on('statistics.created_at', '>', DB::raw("'" . $date->format('Y-m-d') . " 00:00:00'"));
+                        $join->on('statistics.created_at', '<', DB::raw("'" . $date->format('Y-m-d') . " 23:59:59'"));
+                    })
+                    ->orderBy('statistics.price', 'asc')
+                    ->offset($regionCount % 2 === 0 ? ($regionCount / 2) - 1 : ($regionCount - 1) / 2) // INFO: get the 'middle' index
+                    ->limit($regionCount % 2 === 0 ? 2 : 1)
+                    ->get();
+
+                if (count($medianResults) > 1) {
+                    $median = ($medianResults[0]['price'] + $medianResults[1]['price']) / 2;
+                } else {
+                    $median = $medianResults[0]['price'];
+                }
+
                 if ($regionCount % 2 === 0) {
                     // INFO: even number, median is the average of two properties
                     Log::channel("cli")->info("{$this->logPrefix} CALCULATED for ${regionItem["area"]}, median is the average ${median}");
                 } else {
                     // INFO: odd number so median is the property at the number
-//                    $thisProperty = Property
-//                        ::with([
-//                            'statistics' => function (HasMany $query) {
-//                                $query->latest()->first();
-//                            }
-//                        ])->first()
-//                        ->where("propertyable_type", "like", "%${type}")
-//                        ->where('updated_at', '>', $date->format('Y-m-d'))
-//                        ->orderBy('statistics.price', 'asc')
-//                        ->get();
-                    $medianResult = Property
-                        ::select('statistics.price', 'properties.id', 'properties.title')
-                        ->where("propertyable_type", "like", "%${type}")
-                        ->where('properties.updated_at', '>', $date->format('Y-m-d'))
-                        ->where('area', '=', $regionItem["area"])
-                        ->join('statistics', function ($join) use ($date) {
-                            /**
-                             * INFO: for a given date, there can be only one statistic otherwise the join creates
-                             * multiple entries per property because there are multiple statistics
-                             *
-                             * INFO: also make sure there can be only one statistic per day, even if admin uploaded
-                             * multiple CSV for the same property on the same day
-                             *
-                             */
-                            $join->on('properties.id', '=', 'statistics.property_id');
-                            $join->on('statistics.created_at', '>', DB::raw("'" . $date->format('Y-m-d') . " 00:00:00'"));
-                            $join->on('statistics.created_at', '<', DB::raw("'" . $date->format('Y-m-d') . " 23:59:59'"));
-                        })
-                        ->orderBy('statistics.price', 'asc')
-                        ->offset(($regionCount - 1) / 2) // INFO: get the 'middle' index
-                        ->limit(1)
-                        ->first();
                     Log::channel("cli")->info("{$this->logPrefix} CALCULATED for ${regionItem["area"]}, median is the exact ${median}");
                 }
             }
