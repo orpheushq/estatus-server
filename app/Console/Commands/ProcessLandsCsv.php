@@ -84,7 +84,6 @@ class ProcessLandsCsv extends Command
             }
 
             Log::channel("upload")->notice("{$this->logPrefix} Finished processing");
-            dd($filePath);
             return Command::SUCCESS;
         } catch (\Exception $e) {
             $this->info("ERROR: " . $e->getMessage());

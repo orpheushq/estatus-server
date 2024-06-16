@@ -60,7 +60,7 @@ class AlertUsersOnProperties extends Command
     {
         $minDate = $this->argument('minDate');
         $dryRun = $this->option('dry');
-        $type = 'land';
+        $type = 'Land';
         try {
             $date = is_null($minDate) ? new \DateTime() : new \DateTime($minDate);
             Log::channel("cli")->info("{$this->logPrefix} START for date {$date->format('Y-m-d')}");
