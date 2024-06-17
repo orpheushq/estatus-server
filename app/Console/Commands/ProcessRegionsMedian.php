@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Property;
+use App\Models\Region;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
@@ -101,6 +102,31 @@ class ProcessRegionsMedian extends Command
                 } else {
                     // INFO: odd number so median is the property at the number
                     Log::channel("cli")->info("{$this->logPrefix} CALCULATED for ${regionItem["area"]}, median is the exact ${median}");
+                }
+
+                $thisRegion = Region::where('region', '=', $regionItem["area"])->first();
+
+                if (is_null($thisRegion)) {
+                    // INFO: New region
+                    if (!$dryRun) {
+                        $thisRegion = Region::create([
+                            "region" => $regionItem["area"]
+                        ]);
+                        $thisRegion->statistics()->create([
+                            "price" => $median
+                        ]);
+                        Log::channel("cli")->info("{$this->logPrefix} CREATED new region {$regionItem["area"]}");
+                    } else {
+                        Log::channel("cli")->info("{$this->logPrefix} CREATE new region {$regionItem["area"]}");
+                    }
+                } else {
+                    // INFO: existing region
+                    if (!$dryRun) {
+                        $thisRegion->statistics()->create([
+                            "price" => $median
+                        ]);
+                        Log::channel("cli")->info("{$this->logPrefix} ADDED statistic");
+                    }
                 }
             }
 
