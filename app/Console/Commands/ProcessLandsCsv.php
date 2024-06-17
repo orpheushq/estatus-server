@@ -83,6 +83,13 @@ class ProcessLandsCsv extends Command
                 }
             }
 
+            Log::channel("upload")->notice("{$this->logPrefix} Invoking Median processor");
+            if (!$dryRun) {
+                // INFO: we can't get dry run results anyway because DB is not updated for the processor to calculate medians!
+                $this->call('region:calculateMedians');
+            }
+
+
             Log::channel("upload")->notice("{$this->logPrefix} Finished processing");
             return Command::SUCCESS;
         } catch (\Exception $e) {
