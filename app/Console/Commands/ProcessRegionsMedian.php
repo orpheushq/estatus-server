@@ -131,6 +131,7 @@ class ProcessRegionsMedian extends Command
             }
 
 
+            Log::channel("cli")->info("{$this->logPrefix} END for date {$date->format('Y-m-d')}");
             return Command::SUCCESS;
         } catch (\Exception $e) {
             $this->info("ERROR: " . $e->getMessage());
