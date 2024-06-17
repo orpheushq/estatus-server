@@ -54,7 +54,7 @@ class ProcLand
         $title = mb_convert_encoding(substr($title, 0, 250), "UTF-8");
         $size = floatval($size);
         $price = floatval($price);
-        $address = is_null($address) || $address === '' || $address === 'N/A' ? null || $address;
+        $address = is_null($address) || $address === '' || $address === 'N/A' ? null : $address;
 
         $thisProperty = Property::where('url', '=', $url)->first();
 
