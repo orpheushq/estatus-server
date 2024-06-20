@@ -93,12 +93,17 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        <div class="container-fluid">
+                            <x-adminlte-callout theme="danger">Currently this feature is under development. Remove this message after development!</x-adminlte-callout>
+                            <x-adminlte-callout theme="warning">Make sure there are no uploads currently running!</x-adminlte-callout>
+                        </div>
                         <div class="row">
                             <div class="col-4">
                                 <x-adminlte-input-file igroup-size="sm" name="dataFile" required accept=".xls,.xlsx,.csv" />
                             </div>
                             <div class="col-2">
-                                <x-adminlte-select name="sourceSelect" igroup-size="sm">
+                                <x-adminlte-select name="sourceSelect" igroup-size="sm" required>
+                                    <option value="" selected disabled>(Select)</option>
                                     <option value="ikman">ikman.lk</option>
                                     <option value="lpw">LankaPropertyWeb</option>
                                     <option value="hitad">Hitad.lk</option>
