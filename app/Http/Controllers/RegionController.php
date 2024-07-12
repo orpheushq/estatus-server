@@ -27,11 +27,11 @@ class RegionController extends Controller
             $regions = Region
                 ::addSelect([
                     'price' =>
-                        RegionStatistic
-                            ::select('price')
-                            ->whereColumn('region_id', 'regions.id')
-                            ->latest()
-                            ->take(1)
+                    RegionStatistic
+                        ::select('price')
+                        ->whereColumn('region_id', 'regions.id')
+                        ->latest()
+                        ->take(1)
                 ])->get();
 
             $prices = [];
@@ -70,15 +70,26 @@ class RegionController extends Controller
         /**
          * TODO: currently region table has no type column. After adding this, add type handling as well
          */
-        $type = $request->input('type');
-        $regionData = Region
-            ::where('region', '=', $region)
-            ->with([
-                'statistics' => function (HasMany $query) {
-                    $query->latest()->first();
-                }
-            ])->first();
-        return response($regionData, 200);
+        if (($request->input('historical')) === 'true') {
+            $regionData = Region
+                ::where('region', '=', $region)
+                ->with([
+                    'statistics' => function (HasMany $query) {
+                        $query->latest();
+                    }
+                ])->first();
+            return response($regionData, 200);
+        } else {
+            $type = $request->input('type');
+            $regionData = Region
+                ::where('region', '=', $region)
+                ->with([
+                    'statistics' => function (HasMany $query) {
+                        $query->latest()->first();
+                    }
+                ])->first();
+            return response($regionData, 200);
+        }
     }
 
     /**
