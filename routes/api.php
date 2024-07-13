@@ -34,7 +34,6 @@ Route::get('/properties/addresses', [PropertyController::class, 'getUniqueAddres
 
 Route::apiResource('properties', PropertyController::class);
 Route::apiResource('regions', RegionController::class);
-Route::get('/regions/{region}', [RegionController::class, 'show']);
 
 /* Protected Routes */
 Route::group(['middleware' => ['auth:sanctum']], function () {
