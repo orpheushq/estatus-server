@@ -122,9 +122,16 @@ class ProcessRegionsMedian extends Command
                 } else {
                     // INFO: existing region
                     if (!$dryRun) {
-                        $thisRegion->statistics()->create([
-                            "price" => $median
-                        ]);
+                        $currentDate = date('Y-m-d');
+                        $hasStatistics = $thisRegion->statistics()->whereDate('updated_at', $currentDate)->exists();
+                        if ($hasStatistics) {
+                            $statistics = $thisRegion->statistics()->whereDate('updated_at', $currentDate)->first();
+                            $statistics->update(['price' => $median]);
+                        } else {
+                            $thisRegion->statistics()->create([
+                                'price' => $median
+                            ]);
+                        };
                         Log::channel("cli")->info("{$this->logPrefix} ADDED statistic");
                     }
                 }

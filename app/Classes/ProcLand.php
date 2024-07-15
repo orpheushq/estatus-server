@@ -55,6 +55,7 @@ class ProcLand
         $size = floatval($size);
         $price = floatval($price);
         $address = is_null($address) || $address === '' || $address === 'N/A' ? null : $address;
+        $currentDate = date('Y-m-d');
 
         $thisProperty = Property::where('url', '=', $url)->first();
 
@@ -76,9 +77,17 @@ class ProcLand
                     'address' => $address,
                     'raw_address' => $rawAddress,
                 ]);
-                $thisProperty->statistics()->create([
-                    'price' => $price
-                ]);
+
+                $hasStatistics = $thisProperty->statistics()->whereDate('updated_at', $currentDate)->first();
+
+                if ($hasStatistics) {
+                    $statistics = $thisProperty->statistics()->whereDate('updated_at', $currentDate)->first();
+                    $statistics->update(['price' => $price]);
+                } else {
+                    $thisProperty->statistics()->create([
+                        'price' => $price
+                    ]);
+                };
             }
             Log::channel("upload")->info(($dryRun ? "Add": "Added")." new land in ${landRow['area']} of size ${landRow['size']}");
         } else {
@@ -98,9 +107,16 @@ class ProcLand
                 $thisLand['size'] = $size;
                 $thisLand->save();
 
-                $thisProperty->statistics()->create([
-                    'price' => $price
-                ]);
+                $hasStatistics = $thisProperty->statistics()->whereDate('updated_at', $currentDate)->first();
+
+                if ($hasStatistics) {
+                    $statistics = $thisProperty->statistics()->whereDate('updated_at', $currentDate)->first();
+                    $statistics->update(['price' => $price]);
+                } else {
+                    $thisProperty->statistics()->create([
+                        'price' => $price
+                    ]);
+                };
             }
             Log::channel("upload")->info(($dryRun ? "Update": "Updated")." land in ${landRow['area']} of size ${landRow['size']}");
         }
