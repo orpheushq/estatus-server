@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 
-function median($arr) {
+function median($arr)
+{
     sort($arr);
     $count = count($arr);
     $middle = floor(($count - 1) / 2);
@@ -25,7 +26,7 @@ function median($arr) {
 }
 class ProcLand
 {
-    public static function processSingleLand (array $landRow, string $source, bool $dryRun): void
+    public static function processSingleLand(array $landRow, string $source, bool $dryRun): void
     {
         [
             "area" => $area,
@@ -55,6 +56,7 @@ class ProcLand
         $size = floatval($size);
         $price = floatval($price);
         $address = is_null($address) || $address === '' || $address === 'N/A' ? null : $address;
+        $currentDate = date('Y-m-d');
 
         $thisProperty = Property::where('url', '=', $url)->first();
 
@@ -76,11 +78,13 @@ class ProcLand
                     'address' => $address,
                     'raw_address' => $rawAddress,
                 ]);
+
+
                 $thisProperty->statistics()->create([
                     'price' => $price
                 ]);
             }
-            Log::channel("upload")->info(($dryRun ? "Add": "Added")." new land in ${landRow['area']} of size ${landRow['size']}");
+            Log::channel("upload")->info(($dryRun ? "Add" : "Added") . " new land in ${landRow['area']} of size ${landRow['size']}");
         } else {
             if (!$dryRun) {
                 $thisLand = $thisProperty->propertyable()->first();
@@ -98,11 +102,18 @@ class ProcLand
                 $thisLand['size'] = $size;
                 $thisLand->save();
 
-                $thisProperty->statistics()->create([
-                    'price' => $price
-                ]);
+                $hasStatistics = $thisProperty->statistics()->whereDate('updated_at', $currentDate)->first();
+
+                if ($hasStatistics) {
+                    $statistics = $thisProperty->statistics()->whereDate('updated_at', $currentDate)->first();
+                    $statistics->update(['price' => $price]);
+                } else {
+                    $thisProperty->statistics()->create([
+                        'price' => $price
+                    ]);
+                };
             }
-            Log::channel("upload")->info(($dryRun ? "Update": "Updated")." land in ${landRow['area']} of size ${landRow['size']}");
+            Log::channel("upload")->info(($dryRun ? "Update" : "Updated") . " land in ${landRow['area']} of size ${landRow['size']}");
         }
     }
 }
