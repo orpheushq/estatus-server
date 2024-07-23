@@ -28,8 +28,8 @@ class ProcessRegionsMedian extends Command
      * @var string
      */
     protected $description = "Calculate medians for regions and create new regions if required.\n  " .
-    "IMPORTANT: User should ensure data integrity. For the given date, there can be only one statistic ".
-    "If a date is provided, there should be no dates more recent than the date because multiple properties might show";
+        "IMPORTANT: User should ensure data integrity. For the given date, there can be only one statistic " .
+        "If a date is provided, there should be no dates more recent than the date because multiple properties might show";
 
 
     /**
@@ -51,9 +51,12 @@ class ProcessRegionsMedian extends Command
             $regionsToUpdate = Property
                 ::select("area", DB::raw("COUNT(id) as regionCount"))
                 ->where("propertyable_type", "like", "%${type}")
-                ->whereBetween('updated_at', [
-                    $date->format('Y-m-d') . ' 00:00:00',
-                    $date->format('Y-m-d') . ' 23:59:59']
+                ->whereBetween(
+                    'updated_at',
+                    [
+                        $date->format('Y-m-d') . ' 00:00:00',
+                        $date->format('Y-m-d') . ' 23:59:59'
+                    ]
                 )
                 ->groupBy("area")
                 ->orderBy("area")
@@ -67,9 +70,12 @@ class ProcessRegionsMedian extends Command
                 $medianResults = Property
                     ::select('statistics.price', 'properties.id', 'properties.title')
                     ->where("propertyable_type", "like", "%${type}")
-                    ->whereBetween('properties.updated_at', [
+                    ->whereBetween(
+                        'properties.updated_at',
+                        [
                             $date->format('Y-m-d') . ' 00:00:00',
-                            $date->format('Y-m-d') . ' 23:59:59']
+                            $date->format('Y-m-d') . ' 23:59:59'
+                        ]
                     )
                     ->where('area', '=', $regionItem["area"])
                     ->join('statistics', function ($join) use ($date) {
