@@ -116,7 +116,7 @@ class ProcessRegionsMedian extends Command
                     // INFO: New region
                     if (!$dryRun) {
                         $thisRegion = Region::create([
-                            "region" => $regionItem["area"]
+                            "region" => str_replace(' ', '-', $regionItem["area"])
                         ]);
                         $thisRegion->statistics()->create([
                             "price" => $median
