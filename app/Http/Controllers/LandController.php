@@ -66,7 +66,7 @@ class LandController extends Controller
             "property.statistics" => function (HasMany $query) {
                 $query->latest();
             }
-        ])->where('id', '>', 0)->orderBy('created_at', 'desc')->paginate(25);
+        ])->where('id', '>', 0)->orderBy('updated_at', 'desc')->paginate(25);
         $values = $request->all();
         unset($values['_token']);
 
