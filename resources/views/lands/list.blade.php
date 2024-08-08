@@ -55,26 +55,26 @@
                 'orderable' => false,
             ],
         ],
-        'paging' => true,
-        'lengthMenu' => [10],
+        'paging' => false,
+        'info' => false,
+        'data' => []
     ];
     foreach ($entities as $i => &$u) {
-        $thisProperty = $u['property'];
-        $thisStatistic = $thisProperty['statistics'][0];
+        $thisProperty = $u->property;
+        $thisStatistic = $thisProperty->statistics->first();
         $temp = [
-            'id' => $u['id'],
-            'area' => $thisProperty['area'],
-            'size' => $u['size'],
-            'price' => number_format($thisStatistic['price'], 2),
-            'title' => $thisProperty['title'],
-            'description' => $thisProperty['description'],
-            'created_at' => $thisProperty['created_at']->format('d M Y h:i A'),
-            'updated_at' => $thisProperty['updated_at']->format('d M Y h:i A'),
+            'id' => $u->id,
+            'area' => $thisProperty->area,
+            'size' => $u->size,
+            'price' => number_format($thisStatistic->price, 2),
+            'title' => $thisProperty->title,
+            'description' => $thisProperty->description,
+            'created_at' => $thisProperty->created_at->format('d M Y h:i A'),
+            'updated_at' => $thisProperty->updated_at->format('d M Y h:i A'),
             'actionCol' => '<nobr>' . $btnDetails . '</nobr>',
         ];
-        $entities[$i] = $temp;
+        $config['data'][] = $temp;
     }
-    $config['data'] = $entities;
 @endphp
 
 
@@ -168,7 +168,6 @@
             </div>
         </div>
     </form>
-    <x-adminlte-callout>To show table data, append <a href="?showTable=true">?showTable=true</a> to URL</x-adminlte-callout>
     <x-adminlte-datatable id="tblLand" :heads="$heads" :config="$config" striped hoverable with-buttons>
         @foreach ($config['data'] as $row)
             <tr>
@@ -178,6 +177,10 @@
             </tr>
         @endforeach
     </x-adminlte-datatable>
+
+    @if ($entities->count())
+    {{ $entities->links('pagination::bootstrap-5') }}
+    @endif
 @stop
 
 @section('css')

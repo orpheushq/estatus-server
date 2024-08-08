@@ -66,7 +66,7 @@ class LandController extends Controller
             "property.statistics" => function (HasMany $query) {
                 $query->latest();
             }
-        ])->where('id', '>', 0);
+        ])->where('id', '>', 0)->orderBy('updated_at', 'desc')->paginate(25);
         $values = $request->all();
         unset($values['_token']);
 
@@ -83,12 +83,7 @@ class LandController extends Controller
             if (!$isValid) {
                 return redirect()->back()->withErrors($validator);
             } else {
-                // INFO: don't load data unless request has showTable URL param
-                if (isset($values['showTable'])) {
-                    return view('lands.list', ["entities" => $lands->get()]);
-                } else {
-                    return view('lands.list', ["entities" => []]);
-                }
+                return view('lands.list', ["entities" => $lands]);
             }
         }
     }
