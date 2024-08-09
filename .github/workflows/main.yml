@@ -1,7 +1,6 @@
 on:
-  create:
-    branches:
-      - 'releases/**'
+  release:
+    types: [published]
 name: 🚀 Deploy website on push
 jobs:
   web-deploy:
