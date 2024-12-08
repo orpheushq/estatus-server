@@ -24,6 +24,7 @@ Laravel-based server
 * [Upgrade Guide](#upgrade-guide)
 * [Debugging](#debugging)
 * [File Handling](#file-handling)
+* [Cleaning the DB](#cleaning-the-db)
 
 ## Variable Dumping
 * Instead of using `var_dump(...); exit;`, use
@@ -208,3 +209,38 @@ Laravel-based server
 * Use `ini_get('post_max_size')` and `ini_get('upload_max_filesize')` to get file size limits
     + Usually this is 2 MB
 * Find the ini file belonging to the current PHP executable and change the values
+
+## Cleaning the DB
+## Remove statistics from the DB
+After removing statistics, we also have to remove properties which have no statistics attached to them
+```mysql
+SELECT `properties`.id, `statistics`.id
+FROM `properties`
+LEFT JOIN `statistics` ON `properties`.id = `statistics`.property_id
+WHERE `statistics`.id IS NULL
+ORDER BY `properties`.id asc;
+```
+This query will return all properties which have no statistics attached to them. To delete:
+```mysql
+DELETE `properties`
+FROM `properties`
+LEFT JOIN `statistics` ON `properties`.id = `statistics`.property_id
+WHERE `statistics`.id IS NULL
+```
+These queries likely will take over a minute or longer to run
+
+Then to select regions which have no statistics
+```mysql
+SELECT `regions`.id, `region_statistics`.id
+FROM `regions`
+LEFT JOIN `region_statistics` ON `regions`.id = `region_statistics`.region_id
+WHERE `region_statistics`.id IS NULL
+ORDER BY `regions`.id asc;
+```
+And to delete
+```mysql
+DELETE `regions`
+FROM `regions`
+LEFT JOIN `region_statistics` ON `regions`.id = `region_statistics`.region_id
+WHERE `region_statistics`.id IS NULL;
+```
