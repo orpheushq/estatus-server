@@ -70,7 +70,7 @@
             'area' => $thisProperty->area,
             'size' => $u->size,
             'price' => number_format($thisStatistic->price, 2),
-            'interest' => number_format($thisStatistic->interest, 2),
+            'interest' => number_format($thisStatistic->interest, 0),
             'title' => $thisProperty->title,
             'description' => $thisProperty->description,
             'created_at' => $thisProperty->created_at->format('d M Y h:i A'),
