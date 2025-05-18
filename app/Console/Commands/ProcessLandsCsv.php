@@ -58,6 +58,7 @@ class ProcessLandsCsv extends Command
                 'J' => 'price',
                 'K' => 'mapLink',
                 'L' => 'raw_maplink',
+                'N' => 'interest'
             );
 
             foreach ($rowIterator as $row) {
