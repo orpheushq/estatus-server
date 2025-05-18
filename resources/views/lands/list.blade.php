@@ -16,7 +16,7 @@
 
 {{-- Setup data for datatables --}}
 @php
-    $heads = ['ID', 'Area', 'Title', 'Size', 'Latest Price', 'Description', 'Created At', 'Updated At', 'Action'];
+    $heads = ['ID', 'Area', 'Title', 'Size', 'Latest Price', 'Latest Interest', 'Description', 'Created At', 'Updated At', 'Action'];
 
     $btnDetails = '<button class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details">
                 <i class="fa fa-lg fa-fw fa-eye"></i>
@@ -40,6 +40,9 @@
             ],
             [
                 'data' => 'price',
+            ],
+            [
+                'data' => 'interest',
             ],
             [
                 'data' => 'description',
@@ -67,6 +70,7 @@
             'area' => $thisProperty->area,
             'size' => $u->size,
             'price' => number_format($thisStatistic->price, 2),
+            'interest' => number_format($thisStatistic->interest, 0),
             'title' => $thisProperty->title,
             'description' => $thisProperty->description,
             'created_at' => $thisProperty->created_at->format('d M Y h:i A'),

@@ -37,7 +37,8 @@ class ProcLand
             "size" => $size,
             "price" => $price,
             "mapLink" => $maplink,
-            "raw_maplink" => $rawMapLink
+            "raw_maplink" => $rawMapLink,
+            "interest" => $interest
         ] = $landRow;
         $location = null; // TODO: implement later
         $rawAddress = null; // TODO: implement later
@@ -81,10 +82,11 @@ class ProcLand
 
 
                 $thisProperty->statistics()->create([
-                    'price' => $price
+                    'price' => $price,
+                    'interest' => $interest,
                 ]);
             }
-            Log::channel("upload")->info(($dryRun ? "Add" : "Added") . " new land in ${landRow['area']} of size ${landRow['size']}");
+            Log::channel("upload")->info(($dryRun ? "Add" : "Added") . " new land in ${landRow['area']} of size ${landRow['size']} and interest score ${landRow['interest']}");
         } else {
             if (!$dryRun) {
                 $thisLand = $thisProperty->propertyable()->first();
@@ -106,14 +108,15 @@ class ProcLand
 
                 if ($hasStatistics) {
                     $statistics = $thisProperty->statistics()->whereDate('updated_at', $currentDate)->first();
-                    $statistics->update(['price' => $price]);
+                    $statistics->update(['price' => $price, 'interest' => $interest]);
                 } else {
                     $thisProperty->statistics()->create([
-                        'price' => $price
+                        'price' => $price,
+                        'interest' => $interest,
                     ]);
                 };
             }
-            Log::channel("upload")->info(($dryRun ? "Update" : "Updated") . " land in ${landRow['area']} of size ${landRow['size']}");
+            Log::channel("upload")->info(($dryRun ? "Update" : "Updated") . " land in ${landRow['area']} of size ${landRow['size']} and interest score ${landRow['interest']}");
         }
     }
 }

@@ -58,6 +58,7 @@ class ProcessLandsCsv extends Command
                 'J' => 'price',
                 'K' => 'mapLink',
                 'L' => 'raw_maplink',
+                'N' => 'interest'
             );
 
             foreach ($rowIterator as $row) {
@@ -88,6 +89,8 @@ class ProcessLandsCsv extends Command
                 // INFO: we can't get dry run results anyway because DB is not updated for the processor to calculate medians!
                 Log::channel("upload")->notice("{$this->logPrefix} Invoking Median processor");
                 $this->call('region:calculateMedians');
+                Log::channel("upload")->notice("{$this->logPrefix} Invoking Interest processor");
+                $this->call('region:calculateInterest');
             }
 
 
