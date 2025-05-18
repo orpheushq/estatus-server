@@ -91,7 +91,7 @@ Laravel-based server
 
 ### Setting Environment
 * If global PHP version is different, locally PHP environment can be set
-> `export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Applications/MAMP/bin/php/php7.4.16/bin`
+> `export PATH="/Applications/MAMP/bin/php/php8.2.0/bin:$PATH"`
 > `composer create-project --prefer-dist laravel/laravel la-server2 "8.*"`
     + https://stackoverflow.com/a/63111813
 * To set environment to production, set `APP_ENV=production` and `APP_DEBUG=false` in __.env__
