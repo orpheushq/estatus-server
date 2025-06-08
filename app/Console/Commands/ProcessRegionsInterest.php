@@ -53,7 +53,7 @@ class ProcessRegionsInterest extends Command
                 ::select("area", DB::raw("COUNT(id) as regionCount"))
                 ->where("propertyable_type", "like", "%${type}")
                 ->whereBetween(
-                    'updated_at',
+                    'created_at',
                     [
                         $date->format('Y-m-d') . ' 00:00:00',
                         $date->format('Y-m-d') . ' 23:59:59'
@@ -71,7 +71,7 @@ class ProcessRegionsInterest extends Command
                     )
                     ->where("propertyable_type", "like", "%${type}")
                     ->whereBetween(
-                        'properties.updated_at',
+                        'properties.created_at',
                         [
                             $date->format('Y-m-d') . ' 00:00:00',
                             $date->format('Y-m-d') . ' 23:59:59'
