@@ -51,6 +51,10 @@ class ProcLand
             throw new \Exception("No title");
         }
 
+        if (!isset($interest) || is_null($interest)) {
+            Log::channel("upload")->warning("Could not find interest metric for property with URL ".($url ?? '[no url]'));
+        }
+
         // INFO: transforms
         $area = strtolower(trim($area));
         $title = mb_convert_encoding(substr($title, 0, 250), "UTF-8");
@@ -58,6 +62,7 @@ class ProcLand
         $price = floatval($price);
         $address = is_null($address) || $address === '' || $address === 'N/A' ? null : $address;
         $currentDate = date('Y-m-d');
+        $interest = $interest ?? 0; // INFO: if interest is not provided, set it to 0
 
         $thisProperty = Property::where('url', '=', $url)->first();
 
