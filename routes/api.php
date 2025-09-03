@@ -5,9 +5,11 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\RegionController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Classes\CustomRoute;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +33,7 @@ Route::post('/auth/gauth', [AuthController::class, 'gauth']);
 Route::get('/util/lists', [PropertyController::class, 'getLists']);
 
 Route::get('/properties/addresses', [PropertyController::class, 'getUniqueAddresses']);
+Route::post('/properties/processSingleLand', [PropertyController::class, 'processSingleLand']);
 
 Route::apiResource('properties', PropertyController::class);
 Route::apiResource('regions', RegionController::class);
