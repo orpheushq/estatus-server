@@ -28,13 +28,8 @@ class Property extends Model
 
     public function getTypes ()
     {
-        try {
-            $uniqueTypes = $this->select('propertyable_type')->distinct()->get();
-            return array_values($uniqueTypes->pluck('propertyable_type')->toArray());
-        } catch (\Exception $e) {
-            \Log::error('Error in getTypes: ' . $e->getMessage());
-            return [];
-        }
+        $uniqueTypes = $this->select('propertyable_type')->distinct()->get();
+        return array_values($uniqueTypes->pluck('propertyable_type')->toArray());
     }
 
     public function getAreas ()
