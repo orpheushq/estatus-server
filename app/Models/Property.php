@@ -28,14 +28,13 @@ class Property extends Model
 
     public function getTypes ()
     {
-        $uniqueTypes = $this->all()->unique('propertyable_type');
-
-        return array_values(array_map(fn($v): string => $v['propertyable_type'], $uniqueTypes->toArray()));
+        $uniqueTypes = $this->select('propertyable_type')->distinct()->get();
+        return array_values($uniqueTypes->pluck('propertyable_type')->toArray());
     }
 
     public function getAreas ()
     {
-        $uniqueAreas = $this->all()->unique('area');
-        return array_values(array_map(fn($v): string => $v['area'], $uniqueAreas->toArray()));
+        $uniqueAreas = $this->select('area')->distinct()->get();
+        return array_values($uniqueAreas->pluck('area')->toArray());
     }
 }

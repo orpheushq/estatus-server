@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\ProcLand;
 use App\Models\Property;
 use App\Models\RegionStatistic;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,6 +22,51 @@ class PropertyController extends Controller
     {
         $this->propertyTypes = (new Property())->getTypes();
         $this->propertyAreas = (new Property())->getAreas();
+    }
+
+    public function processSingleLand(Request $request)
+    {
+        $apiKey = config('importer.apiKey');
+
+        $headerApiKey = $request->header('X-API-Key');
+        if ($headerApiKey !== $apiKey) {
+            return response()->json(['error' => 'Invalid or missing API key'], 401);
+        }
+
+        $data = $request->validate([
+            'area' => 'required|string',
+            'url' => 'required|string',
+            'address' => 'nullable|string',
+            'title' => 'required|string',
+            'description' => 'nullable|string',
+            'size' => 'required|numeric',
+            'price' => 'required|numeric',
+            'maplink' => 'required|string',
+            'raw_maplink' => 'required|string',
+            'interest' => 'nullable|numeric',
+            'source' => 'nullable|in:ikman,lpw',
+            'dryRun' => 'nullable|boolean'
+        ], [
+            'source.in' => 'The source must be either ikman or lpw or set empty (not receommended).'
+        ]);
+
+        $dryRun = (bool) ($data['dryRun'] ?? false);
+
+        // INFO: remove params that should not be passed to function
+        // NOTE: `validate` function ensures that only params defined will be available anyway
+        unset($data['dryRun']);
+
+        // INFO: transforms
+        $data['mapLink'] = $data['maplink'];
+        unset($data['maplink']);
+
+        try {
+            ProcLand::processSingleLand($data, $data['source'], $dryRun);
+            return response()->json(['message' => $dryRun ? 'Dry run successful. No data was saved.' : 'Land processed successfully'], 200);
+        } catch (\Exception $e) {
+            Log::error('Error processing single land: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to process land'], 500);
+        }
     }
 
     public function getUniqueAddresses(Request $request)
