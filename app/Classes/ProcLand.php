@@ -121,7 +121,7 @@ class ProcLand
                     ]);
                 };
             }
-            Log::channel("upload")->info(($dryRun ? "Update" : "Updated") . " land in ${landRow['area']} of size ${landRow['size']} and interest score ${landRow['interest']}");
+            Log::channel("upload")->info(($dryRun ? "Update" : "Updated") . " land in ${landRow['area']} #${thisProperty['id']} of size ${landRow['size']} and interest score ${landRow['interest']}");
         }
     }
 }

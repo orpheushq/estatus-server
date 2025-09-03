@@ -12,6 +12,7 @@ Laravel-based server
 * [CLI](#cli)
 * [Task Scheduler](#task-scheduler)
 * [Setting Environment](#setting-environment)
+* [Data Pipeline](#data-pipeline)
 * [Deployment](#deployment)
     * [Troubleshooting](#troubleshooting)
 * [CSRF Protection](#csrf-protection)
@@ -109,6 +110,9 @@ Laravel-based server
 * During testing, the scheduler can be 'simulated' using
   > `php artisan schedule:work`
     + This will run tasks by performing checking (to check if there are tasks that can be run) each minute
+
+## Data Pipeline
+* Use `/properties/processSingleLand` to process a single land (refer Postman collection for more details)
 
 ## Deployment
 * Laravel app can be deployed to shared hosting
